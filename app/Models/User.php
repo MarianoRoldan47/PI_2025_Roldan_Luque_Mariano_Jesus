@@ -18,9 +18,20 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'dni',
         'name',
+        'apellido1',
+        'apellido2',
+        'telefono',
+        'direccion',
+        'codigo_postal',
+        'localidad',
+        'provincia',
+        'rol',
         'email',
         'password',
+        'imagen',
+        'fecha_nacimiento'
     ];
 
     /**
@@ -44,5 +55,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function movimientos()
+    {
+        return $this->hasMany(Movimiento::class);
     }
 }
