@@ -16,95 +16,81 @@ new class extends Component
     }
 }; ?>
 
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" wire:navigate>
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
+<!-- Sidebar -->
+<aside class="d-flex flex-column flex-shrink-0 p-3 bg-dark text-white" id="sidebar">
+    <!-- Logo / Título -->
+    <a href="/" class="d-flex align-items-center justify-content-center mb-2 text-white text-decoration-none">
+        <div class="d-none d-sm-flex">
+            <img src="{{ asset('img/banner_sidebar.png') }}" class="rounded-2" style="width: 250px" alt="CyberStock WMS">
+        </div>
+        <x-application-logo class="rounded-2 d-sm-none" style="width: 50px" />
+
+    </a>
+
+    <hr class="border-secondary">
+
+    <!-- Navegación -->
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="#" class="nav-link active text-white d-flex align-items-center justify-content-sm-start" aria-current="page">
+                <div class="d-flex justify-content-center align-items-center" style="width: 20px;">
+                    <i class="fa-solid fa-house"></i>
                 </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                <p class="d-sm-block d-none m-0 ms-3">Home</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white d-flex align-items-center justify-content-sm-start" aria-current="page">
+                <div class="d-flex justify-content-center align-items-center" style="width: 20px;">
+                    <i class="fa-solid fa-tag"></i>
                 </div>
-            </div>
+                <p class="d-sm-block d-none m-0 ms-3">Productos</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white d-flex align-items-center justify-content-sm-start" aria-current="page">
+                <div class="d-flex justify-content-center align-items-center" style="width: 20px;">
+                    <i class="fa-solid fa-map-marker-alt"></i>
+                </div>
+                <p class="d-sm-block d-none m-0 ms-3">Zonas</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white d-flex align-items-center justify-content-sm-start" aria-current="page">
+                <div class="d-flex justify-content-center align-items-center" style="width: 20px;">
+                    <i class="fa-solid fa-exchange-alt"></i>
+                </div>
+                <p class="d-sm-block d-none m-0 ms-3">Movimientos</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white d-flex align-items-center justify-content-sm-start" aria-current="page">
+                <div class="d-flex justify-content-center align-items-center" style="width: 20px;">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <p class="d-sm-block d-none m-0 ms-3">Usuarios</p>
+            </a>
+        </li>
+    </ul>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
+    <hr class="border-secondary">
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile')" wire:navigate>
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <button wire:click="logout" class="w-full text-start">
-                            <x-dropdown-link>
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </button>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
+    <!-- Dropdown usuario -->
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+            id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32"
+                class="rounded-circle me-2" />
+            <strong class="d-sm-block d-none">Mariano Roldan Luque</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
+        </ul>
     </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-                <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile')" wire:navigate>
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <button wire:click="logout" class="w-full text-start">
-                    <x-responsive-nav-link>
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </button>
-            </div>
-        </div>
-    </div>
-</nav>
+</aside>
