@@ -27,6 +27,5 @@ class AppServiceProvider extends ServiceProvider
     {
         Producto::observe(ProductoObserver::class);
         Movimiento::observe(MovimientoObserver::class);
-        Estanteria::observe(EstanteriaObserver::class);
     }
 }

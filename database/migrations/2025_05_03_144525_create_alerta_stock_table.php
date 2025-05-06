@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('producto_id');
             $table->integer('stock_actual');
-            $table->timestamp('fecha_alerta')->useCurrent();
+            $table->date('fecha_alerta')->useCurrent();
             $table->timestamps();
 
             $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');

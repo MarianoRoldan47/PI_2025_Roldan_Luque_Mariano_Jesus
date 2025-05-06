@@ -7,7 +7,7 @@ use App\Models\AlertaStock;
 use App\Models\Movimiento;
 use App\Models\Producto;
 use App\Models\User;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 class DashboardController extends Controller
 {
@@ -48,8 +48,8 @@ class DashboardController extends Controller
         $rankingUsuarios = Movimiento::whereNotNull('user_id')
             ->whereHas('usuario')
             ->whereBetween('fecha_movimiento', [
-                Carbon::now()->startOfMonth(),
-                Carbon::now()->endOfMonth()
+                Date::now()->startOfMonth(),
+                Date::now()->endOfMonth()
             ])
             ->selectRaw('user_id, COUNT(*) as total')
             ->with('usuario:id,name')

@@ -16,9 +16,7 @@ new class extends Component
     }
 }; ?>
 
-<!-- Sidebar -->
 <aside class="d-flex flex-column flex-shrink-0 p-3 bg-dark text-white" id="sidebar">
-    <!-- Logo / Título -->
     <a href="/" class="d-flex align-items-center justify-content-center mb-2 text-white text-decoration-none">
         <div class="d-none d-sm-flex">
             <img src="{{ asset('img/banner_sidebar.png') }}" class="rounded-2" style="width: 250px" alt="CyberStock WMS">

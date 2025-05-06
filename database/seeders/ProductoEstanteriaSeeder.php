@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
 
 class ProductoEstanteriaSeeder extends Seeder
 {
@@ -27,8 +27,8 @@ class ProductoEstanteriaSeeder extends Seeder
                     'producto_id' => $producto->id,
                     'estanteria_id' => $estanteria->id,
                     'cantidad' => $cantidad,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
+                    'created_at' => Date::now(),
+                    'updated_at' => Date::now(),
                 ]);
 
                 DB::table('estanterias')->where('id', $estanteria->id)->decrement('capacidad_libre', $cantidad);
