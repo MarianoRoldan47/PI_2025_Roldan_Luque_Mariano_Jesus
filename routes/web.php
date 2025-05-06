@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ViewsControllers\DashboardController;
 
 
-Route::view('dashboard', 'dashboard')
-    ->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])

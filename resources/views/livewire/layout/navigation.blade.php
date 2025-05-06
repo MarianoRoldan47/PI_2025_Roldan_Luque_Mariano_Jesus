@@ -42,6 +42,14 @@ new class extends Component
         <li class="nav-item">
             <a href="#" class="nav-link text-white d-flex align-items-center justify-content-sm-start" aria-current="page">
                 <div class="d-flex justify-content-center align-items-center" style="width: 20px;">
+                    <i class="fa-solid fa-exchange-alt"></i>
+                </div>
+                <p class="d-sm-block d-none m-0 ms-3">Movimientos</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white d-flex align-items-center justify-content-sm-start" aria-current="page">
+                <div class="d-flex justify-content-center align-items-center" style="width: 20px;">
                     <i class="fa-solid fa-tag"></i>
                 </div>
                 <p class="d-sm-block d-none m-0 ms-3">Productos</p>
@@ -53,14 +61,6 @@ new class extends Component
                     <i class="fa-solid fa-map-marker-alt"></i>
                 </div>
                 <p class="d-sm-block d-none m-0 ms-3">Zonas</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link text-white d-flex align-items-center justify-content-sm-start" aria-current="page">
-                <div class="d-flex justify-content-center align-items-center" style="width: 20px;">
-                    <i class="fa-solid fa-exchange-alt"></i>
-                </div>
-                <p class="d-sm-block d-none m-0 ms-3">Movimientos</p>
             </a>
         </li>
         <li class="nav-item">

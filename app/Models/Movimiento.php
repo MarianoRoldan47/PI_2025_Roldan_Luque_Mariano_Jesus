@@ -11,8 +11,16 @@ class Movimiento extends Model
     use HasFactory;
 
     protected $fillable = [
-        'producto_id', 'usuario_id', 'tipo', 'cantidad', 'origen_tipo', 'ubicacion_origen_id',
-        'destino_tipo', 'ubicacion_destino_id', 'estado', 'fecha_movimiento'
+        'producto_id',
+        'usuario_id',
+        'tipo',
+        'cantidad',
+        'origen_tipo',
+        'ubicacion_origen_id',
+        'destino_tipo',
+        'ubicacion_destino_id',
+        'estado',
+        'fecha_movimiento'
     ];
 
     public function producto()
@@ -22,6 +30,6 @@ class Movimiento extends Model
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
