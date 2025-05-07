@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Categoria;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\DB;
 
 class CategoriaSeeder extends Seeder
 {
@@ -24,10 +23,8 @@ class CategoriaSeeder extends Seeder
         ];
 
         foreach ($categorias as $nombre) {
-            DB::table('categorias')->insert([
+            Categoria::create([
                 'nombre' => $nombre,
-                'created_at' => Date::now(),
-                'updated_at' => Date::now(),
             ]);
         }
     }

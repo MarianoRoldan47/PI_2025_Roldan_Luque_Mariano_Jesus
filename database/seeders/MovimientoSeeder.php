@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Estanteria;
+use App\Models\Movimiento;
+use App\Models\Producto;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
 
 class MovimientoSeeder extends Seeder
@@ -14,9 +17,9 @@ class MovimientoSeeder extends Seeder
      */
     public function run(): void
     {
-        $productos = DB::table('productos')->get();
-        $usuarios = DB::table('users')->get();
-        $estanterias = DB::table('estanterias')->get();
+        $productos = Producto::all();
+        $usuarios = User::all();
+        $estanterias = Estanteria::all();
 
         foreach (range(1, 30) as $i) {
             $producto = $productos->random();
@@ -47,7 +50,7 @@ class MovimientoSeeder extends Seeder
                 $destino_tipo = 'estanteria';
             }
 
-            DB::table('movimientos')->insert([
+            Movimiento::create([
                 'producto_id' => $producto->id,
                 'user_id' => $user->id,
                 'tipo' => $tipo,
@@ -58,8 +61,6 @@ class MovimientoSeeder extends Seeder
                 'ubicacion_destino_id' => $destino_id,
                 'estado' => 'confirmado',
                 'fecha_movimiento' => $fecha,
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
         }
     }

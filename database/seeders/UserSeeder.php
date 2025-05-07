@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use App\Models\User;
 
 class UserSeeder extends Seeder
@@ -16,22 +14,20 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'dni' => '12345678A',
-            'name' => 'Admin',
-            'apellido1' => 'Apellido1',
-            'apellido2' => 'Apellido2',
-            'telefono' => '600000000',
-            'direccion' => 'Calle Ejemplo 123',
-            'codigo_postal' => '28080',
-            'localidad' => 'Madrid',
-            'provincia' => 'Madrid',
+            'dni' => '20621290L',
+            'name' => 'Mariano',
+            'apellido1' => 'Roldan',
+            'apellido2' => 'Luque',
+            'telefono' => '642160405',
+            'direccion' => 'Calle Fresno 69A',
+            'codigo_postal' => '14960',
+            'localidad' => 'Rute',
+            'provincia' => 'Cordoba',
             'rol' => 'Administrador',
-            'email' => 'admin@example.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
+            'email' => 'marianojesusroldanluque1@gmail.com',
+            'password' => "1234",
             'imagen' => null,
-            'fecha_nacimiento' => '1990-01-01',
-            'remember_token' => Str::random(10),
+            'fecha_nacimiento' => '2005-07-04',
         ]);
     }
 }

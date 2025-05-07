@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ubicacion_destino_id')->nullable();
 
             $table->enum('estado', ['pendiente', 'confirmado', 'cancelado'])->default('pendiente');
-            $table->date('fecha_movimiento');
+            $table->timestamp('fecha_movimiento')->default(Date::now());
             $table->timestamps();
 
             $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');

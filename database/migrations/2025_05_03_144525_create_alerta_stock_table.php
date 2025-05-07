@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('producto_id');
             $table->integer('stock_actual');
-            $table->date('fecha_alerta')->useCurrent();
+            $table->timestamp('fecha_alerta')->default(Date::now());
             $table->timestamps();
 
             $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');

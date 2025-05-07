@@ -54,6 +54,7 @@ if (ctx && movimientosChartData) {
 }
 
 const rankingChartData = window.dashboardRankingData;
+console.log(rankingChartData);
 
 if (rankingChartData) {
 

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Estanteria;
+use App\Models\Zona;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\DB;
 
 class EstanteriaSeeder extends Seeder
 {
@@ -14,17 +14,15 @@ class EstanteriaSeeder extends Seeder
      */
     public function run(): void
     {
-        $zonas = DB::table('zonas')->get();
+        $zonas = Zona::all();
 
         foreach ($zonas as $zona) {
             for ($i = 1; $i <= 3; $i++) {
                 $capacidad = rand(50, 100);
-                DB::table('estanterias')->insert([
+                Estanteria::create([
                     'zona_id' => $zona->id,
                     'capacidad_maxima' => $capacidad,
                     'capacidad_libre' => $capacidad,
-                    'created_at' => Date::now(),
-                    'updated_at' => Date::now(),
                 ]);
             }
         }

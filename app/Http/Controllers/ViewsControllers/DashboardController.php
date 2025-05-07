@@ -27,6 +27,7 @@ class DashboardController extends Controller
             ->orderBy('dia')
             ->get();
 
+
         $labels = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
         $dataPorDia = array_fill(0, 7, 0);

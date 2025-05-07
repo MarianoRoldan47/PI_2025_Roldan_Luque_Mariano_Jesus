@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Estanteria;
+use App\Models\Producto;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Date;
@@ -14,8 +16,8 @@ class ProductoEstanteriaSeeder extends Seeder
      */
     public function run(): void
     {
-        $productos = DB::table('productos')->get();
-        $estanterias = DB::table('estanterias')->get();
+        $productos = Producto::all();
+        $estanterias = Estanteria::all();
 
         foreach ($productos as $producto) {
             $estanteriasAleatorias = $estanterias->random(rand(1, 3));
@@ -27,11 +29,9 @@ class ProductoEstanteriaSeeder extends Seeder
                     'producto_id' => $producto->id,
                     'estanteria_id' => $estanteria->id,
                     'cantidad' => $cantidad,
-                    'created_at' => Date::now(),
-                    'updated_at' => Date::now(),
                 ]);
 
-                DB::table('estanterias')->where('id', $estanteria->id)->decrement('capacidad_libre', $cantidad);
+                Estanteria::where('id', $estanteria->id)->decrement('capacidad_libre', $cantidad);
             }
         }
     }

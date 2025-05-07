@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Zona;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\DB;
 
 class ZonaSeeder extends Seeder
 {
@@ -22,11 +21,9 @@ class ZonaSeeder extends Seeder
         ];
 
         foreach ($zonas as $zona) {
-            DB::table('zonas')->insert([
+            Zona::create([
                 'nombre' => $zona['nombre'],
                 'descripcion' => $zona['descripcion'],
-                'created_at' => Date::now(),
-                'updated_at' => Date::now(),
             ]);
         }
     }

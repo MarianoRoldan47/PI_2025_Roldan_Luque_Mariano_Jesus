@@ -84,7 +84,9 @@
             <div class="col-12 col-lg-6">
                 <div class="card bg-dark text-white mt-4">
                     <div class="card-body">
-                        <h5 class="card-title">Ranking de Usuarios</h5>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Ranking de Usuarios Mensual</h5>
+                        </div>
                         <canvas id="rankingChart"></canvas>
                     </div>
                 </div>
