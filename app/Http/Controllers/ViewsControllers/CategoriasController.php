@@ -31,31 +31,31 @@ class CategoriasController extends Controller
     public function store(Request $request)
     {
         try {
-            Log::info('Datos recibidos:', $request->all());
-
-            // Validar
             $validated = $request->validate([
-                'nombre' => 'required|string|max:255|unique:categorias,nombre'
+                'nombre' => 'required|string|max:255|unique:categorias'
             ]);
 
-            // Crear categoría
             $categoria = Categoria::create($validated);
 
-            Log::info('Categoría creada:', $categoria->toArray());
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'categoria' => $categoria,
+                    'message' => '¡Categoría creada correctamente!'
+                ]);
+            }
 
-            // Siempre devolver JSON ya que es una petición AJAX
-            return response()->json([
-                'id' => $categoria->id,
-                'nombre' => $categoria->nombre,
-                'message' => 'Categoría creada correctamente'
-            ], 201);
+            return redirect()->route('categorias.index')
+                ->with('success', '¡Categoría creada correctamente!');
         } catch (\Exception $e) {
-            Log::error('Error al crear categoría: ' . $e->getMessage());
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al crear la categoría: ' . $e->getMessage()
+                ], 422);
+            }
 
-            return response()->json([
-                'message' => 'Error al crear la categoría',
-                'error' => $e->getMessage()
-            ], 500);
+            return back()->withInput()->withErrors(['error' => 'Error al crear la categoría']);
         }
     }
 

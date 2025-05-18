@@ -9,7 +9,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-..." crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-..." crossorigin="anonymous">
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/3896197f07.js" crossorigin="anonymous"></script>
@@ -20,6 +21,40 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        .product-image {
+            height: 100px;
+        }
+
+        @media (min-width: 576px) {
+            .product-image {
+                height: 200px;
+            }
+        }
+
+        #sidebar {
+            width: 260px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 576px) {
+            #sidebar {
+                width: 60px;
+            }
+
+            #sidebar .nav-link {
+                padding: 0.5rem;
+                justify-content: center;
+            }
+
+            #sidebar .dropdown-toggle::after {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 60px;
+            }
+        }
+
         .modal.fade .modal-dialog {
             transform: scale(0.8);
             transition: transform 0.3s ease-in-out;
@@ -67,9 +102,54 @@
                 opacity: 1;
             }
         }
+
+        /* Estilos para la paginación */
+        .pagination {
+            justify-content: center;
+            margin-bottom: 0;
+        }
+
+        .page-item:not(:first-child) .page-link {
+            margin-left: -1px;
+        }
+
+        .page-item.active .page-link {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+
+        .page-link {
+            position: relative;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            margin-left: -1px;
+            line-height: 1.25;
+            color: #fff;
+            background-color: #212529;
+            border: 1px solid #373b3e;
+        }
+
+        .page-link:hover {
+            color: #fff;
+            background-color: #2c3034;
+            border-color: #373b3e;
+        }
+
+        /* Ajustes específicos para el contenedor de paginación */
+        .pagination-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        body {
+            background-color: white;
+        }
     </style>
 
     @stack('styles')
+
+    @livewireStyles
 </head>
 
 <body class="d-flex vh-100">
@@ -77,11 +157,11 @@
     <livewire:layout.navigation />
 
     @if (session('success'))
-        <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalTitle">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content bg-dark text-white">
                     <div class="modal-header border-bottom border-white">
-                        <h5 class="modal-title text-white">
+                        <h5 class="modal-title text-white" id="successModalTitle">
                             <i class="fas fa-check-circle text-success me-2"></i>¡Éxito!
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -96,7 +176,8 @@
                         </div>
                     </div>
                     <div class="modal-footer border-top border-white">
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                            id="successModalButton">Aceptar</button>
                     </div>
                 </div>
             </div>
@@ -133,6 +214,8 @@
     </script>
 
     @stack('scripts')
+
+    @livewireScripts
 </body>
 
 </html>

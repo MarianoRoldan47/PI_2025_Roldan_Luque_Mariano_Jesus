@@ -37,25 +37,58 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <h4 class="text-white text-center mb-4">{{ __('¿Olvidaste tu contraseña?') }}</h4>
+
+    <div class="mb-4 text-white-50 small text-center">
+        {{ __('No hay problema. Solo indícanos tu correo electrónico y te enviaremos un enlace para que puedas crear una nueva.') }}
     </div>
 
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    @if (session('status'))
+        <div class="alert alert-success d-flex align-items-center small mb-4" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <div>{{ session('status') }}</div>
+        </div>
+    @endif
 
     <form wire:submit="sendPasswordResetLink">
         <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="mb-4">
+            <div class="input-group">
+                <span class="input-group-text bg-dark border-secondary text-primary">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <input wire:model="email"
+                       type="email"
+                       id="email"
+                       class="form-control form-control-lg bg-dark text-white border-secondary @error('email') is-invalid @enderror"
+                       required
+                       autofocus
+                       placeholder="{{ __('Correo electrónico') }}">
+            </div>
+            @error('email')
+                <div class="invalid-feedback d-block small">
+                    <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                </div>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+        <!-- Submit Button -->
+        <button type="submit"
+                class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
+                style="background-color: #22a7e1; border: none;">
+            <i class="fas fa-paper-plane me-2"></i>
+            {{ __('Enviar enlace de recuperación') }}
+        </button>
+
+        <!-- Back to Login -->
+        <div class="text-center mt-4">
+            <a href="{{ route('login') }}"
+               class="text-primary text-decoration-none small"
+               wire:navigate>
+                <i class="fas fa-arrow-left me-1"></i>
+                {{ __('Volver al inicio de sesión') }}
+            </a>
         </div>
     </form>
 </div>

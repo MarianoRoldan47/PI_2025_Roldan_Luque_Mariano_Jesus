@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Livewire\Volt\Component;
 
-new class extends Component
-{
+new class extends Component {
     public string $current_password = '';
     public string $password = '';
     public string $password_confirmation = '';
@@ -24,7 +24,6 @@ new class extends Component
             ]);
         } catch (ValidationException $e) {
             $this->reset('current_password', 'password', 'password_confirmation');
-
             throw $e;
         }
 
@@ -34,46 +33,96 @@ new class extends Component
 
         $this->reset('current_password', 'password', 'password_confirmation');
 
-        $this->dispatch('password-updated');
+        // Añadir mensaje a la sesión flash
+        Session::flash('success', 'La contraseña se ha actualizado correctamente.');
+
+        // Redirigir a la misma página para mostrar el modal
+        $this->redirect(request()->header('Referer'), navigate: true);
     }
 }; ?>
 
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-white">
-            {{ __('Update Password') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-white">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
+<section class="card bg-dark shadow-lg border-0">
+    <div class="card-body p-3 p-sm-4">
+        <!-- Header -->
+        <h4 class="text-white mb-1">{{ __('Actualizar Contraseña') }}</h4>
+        <p class="text-white-50 small mb-4">
+            {{ __('Asegúrate de usar una contraseña segura para mantener tu cuenta protegida.') }}
         </p>
-    </header>
 
-    <form wire:submit="updatePassword" class="mt-6 space-y-6">
-        <div>
-            <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-            <x-text-input wire:model="current_password" id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
-            <x-input-error :messages="$errors->get('current_password')" class="mt-2" />
-        </div>
+        <form wire:submit="updatePassword" class="mt-4">
+            <!-- Contraseña actual -->
+            <div class="form-group mb-3">
+                <label for="current_password" class="form-label text-white small mb-1">
+                    {{ __('Contraseña Actual') }}
+                </label>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="fas fa-lock text-primary"></i>
+                    </span>
+                    <input wire:model="current_password" type="password" id="current_password"
+                        class="form-control form-control-sm bg-dark text-white border-secondary @error('current_password') is-invalid @enderror"
+                        required>
+                </div>
+                @error('current_password')
+                    <div class="invalid-feedback d-block small">
+                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                    </div>
+                @enderror
+            </div>
 
-        <div>
-            <x-input-label for="update_password_password" :value="__('New Password')" />
-            <x-text-input wire:model="password" id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <!-- Nueva contraseña -->
+            <div class="form-group mb-3">
+                <label for="password" class="form-label text-white small mb-1">
+                    {{ __('Nueva Contraseña') }}
+                </label>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="fas fa-key text-primary"></i>
+                    </span>
+                    <input wire:model="password" type="password" id="password"
+                        class="form-control form-control-sm bg-dark text-white border-secondary @error('password') is-invalid @enderror"
+                        required>
+                </div>
+                @error('password')
+                    <div class="invalid-feedback d-block small">
+                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                    </div>
+                @enderror
+            </div>
 
-        <div>
-            <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input wire:model="password_confirmation" id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+            <!-- Confirmar contraseña -->
+            <div class="form-group mb-4">
+                <label for="password_confirmation" class="form-label text-white small mb-1">
+                    {{ __('Confirmar Contraseña') }}
+                </label>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="fas fa-check-double text-primary"></i>
+                    </span>
+                    <input wire:model="password_confirmation" type="password" id="password_confirmation"
+                        class="form-control form-control-sm bg-dark text-white border-secondary" required>
+                </div>
+            </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <!-- Footer del formulario -->
+            <div
+                class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-2 gap-sm-3 border-top border-secondary mt-4 pt-3 pt-sm-4">
+                <div wire:loading class="text-primary small">
+                    <i class="fas fa-spinner fa-spin me-1"></i> {{ __('Guardando...') }}
+                </div>
 
-            <x-action-message class="me-3" on="password-updated">
-                {{ __('Saved.') }}
-            </x-action-message>
-        </div>
-    </form>
+                <div wire:loading.remove>
+                    @if (session('status') === 'password-updated')
+                        <div class="text-success small">
+                            <i class="fas fa-check-circle me-1"></i> {{ __('Guardado.') }}
+                        </div>
+                    @endif
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-save me-1"></i> {{ __('Guardar cambios') }}
+                </button>
+            </div>
+        </form>
+    </div>
 </section>

@@ -1,16 +1,27 @@
 <x-app-layout>
     <div class="container-fluid p-4 h-100 d-flex flex-column">
         <div class="row mb-4">
-            <div class="col">
+            <div class="col-12 col-md">
                 <h1 class="fs-3">NUEVO MOVIMIENTO - {{ ucfirst($tipo) }}</h1>
                 <p class="text-muted">Introduce los datos del nuevo movimiento</p>
             </div>
-            <div class="col text-end">
+            <div class="col-12 col-md text-end">
                 <a href="{{ route('movimientos.index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Volver
                 </a>
             </div>
         </div>
+        @if ($tipo === 'traslado')
+            <div class="alert alert-primary">
+                <i class="fas fa-info-circle me-2"></i>
+                El sistema gestionará automáticamente los movimientos necesarios para realizar el traslado.
+            </div>
+        @elseif ($tipo === 'salida')
+            <div class="alert alert-primary">
+                <i class="fas fa-info-circle me-2"></i>
+                El sistema gestionará automáticamente de qué ubicaciones extraer el producto.
+            </div>
+        @endif
 
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -54,8 +65,10 @@
 
                                 <div class="col-md-6">
                                     <label for="cantidad" class="form-label">Cantidad *</label>
-                                    <input type="number" class="form-control bg-dark text-white" id="cantidad"
-                                        name="cantidad" value="{{ old('cantidad') }}" required min="1">
+                                    <div class="cantidad-container">
+                                        <input type="number" class="form-control bg-dark text-white" id="cantidad"
+                                            name="cantidad" value="{{ old('cantidad') }}" required min="1">
+                                    </div>
                                 </div>
                             </div>
 
@@ -95,13 +108,6 @@
                             @elseif($tipo === 'salida')
                                 <!-- Sección de salida -->
                                 <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <div class="alert alert-info">
-                                            <i class="fas fa-info-circle me-2"></i>
-                                            El sistema gestionará automáticamente de qué ubicaciones extraer el
-                                            producto.
-                                        </div>
-                                    </div>
                                     <div class="col-md-12">
                                         <label for="destino_tipo" class="form-label">Destino *</label>
                                         <select class="form-select bg-dark text-white" id="destino_tipo"
@@ -178,69 +184,148 @@
                     const estanteriasOrigenSeleccionadas = new Map();
                     const estanteriasDestinoSeleccionadas = new Map();
 
-
-
                     if (tipo === 'traslado') {
-                        productoSelect.addEventListener('change', function() {
+                        let isUpdating = false; // Bandera para evitar recursión
+
+                        cantidadInput.addEventListener('change', function() {
+                            if (isUpdating) return; // Evitar recursión
+                            isUpdating = true;
+
+                            const cantidad = parseInt(this.value) || 0;
+                            const destinoSelect = document.getElementById('ubicacion_destino_selector');
+
+                            // Calcular capacidad total disponible
+                            const capacidadTotal = Array.from(destinoSelect.options)
+                                .filter(opt => opt.value)
+                                .reduce((sum, opt) => sum + (parseInt(opt.dataset.capacidad) || 0), 0);
+
+                            // Eliminar mensaje de error anterior
+                            const errorExistente = document.getElementById('error-cantidad');
+                            if (errorExistente) {
+                                errorExistente.remove();
+                            }
+
+                            if (cantidad > capacidadTotal) {
+                                // Crear mensaje de error
+                                const errorDiv = document.createElement('div');
+                                errorDiv.id = 'error-cantidad';
+                                errorDiv.className = 'alert alert-danger mt-2';
+                                errorDiv.innerHTML = `
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    No hay suficiente espacio disponible en las estanterías para realizar el traslado. Espacio total disponible para trasladar: ${capacidadTotal}
+                                `;
+
+                                this.parentNode.appendChild(errorDiv);
+                                this.value = capacidadTotal;
+                                cantidadRequerida = capacidadTotal;
+                            }
+
+                            // Actualizar las opciones solo si es necesario
+                            if (productoSelect.value && !isUpdating) {
+                                productoSelect.dispatchEvent(new Event('change'));
+                            }
+
+                            isUpdating = false;
+                        });
+
+                        productoSelect.addEventListener('change', async function() {
+                            if (isUpdating) return;
+                            isUpdating = true;
+
                             const productoId = this.value;
                             const origenSelect = document.getElementById('ubicacion_origen_selector');
                             const destinoSelect = document.getElementById('ubicacion_destino_selector');
+                            const cantidad = parseInt(cantidadInput.value) || 0;
 
                             // Limpiar selectores
                             origenSelect.innerHTML = '<option value="">Selecciona una estantería</option>';
                             destinoSelect.innerHTML = '<option value="">Selecciona una estantería</option>';
 
-                            if (!productoId) return;
+                            if (!productoId) {
+                                isUpdating = false;
+                                return;
+                            }
 
-                            // Mostrar indicador de carga
-                            origenSelect.disabled = true;
-                            destinoSelect.disabled = true;
+                            try {
+                                const response = await fetch(
+                                    `{{ route('movimientos.get-estanterias') }}?producto_id=${productoId}`, {
+                                        headers: {
+                                            'X-Requested-With': 'XMLHttpRequest',
+                                            'Accept': 'application/json'
+                                        }
+                                    });
 
-                            fetch(`{{ route('movimientos.get-estanterias') }}?producto_id=${productoId}`, {
-                                    headers: {
-                                        'X-Requested-With': 'XMLHttpRequest',
-                                        'Accept': 'application/json'
-                                    }
-                                })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error('Error en la respuesta del servidor');
-                                    }
-                                    return response.json();
-                                })
-                                .then(data => {
-                                    if (data.error) {
-                                        throw new Error(data.error);
-                                    }
+                                if (!response.ok) throw new Error('Error en la respuesta del servidor');
 
-                                    // Actualizar estanterías origen
+                                const data = await response.json();
+
+                                // Actualizar estanterías origen (con stock del producto)
+                                if (data.estanteriasOrigen && data.estanteriasOrigen.length > 0) {
                                     data.estanteriasOrigen.forEach(estanteria => {
-                                        const option = new Option(
-                                            `${estanteria.nombre} ${estanteria.zona} (Stock: ${estanteria.stock_producto})`,
-                                            estanteria.id
-                                        );
+                                        const option = document.createElement('option');
+                                        option.value = estanteria.id;
+                                        option.textContent =
+                                            `${estanteria.nombre} ${estanteria.zona} (Stock: ${estanteria.stock_producto})`;
                                         option.dataset.stock = estanteria.stock_producto;
-                                        origenSelect.add(option);
+                                        origenSelect.appendChild(option);
                                     });
+                                }
 
-                                    // Actualizar estanterías destino
+                                // Actualizar estanterías destino (con espacio libre)
+                                if (data.estanteriasDestino && data.estanteriasDestino.length > 0) {
                                     data.estanteriasDestino.forEach(estanteria => {
-                                        const option = new Option(
-                                            `${estanteria.nombre} ${estanteria.zona} (Espacio: ${estanteria.capacidad_libre})`,
-                                            estanteria.id
-                                        );
+                                        const option = document.createElement('option');
+                                        option.value = estanteria.id;
+                                        option.textContent =
+                                            `${estanteria.nombre} ${estanteria.zona} (Espacio: ${estanteria.capacidad_libre})`;
                                         option.dataset.capacidad = estanteria.capacidad_libre;
-                                        destinoSelect.add(option);
+                                        destinoSelect.appendChild(option);
                                     });
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                    alert('Error al cargar las estanterías: ' + error.message);
-                                })
-                                .finally(() => {
-                                    origenSelect.disabled = false;
-                                    destinoSelect.disabled = false;
-                                });
+                                }
+
+                                // Validar capacidad disponible si hay cantidad seleccionada
+                                if (cantidad > 0) {
+                                    cantidadInput.dispatchEvent(new Event('change'));
+                                }
+
+                            } catch (error) {
+                                console.error('Error:', error);
+                            } finally {
+                                isUpdating = false;
+                            }
+                        });
+                    }
+                    if (tipo === 'entrada') {
+                        cantidadInput.addEventListener('change', function() {
+                            const cantidad = parseInt(this.value) || 0;
+                            const capacidadTotal = Array.from(document.querySelectorAll(
+                                    '#ubicacion_destino_selector option'))
+                                .reduce((sum, option) => {
+                                    return sum + (parseInt(option.dataset.capacidad) || 0);
+                                }, 0);
+
+                            // Eliminar mensaje de error anterior si existe
+                            const errorExistente = document.getElementById('error-cantidad');
+                            if (errorExistente) {
+                                errorExistente.remove();
+                            }
+
+                            if (cantidad > capacidadTotal) {
+                                // Crear mensaje de error
+                                const errorDiv = document.createElement('div');
+                                errorDiv.id = 'error-cantidad';
+                                errorDiv.className = 'alert alert-danger mt-2';
+                                errorDiv.innerHTML = `
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    No hay suficiente espacio disponible en las estanterías. Espacio total disponible: ${capacidadTotal}
+                                `;
+
+                                // Insertar mensaje después del input
+                                this.parentNode.appendChild(errorDiv);
+
+                                // Ajustar el valor al máximo disponible
+                                this.value = capacidadTotal;
+                            }
                         });
                     }
 
@@ -506,16 +591,30 @@
                                 alert('La cantidad total asignada debe ser igual a la cantidad requerida');
                             }
                         } else if (tipo === 'traslado') {
+                            e.preventDefault(); // Prevenir envío por defecto
+
+                            // Verificar que hay ubicaciones seleccionadas
+                            if (estanteriasOrigenSeleccionadas.size === 0 || estanteriasDestinoSeleccionadas
+                                .size === 0) {
+                                alert('Debes seleccionar al menos una ubicación de origen y una de destino');
+                                return;
+                            }
+
+                            // Verificar cantidades
                             const totalOrigen = Array.from(estanteriasOrigenSeleccionadas.values())
                                 .reduce((a, b) => a + parseInt(b), 0);
                             const totalDestino = Array.from(estanteriasDestinoSeleccionadas.values())
                                 .reduce((a, b) => a + parseInt(b), 0);
+
                             if (totalOrigen !== cantidadRequerida || totalDestino !== cantidadRequerida) {
-                                e.preventDefault();
                                 alert(
                                     'Las cantidades en origen y destino deben ser iguales a la cantidad total del movimiento'
-                                );
+                                    );
+                                return;
                             }
+
+                            // Si todo está bien, enviar el formulario
+                            this.submit();
                         }
                     });
 

@@ -4,8 +4,7 @@ use App\Livewire\Actions\Logout;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Volt\Component;
 
-new class extends Component
-{
+new class extends Component {
     public string $password = '';
 
     /**
@@ -23,57 +22,66 @@ new class extends Component
     }
 }; ?>
 
-<section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-white">
-            {{ __('Delete Account') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-white">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+<section class="card bg-dark shadow-lg border-0">
+    <div class="card-body p-3 p-sm-4">
+        <!-- Header -->
+        <h4 class="text-white mb-2">{{ __('Eliminar Cuenta') }}</h4>
+        <p class="text-white-50 small mb-4">
+            {{ __('Una vez que tu cuenta sea eliminada, todos sus recursos y datos serán eliminados permanentemente. Antes de eliminar tu cuenta, por favor descarga cualquier dato o información que desees conservar.') }}
         </p>
-    </header>
 
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+        <!-- Delete Button -->
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+            <i class="fas fa-trash-alt me-2"></i>{{ __('Eliminar Cuenta') }}
+        </button>
 
-    <x-modal name="confirm-user-deletion" :show="$errors->isNotEmpty()" focusable>
-        <form wire:submit="deleteUser" class="p-6">
+        <!-- Modal -->
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark border-secondary">
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title text-white" id="confirmDeleteModalLabel">
+                            {{ __('¿Estás seguro de que quieres eliminar tu cuenta?') }}
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
 
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to delete your account?') }}
-            </h2>
+                    <form wire:submit="deleteUser">
+                        <div class="modal-body">
+                            <p class="text-white small mb-4">
+                                {{ __('Una vez que tu cuenta sea eliminada, todos sus recursos y datos serán eliminados permanentemente. Por favor, introduce tu contraseña para confirmar que deseas eliminar permanentemente tu cuenta.') }}
+                            </p>
 
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
-            </p>
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-dark border-secondary">
+                                        <i class="fas fa-lock text-danger"></i>
+                                    </span>
+                                    <input wire:model="password" type="password" id="password"
+                                        class="form-control form-control-sm bg-dark text-white border-secondary @error('password') is-invalid @enderror"
+                                        required placeholder="{{ __('Contraseña') }}">
+                                </div>
+                                @error('password')
+                                    <div class="invalid-feedback d-block small">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
 
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
-
-                <x-text-input
-                    wire:model="password"
-                    id="password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
-
-                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        <div class="modal-footer border-secondary">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-2"></i>{{ __('Cancelar') }}
+                            </button>
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt me-2"></i>{{ __('Eliminar Cuenta') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ms-3">
-                    {{ __('Delete Account') }}
-                </x-danger-button>
-            </div>
-        </form>
-    </x-modal>
+        </div>
+    </div>
 </section>

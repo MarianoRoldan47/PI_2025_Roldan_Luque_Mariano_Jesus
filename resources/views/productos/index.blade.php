@@ -1,80 +1,20 @@
 <x-app-layout>
-    <div class="container-fluid p-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
-            <div class="col">
-                <h1 class="fs-3">PRODUCTOS</h1>
-                <p class="text-muted">Gestión del catálogo de productos</p>
+    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
+        <div class="row g-2 g-sm-4 mb-2 mb-sm-4">
+            <div class="col-12 col-md">
+                <h1 class="fs-4 fs-sm-3 mb-0">PRODUCTOS</h1>
+                <p class="text-muted small mb-0">Catálogo de productos</p>
             </div>
-            <div class="col text-end">
-                <a href="{{ route('productos.create') }}" class="btn btn-info text-white">
-                    <i class="fas fa-plus"></i> Nuevo Producto
+            <div class="col-12 col-md text-md-end mt-2 mt-md-0">
+                <a href="{{ route('productos.create') }}" class="btn btn-primary btn-sm btn-md text-white">
+                    <i class="fas fa-plus-circle me-1"></i>Nuevo Producto
                 </a>
             </div>
         </div>
 
         <div class="card bg-dark text-white shadow-sm">
-            <div class="card-body">
-                @if ($productos->isEmpty())
-                    <p class="text-muted">No hay productos registrados.</p>
-                @else
-                    <div class="table-responsive">
-                        <table class="table table-dark table-hover align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Imagen</th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Categoría</th>
-                                    <th>Stock Total</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($productos as $producto)
-                                    <tr>
-                                        <td class="text-center">
-                                            <img src="{{ $producto->imagen ? asset('storage/' . $producto->imagen) : asset('img/default-product.png') }}"
-                                                alt="{{ $producto->nombre }}" class="img-thumbnail"
-                                                style="max-height: 100px; width: auto;">
-                                        </td>
-                                        <td>{{ $producto->codigo_producto }}</td>
-                                        <td>{{ $producto->nombre }}</td>
-                                        <td>{{ $producto->categoria->nombre }}</td>
-                                        <td>{{ $producto->stock_total }}</td>
-                                        <td>
-                                            <span
-                                                class="badge bg-{{ $producto->stock_total < $producto->stock_minimo_alerta ? 'danger' : 'success' }}">
-                                                {{ $producto->stock_total < $producto->stock_minimo_alerta ? 'Stock Bajo' : 'Stock OK' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-2 justify-content-start">
-                                                <a href="{{ route('productos.show', $producto) }}"
-                                                    class="btn btn-sm btn-primary">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="{{ route('productos.edit', $producto) }}"
-                                                    class="btn btn-sm btn-warning">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-danger delete-btn"
-                                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                    data-producto-id="{{ $producto->id }}">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-3">
-                        {{ $productos->links() }}
-                    </div>
-                @endif
+            <div class="card-body p-2 p-sm-3">
+                @livewire('tabla-productos')
             </div>
         </div>
 

@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MovimientosController extends Controller
 {
@@ -47,7 +48,6 @@ class MovimientosController extends Controller
         $productos = Producto::all();
         $usuarios = User::all();
 
-        // Obtener las estanterías con su información
         $estanteriasBase = Estanteria::with(['zona', 'productos'])
             ->get()
             ->map(function ($estanteria) use ($request) {
@@ -59,7 +59,6 @@ class MovimientosController extends Controller
                     'capacidad_maxima' => $estanteria->capacidad_maxima
                 ];
 
-                // Añadir información de stock por producto si hay uno seleccionado
                 if ($request->producto_id) {
                     $stock = $estanteria->productos()
                         ->where('producto_id', $request->producto_id)
@@ -81,16 +80,12 @@ class MovimientosController extends Controller
                 return $estanteria['capacidad_libre'] > 0;
             })->values();
         } elseif ($tipo === 'traslado') {
-            // Para traslados:
-            // - Origen: solo estanterías que tienen stock del producto
-            // - Destino: estanterías con capacidad libre EXCEPTO las que ya tienen el producto
             $viewData['estanteriasOrigen'] = $estanteriasBase
                 ->filter(function ($estanteria) {
                     return isset($estanteria['stock_producto']) && $estanteria['stock_producto'] > 0;
                 })
                 ->values();
 
-            // Obtener IDs de estanterías que tienen el producto
             $estanteriasConProducto = $viewData['estanteriasOrigen']->pluck('id')->toArray();
 
             $viewData['estanteriasDestino'] = $estanteriasBase
@@ -99,7 +94,7 @@ class MovimientosController extends Controller
                         !in_array($estanteria['id'], $estanteriasConProducto);
                 })
                 ->values();
-        } else { // salida
+        } else {
             $viewData['estanterias'] = $estanteriasBase;
         }
 
@@ -114,7 +109,6 @@ class MovimientosController extends Controller
         try {
             DB::beginTransaction();
 
-            // Validaciones básicas
             $validated = $request->validate([
                 'producto_id' => 'required|exists:productos,id',
                 'cantidad' => 'required|integer|min:1',
@@ -123,18 +117,22 @@ class MovimientosController extends Controller
 
             $producto = Producto::findOrFail($request->producto_id);
 
-            // Manejar cada tipo de movimiento
             switch ($request->tipo) {
                 case 'entrada':
-                    // Validar ubicaciones
                     $request->validate([
                         'ubicaciones' => 'required|array',
                         'ubicaciones.*' => 'required|integer|min:1'
                     ]);
 
+                    $capacidadTotalDisponible = Estanteria::sum('capacidad_libre');
+
+                    if ($capacidadTotalDisponible < $request->cantidad) {
+                        throw new Exception('No hay suficiente espacio disponible en las estanterías. Espacio total disponible: ' . $capacidadTotalDisponible);
+                    }
+
                     $totalAsignado = array_sum($request->ubicaciones);
                     if ($totalAsignado !== (int)$request->cantidad) {
-                        throw new \Exception('La cantidad total asignada no coincide con la cantidad del movimiento');
+                        throw new Exception('La cantidad total asignada no coincide con la cantidad del movimiento');
                     }
 
                     foreach ($request->ubicaciones as $estanteriaId => $cantidad) {
@@ -151,20 +149,22 @@ class MovimientosController extends Controller
                         ]);
 
                         $estanteria = Estanteria::findOrFail($estanteriaId);
+                        $estanteria->capacidad_libre -= $cantidad;
+                        $estanteria->save();
 
-                        // Comprobar si ya existe el producto en la estantería
+                        $producto->stock_total += $cantidad;
+                        $producto->save();
+
                         $existingPivot = $estanteria->productos()
                             ->where('producto_id', $request->producto_id)
                             ->first();
 
                         if ($existingPivot) {
-                            // Actualizar la cantidad existente
                             $estanteria->productos()->updateExistingPivot($request->producto_id, [
                                 'cantidad' => DB::raw("cantidad + $cantidad"),
                                 'updated_at' => now()
                             ]);
                         } else {
-                            // Crear nueva relación
                             $estanteria->productos()->attach($request->producto_id, [
                                 'cantidad' => $cantidad,
                                 'created_at' => now(),
@@ -175,12 +175,10 @@ class MovimientosController extends Controller
                     break;
 
                 case 'salida':
-                    // Verificar stock total disponible
                     if ($producto->stock_total < $request->cantidad) {
                         throw new \Exception('No hay suficiente stock disponible.');
                     }
 
-                    // Obtener ubicaciones con stock ordenadas por fecha de entrada (FIFO)
                     $ubicaciones = DB::table('producto_estanteria')
                         ->where('producto_id', $request->producto_id)
                         ->where('cantidad', '>', 0)
@@ -192,107 +190,150 @@ class MovimientosController extends Controller
                     foreach ($ubicaciones as $ubicacion) {
                         $cantidadASacar = min($cantidadPendiente, $ubicacion->cantidad);
 
-                        // Crear movimiento de salida
-                        Movimiento::create([
-                            'producto_id' => $request->producto_id,
-                            'cantidad' => $cantidadASacar,
-                            'tipo' => 'salida',
-                            'origen_tipo' => 'estanteria',
-                            'ubicacion_origen_id' => $ubicacion->estanteria_id,
-                            'destino_tipo' => 'cliente',
-                            'fecha_movimiento' => now(),
-                            'user_id' => Auth::user()->id,
-                            'estado' => 'confirmado'
-                        ]);
-
-                        // Actualizar stock en ubicación
-                        DB::table('producto_estanteria')
-                            ->where('estanteria_id', $ubicacion->estanteria_id)
-                            ->where('producto_id', $request->producto_id)
-                            ->update([
-                                'cantidad' => DB::raw("cantidad - $cantidadASacar"),
-                                'updated_at' => now()
+                        if ($cantidadASacar > 0) {
+                            Movimiento::create([
+                                'producto_id' => $request->producto_id,
+                                'cantidad' => $cantidadASacar,
+                                'tipo' => 'salida',
+                                'origen_tipo' => 'estanteria',
+                                'ubicacion_origen_id' => $ubicacion->estanteria_id,
+                                'destino_tipo' => 'cliente',
+                                'fecha_movimiento' => now(),
+                                'user_id' => Auth::user()->id,
+                                'estado' => 'confirmado'
                             ]);
 
-                        $cantidadPendiente -= $cantidadASacar;
-                        if ($cantidadPendiente <= 0) break;
+                            $estanteria = Estanteria::findOrFail($ubicacion->estanteria_id);
+                            $estanteria->capacidad_libre += $cantidadASacar;
+                            $estanteria->save();
+
+                            $producto->decrement('stock_total', $cantidadASacar);
+
+                            if ($cantidadASacar >= $ubicacion->cantidad) {
+                                DB::table('producto_estanteria')
+                                    ->where('estanteria_id', $ubicacion->estanteria_id)
+                                    ->where('producto_id', $request->producto_id)
+                                    ->delete();
+                            } else {
+                                DB::table('producto_estanteria')
+                                    ->where('estanteria_id', $ubicacion->estanteria_id)
+                                    ->where('producto_id', $request->producto_id)
+                                    ->decrement('cantidad', $cantidadASacar);
+                            }
+
+                            $cantidadPendiente -= $cantidadASacar;
+
+                            if ($cantidadPendiente <= 0) {
+                                break;
+                            }
+                        }
                     }
 
                     if ($cantidadPendiente > 0) {
-                        throw new \Exception('Error al procesar la salida del stock.');
+                        throw new \Exception('Error al procesar la salida del stock. Cantidad pendiente: ' . $cantidadPendiente);
                     }
 
                     break;
 
                 case 'traslado':
-                    // Validaciones para traslado
                     $request->validate([
-                        'ubicacion_origen_id' => 'required|exists:estanterias,id',
-                        'ubicacion_destino_id' => 'required|different:ubicacion_origen_id|exists:estanterias,id'
+                        'ubicaciones_origen' => 'required|array',
+                        'ubicaciones_origen.*' => 'required|integer|min:1',
+                        'ubicaciones_destino' => 'required|array',
+                        'ubicaciones_destino.*' => 'required|integer|min:1'
                     ]);
 
-                    $estanteriaOrigen = Estanteria::findOrFail($request->ubicacion_origen_id);
-                    $estanteriaDestino = Estanteria::findOrFail($request->ubicacion_destino_id);
+                    $totalOrigen = array_sum($request->ubicaciones_origen);
+                    $totalDestino = array_sum($request->ubicaciones_destino);
 
-                    // Verificar stock en origen
-                    $stockOrigen = $estanteriaOrigen->productos()
-                        ->where('producto_id', $request->producto_id)
-                        ->first()?->pivot->cantidad ?? 0;
-
-                    if ($stockOrigen < $request->cantidad) {
-                        throw new \Exception('No hay suficiente stock en la ubicación de origen.');
+                    if ($totalOrigen !== (int)$request->cantidad || $totalDestino !== (int)$request->cantidad) {
+                        throw new \Exception('Las cantidades en origen y destino deben coincidir con la cantidad total del movimiento');
                     }
 
-                    // Verificar capacidad en destino
-                    if ($estanteriaDestino->capacidad_libre < $request->cantidad) {
-                        throw new \Exception('La estantería de destino no tiene suficiente espacio.');
-                    }
-
-                    // Crear movimiento de traslado
-                    $movimiento = Movimiento::create([
-                        'producto_id' => $request->producto_id,
-                        'cantidad' => $request->cantidad,
-                        'tipo' => 'traslado',
-                        'origen_tipo' => 'estanteria',
-                        'ubicacion_origen_id' => $request->ubicacion_origen_id,
-                        'destino_tipo' => 'estanteria',
-                        'ubicacion_destino_id' => $request->ubicacion_destino_id,
-                        'fecha_movimiento' => now(),
-                        'user_id' => Auth::user()->id,
-                        'estado' => 'confirmado'
-                    ]);
-
-                    // Actualizar stock en ambas ubicaciones
-                    DB::table('producto_estanteria')
-                        ->where('estanteria_id', $request->ubicacion_origen_id)
-                        ->where('producto_id', $request->producto_id)
-                        ->update([
-                            'cantidad' => DB::raw("cantidad - {$request->cantidad}"),
-                            'updated_at' => now()
-                        ]);
-
-                    // Actualizar o crear stock en destino
-                    $existingDestino = DB::table('producto_estanteria')
-                        ->where('estanteria_id', $request->ubicacion_destino_id)
-                        ->where('producto_id', $request->producto_id)
-                        ->first();
-
-                    if ($existingDestino) {
-                        // Actualizar cantidad existente
-                        DB::table('producto_estanteria')
-                            ->where('estanteria_id', $request->ubicacion_destino_id)
+                    foreach ($request->ubicaciones_origen as $origenId => $cantidadOrigen) {
+                        $stockDisponible = DB::table('producto_estanteria')
+                            ->where('estanteria_id', $origenId)
                             ->where('producto_id', $request->producto_id)
-                            ->update([
-                                'cantidad' => DB::raw("cantidad + {$request->cantidad}"),
-                                'updated_at' => now()
-                            ]);
-                    } else {
-                        // Crear nueva relación
-                        $estanteriaDestino->productos()->attach($producto->id, [
-                            'cantidad' => $request->cantidad,
-                            'created_at' => now(),
-                            'updated_at' => now()
-                        ]);
+                            ->value('cantidad') ?? 0;
+
+                        if ($stockDisponible < $cantidadOrigen) {
+                            throw new \Exception("No hay suficiente stock en la estantería origen ID: {$origenId}");
+                        }
+                    }
+
+                    $destinos = [];
+                    foreach ($request->ubicaciones_destino as $destinoId => $cantidadRequerida) {
+                        $destinos[$destinoId] = [
+                            'cantidad_requerida' => $cantidadRequerida,
+                            'cantidad_pendiente' => $cantidadRequerida
+                        ];
+                    }
+
+                    foreach ($request->ubicaciones_origen as $origenId => $cantidadDisponible) {
+                        $cantidadRestante = $cantidadDisponible;
+
+                        foreach ($destinos as $destinoId => &$destino) {
+                            if ($cantidadRestante <= 0) break;
+                            if ($destino['cantidad_pendiente'] <= 0) continue;
+
+                            $cantidadMover = min($cantidadRestante, $destino['cantidad_pendiente']);
+
+                            if ($cantidadMover > 0) {
+                                Movimiento::create([
+                                    'producto_id' => $request->producto_id,
+                                    'cantidad' => $cantidadMover,
+                                    'tipo' => 'traslado',
+                                    'origen_tipo' => 'estanteria',
+                                    'ubicacion_origen_id' => $origenId,
+                                    'destino_tipo' => 'estanteria',
+                                    'ubicacion_destino_id' => $destinoId,
+                                    'fecha_movimiento' => now(),
+                                    'user_id' => Auth::id(),
+                                    'estado' => 'confirmado'
+                                ]);
+
+                                $stockActual = DB::table('producto_estanteria')
+                                    ->where('estanteria_id', $origenId)
+                                    ->where('producto_id', $request->producto_id)
+                                    ->value('cantidad');
+
+                                if ($stockActual == $cantidadMover) {
+                                    DB::table('producto_estanteria')
+                                        ->where('estanteria_id', $origenId)
+                                        ->where('producto_id', $request->producto_id)
+                                        ->delete();
+                                } else {
+                                    DB::table('producto_estanteria')
+                                        ->where('estanteria_id', $origenId)
+                                        ->where('producto_id', $request->producto_id)
+                                        ->decrement('cantidad', $cantidadMover);
+                                }
+
+                                DB::table('producto_estanteria')
+                                    ->updateOrInsert(
+                                        [
+                                            'estanteria_id' => $destinoId,
+                                            'producto_id' => $request->producto_id
+                                        ],
+                                        [
+                                            'cantidad' => DB::raw("COALESCE(cantidad, 0) + {$cantidadMover}"),
+                                            'updated_at' => now()
+                                        ]
+                                    );
+
+                                Estanteria::where('id', $origenId)->increment('capacidad_libre', $cantidadMover);
+                                Estanteria::where('id', $destinoId)->decrement('capacidad_libre', $cantidadMover);
+
+                                $cantidadRestante -= $cantidadMover;
+                                $destino['cantidad_pendiente'] -= $cantidadMover;
+                            }
+                        }
+                    }
+
+                    foreach ($destinos as $destinoId => $destino) {
+                        if ($destino['cantidad_pendiente'] > 0) {
+                            throw new \Exception("No se pudo distribuir toda la cantidad requerida para el destino {$destinoId}");
+                        }
                     }
                     break;
             }
@@ -313,7 +354,6 @@ class MovimientosController extends Controller
      */
     public function show(Movimiento $movimiento)
     {
-        // Cargar el producto incluso si está eliminado
         $movimiento->load(['producto' => function ($query) {
             $query->withTrashed();
         }]);
@@ -329,7 +369,6 @@ class MovimientosController extends Controller
         $productos = Producto::all();
         $usuarios = User::all();
 
-        // Obtener las estanterías con su información de stock y capacidad
         $estanterias = Estanteria::with(['productos' => function ($query) use ($movimiento) {
             $query->where('producto_id', $movimiento->producto_id)
                 ->withPivot('cantidad');
@@ -393,7 +432,8 @@ class MovimientosController extends Controller
                 ], 400);
             }
 
-            // Obtener estanterías que tienen el producto con cantidad > 0
+            $stockTotal = Producto::find($producto_id)->stock_total;
+
             $estanteriasOrigen = DB::table('estanterias')
                 ->join('producto_estanteria', 'estanterias.id', '=', 'producto_estanteria.estanteria_id')
                 ->leftJoin('zonas', 'estanterias.zona_id', '=', 'zonas.id')
@@ -415,13 +455,17 @@ class MovimientosController extends Controller
                     ];
                 });
 
-            // IDs de estanterías que ya tienen el producto
-            $estanteriasConProducto = $estanteriasOrigen->pluck('id');
+            $stockEnEstanterias = $estanteriasOrigen->sum('stock_producto');
 
-            // Obtener estanterías disponibles para destino
+            if ($stockEnEstanterias !== $stockTotal) {
+                Log::warning("Discrepancia en stock del producto {$producto_id}:
+                Stock total: {$stockTotal},
+                Suma en estanterías: {$stockEnEstanterias}");
+            }
+
             $estanteriasDestino = Estanteria::with('zona')
-                ->whereNotIn('id', $estanteriasConProducto)
                 ->where('capacidad_libre', '>', 0)
+                ->whereNotIn('id', $estanteriasOrigen->pluck('id'))
                 ->get()
                 ->map(function ($estanteria) {
                     return [
@@ -434,7 +478,8 @@ class MovimientosController extends Controller
 
             return response()->json([
                 'estanteriasOrigen' => $estanteriasOrigen,
-                'estanteriasDestino' => $estanteriasDestino
+                'estanteriasDestino' => $estanteriasDestino,
+                'stockTotal' => $stockTotal
             ]);
         } catch (\Exception $e) {
             return response()->json([

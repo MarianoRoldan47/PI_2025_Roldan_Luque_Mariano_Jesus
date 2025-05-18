@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('codigo_postal', 5);
             $table->string('localidad');
             $table->string('provincia');
-            $table->enum('rol', ['Administrador', 'Operador', 'Supervisor'])->default('Operador');
+            $table->enum('rol', ['Administrador', 'Usuario'])->default('Usuario');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

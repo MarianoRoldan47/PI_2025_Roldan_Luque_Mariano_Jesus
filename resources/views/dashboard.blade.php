@@ -8,14 +8,39 @@
                 <p class="text-muted">Resumen de actividad del almacén</p>
             </div>
             <div class="col text-end">
-                <button class="btn btn-info text-white" onclick="location.href='#{{-- route('movimientos.create') --}}'">+ Nuevo Movimiento</button>
-
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMovimientosBtn"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-plus-circle me-2"></i>Nuevo Movimiento
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-sm"
+                        aria-labelledby="dropdownMovimientosBtn">
+                        <li>
+                            <a class="dropdown-item py-2"
+                                href="{{ route('movimientos.create', ['tipo' => 'entrada']) }}">
+                                <i class="fas fa-arrow-right text-success me-2"></i> Entrada
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2"
+                                href="{{ route('movimientos.create', ['tipo' => 'traslado']) }}">
+                                <i class="fas fa-exchange-alt text-info me-2"></i> Traslado
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2"
+                                href="{{ route('movimientos.create', ['tipo' => 'salida']) }}">
+                                <i class="fas fa-arrow-left text-danger me-2"></i> Salida
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
         <div class="row g-4 informativos">
             <div class="col-12 col-md-6 col-xl-3">
-                <a href="#" class="text-decoration-none">
+                <a href="{{ route('productos.index') }}" class="text-decoration-none">
                     <div class="card bg-dark border-0 shadow-sm text-white h-100">
                         <div class="card-body d-flex align-items-center">
                             <i class="bi bi-box-seam fs-2 text-warning me-3"></i>
@@ -43,7 +68,7 @@
             </div>
 
             <div class="col-12 col-md-6 col-xl-3">
-                <a href="#" class="text-decoration-none">
+                <a href="{{ route('movimientos.index') }}" class="text-decoration-none">
                     <div class="card bg-dark border-0 shadow-sm text-white h-100">
                         <div class="card-body d-flex align-items-center">
                             <i class="bi bi-graph-up fs-2 text-primary me-3"></i>
