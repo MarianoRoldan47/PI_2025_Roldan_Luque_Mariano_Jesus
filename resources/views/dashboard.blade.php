@@ -1,16 +1,15 @@
 <x-app-layout>
     @vite('resources/css/views/dashboard.css')
 
-    <div class="container-fluid p-4">
+    <div class="container-fluid p-4 h-100 d-flex flex-column">
         <div class="row mb-4">
             <div class="col">
                 <h1 class="fs-3">PANEL DE CONTROL</h1>
                 <p class="text-muted">Resumen de actividad del almacén</p>
             </div>
             <div class="col text-end">
-                <a href="" class="text-decoration-none">
-                    <button class="btn btn-info text-white">+ Nuevo Movimiento</button>
-                </a>
+                <button class="btn btn-info text-white" onclick="location.href='#{{-- route('movimientos.create') --}}'">+ Nuevo Movimiento</button>
+
             </div>
         </div>
 
@@ -72,7 +71,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row flex-grow-1 overflow-auto d-flex align-items-center">
             <div class="col-12 col-lg-6">
                 <div class="card bg-dark text-white mt-4">
                     <div class="card-body">

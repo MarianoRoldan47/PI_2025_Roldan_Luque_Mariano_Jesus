@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('estanterias', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
             $table->unsignedBigInteger('zona_id');
             $table->integer('capacidad_maxima');
             $table->integer('capacidad_libre');

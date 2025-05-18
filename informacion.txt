@@ -1,0 +1,19 @@
+----- Limpiar cache de rutas -----
+
+php artisan route:clear
+
+
+----- Limpiar cache de vistas -----
+
+php artisan view:clear
+
+
+----- Limpiar cache de configuracion -----
+
+php artisan config:clear
+
+php artisan serve --host=0.0.0.0 --port=8000
+
+php artisan make:controller MovimientoController --resource
+
+npm run build && php artisan serve --host=0.0.0.0 --port=8000

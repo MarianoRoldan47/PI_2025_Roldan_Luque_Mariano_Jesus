@@ -54,7 +54,7 @@ class ProductoObserver
                 'producto_id' => $producto->id
             ]);
 
-            $alertaStock->stock_actual = $producto->stock_total;
+            $alertaStock->stock_actual = $producto->stock_total ?? 0;
             $alertaStock->fecha_alerta = $alertaStock->fecha_alerta ?? now();
             $alertaStock->save();
         } else {

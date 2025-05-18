@@ -20,7 +20,6 @@ class Estanteria extends Model
     public function productos()
     {
         return $this->belongsToMany(Producto::class, 'producto_estanteria')
-                    ->withPivot('cantidad')
-                    ->withTimestamps();
+                    ->withPivot('cantidad');
     }
 }

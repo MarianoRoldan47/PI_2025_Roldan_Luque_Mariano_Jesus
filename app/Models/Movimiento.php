@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Movimiento extends Model
 {
@@ -12,7 +13,7 @@ class Movimiento extends Model
 
     protected $fillable = [
         'producto_id',
-        'usuario_id',
+        'user_id',
         'tipo',
         'cantidad',
         'origen_tipo',
@@ -23,6 +24,10 @@ class Movimiento extends Model
         'fecha_movimiento'
     ];
 
+    protected $casts = [
+        'fecha_movimiento' => 'datetime',
+    ];
+
     public function producto()
     {
         return $this->belongsTo(Producto::class);
@@ -31,5 +36,15 @@ class Movimiento extends Model
     public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function origen(): BelongsTo
+    {
+        return $this->belongsTo(Estanteria::class, 'ubicacion_origen_id');
+    }
+
+    public function destino(): BelongsTo
+    {
+        return $this->belongsTo(Estanteria::class, 'ubicacion_destino_id');
     }
 }

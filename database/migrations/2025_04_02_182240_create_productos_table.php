@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('imagen')->nullable();
             $table->enum('tipo', ['materia_prima', 'producto_terminado']);
             $table->unsignedBigInteger('categoria_id');
-            $table->integer('stock_total');
+            $table->integer('stock_total')->default(0);
             $table->integer('stock_minimo_alerta');
             $table->softDeletes();
             $table->timestamps();
