@@ -7,7 +7,11 @@
                 <h1 class="fs-3">PANEL DE CONTROL</h1>
                 <p class="text-muted">Resumen de actividad del almacén</p>
             </div>
-            <div class="col text-end">
+            <div class="col text-end d-flex justify-content-end align-items-center gap-2">
+                <a href="{{ route('productos.create') }}" class="btn btn-success">
+                    <i class="fas fa-plus-circle me-2"></i>Nuevo Producto
+                </a>
+
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMovimientosBtn"
                         data-bs-toggle="dropdown" aria-expanded="false">

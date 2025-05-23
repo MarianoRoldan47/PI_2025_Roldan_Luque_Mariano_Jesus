@@ -1,23 +1,23 @@
 <x-app-layout>
-    <div class="container-fluid p-4 h-100 d-flex flex-column">
+    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
         <div class="row mb-4">
             <div class="col-12 col-md">
-                <h1 class="fs-3">NUEVO MOVIMIENTO - {{ ucfirst($tipo) }}</h1>
-                <p class="text-muted">Introduce los datos del nuevo movimiento</p>
+                <h1 class="h3">NUEVO MOVIMIENTO - {{ ucfirst($tipo) }}</h1>
+                <p>Introduce los datos del nuevo movimiento</p>
             </div>
-            <div class="col-12 col-md text-end">
+            <div class="col-12 col-md d-flex justify-content-end align-items-center">
                 <a href="{{ route('movimientos.index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Volver
                 </a>
             </div>
         </div>
         @if ($tipo === 'traslado')
-            <div class="alert alert-primary">
+            <div class="alert alert-warning">
                 <i class="fas fa-info-circle me-2"></i>
                 El sistema gestionará automáticamente los movimientos necesarios para realizar el traslado.
             </div>
         @elseif ($tipo === 'salida')
-            <div class="alert alert-primary">
+            <div class="alert alert-warning">
                 <i class="fas fa-info-circle me-2"></i>
                 El sistema gestionará automáticamente de qué ubicaciones extraer el producto.
             </div>

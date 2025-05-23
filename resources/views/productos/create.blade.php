@@ -3,11 +3,11 @@
         <!-- Header -->
         <div class="row g-2 mb-2 mb-sm-4">
             <div class="col-12 col-md">
-                <h1 class="fs-5 fs-sm-4 mb-0">NUEVO PRODUCTO</h1>
-                <p class="text-muted small mb-0">Introduce los datos del nuevo producto</p>
+                <h1 class="h3">NUEVO PRODUCTO</h1>
+                <p>Introduce los datos del nuevo producto</p>
             </div>
-            <div class="col-12 col-md text-md-end mt-2 mt-md-0">
-                <a href="{{ route('productos.index') }}" class="btn btn-secondary btn-sm">
+            <div class="col-12 col-md d-flex justify-content-end align-items-center">
+                <a href="{{ route('productos.index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-1"></i>Volver
                 </a>
             </div>

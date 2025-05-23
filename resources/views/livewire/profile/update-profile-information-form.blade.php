@@ -81,7 +81,8 @@ new class extends Component {
 
         $user->save();
 
-        $this->dispatch('profile-updated', name: $user->name);
+        $this->redirect(request()->header('Referer'));
+
     }
 
     public function sendVerification(): void
@@ -91,6 +92,22 @@ new class extends Component {
             $user->sendEmailVerificationNotification();
             Session::flash('status', 'verification-link-sent');
         }
+    }
+    public function deleteImage(): void
+    {
+        $user = Auth::user();
+
+        if ($this->imagen) {
+            $this->imagen = null;
+        }
+
+        if ($user->imagen) {
+            \Storage::disk('public')->delete($user->imagen);
+            $user->imagen = null;
+            $user->save();
+        }
+
+        $this->redirect(request()->header('Referer'));
     }
 };
 ?>
@@ -103,15 +120,33 @@ new class extends Component {
                 <div class="d-flex flex-column flex-sm-row align-items-center gap-3 gap-sm-4">
                     <!-- Imagen de perfil -->
                     <div class="position-relative mb-3 mb-sm-0">
-                        <div class="rounded-circle overflow-hidden" style="width: 90px; height: 90px;">
-                            <img src="{{ Auth::user()->imagen ? asset('storage/' . Auth::user()->imagen) : asset('img/default-profile.png') }}"
-                                class="w-100 h-100 object-fit-cover">
+                        <div class="image-upload-container rounded-circle overflow-hidden border border-secondary"
+                            style="width: 120px; height: 120px;">
+                            @if ($imagen)
+                                <img src="{{ $imagen->temporaryUrl() }}" class="w-100 h-100 object-fit-cover">
+                            @else
+                                <img src="{{ Auth::user()->imagen ? asset('storage/' . Auth::user()->imagen) : asset('img/default-profile.png') }}"
+                                    class="w-100 h-100 object-fit-cover">
+                            @endif
+
+                            <!-- Overlay para cambiar imagen -->
+                            <label for="imagen"
+                                class="image-upload-overlay d-flex align-items-center justify-content-center mb-0">
+                                <i class="fas fa-camera fs-4"></i>
+                                <input type="file" wire:model="imagen" id="imagen" class="d-none"
+                                    accept="image/*">
+                            </label>
                         </div>
-                        <label for="imagen"
-                            class="position-absolute bottom-0 end-0 bg-primary rounded-circle p-2 cursor-pointer shadow-sm">
-                            <i class="fas fa-camera text-white small"></i>
-                            <input type="file" wire:model="imagen" id="imagen" class="d-none" accept="image/*">
-                        </label>
+
+                        <!-- Botón eliminar imagen separado del overlay -->
+                        @if (Auth::user()->imagen || $imagen)
+                            <button type="button" wire:click="deleteImage"
+                                class="position-absolute top-0 end-0 btn btn-danger btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm"
+                                style="width: 24px; height: 24px; transform: translate(25%, -25%);"
+                                title="Eliminar imagen">
+                                <i class="fas fa-times small"></i>
+                            </button>
+                        @endif
                     </div>
                     <!-- Info del usuario -->
                     <div class="text-center text-sm-start">
@@ -238,4 +273,37 @@ new class extends Component {
             </div>
         </form>
     </div>
+    @push('styles')
+        <style>
+            .image-upload-container {
+                position: relative;
+                cursor: pointer;
+            }
+
+            .image-upload-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                color: white;
+                opacity: 0;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+
+            .image-upload-container:hover .image-upload-overlay {
+                opacity: 1;
+            }
+
+            .btn.rounded-circle {
+                transition: all 0.2s ease;
+            }
+
+            .btn.rounded-circle:hover {
+                transform: translate(25%, -25%) scale(1.1) !important;
+            }
+        </style>
+    @endpush
 </section>

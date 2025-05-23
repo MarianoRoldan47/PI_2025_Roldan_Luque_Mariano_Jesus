@@ -50,7 +50,7 @@ class ProductosController extends Controller
 
     public function show(Producto $producto)
     {
-        $producto->load(['categoria', 'estanterias.zona', 'movimientos' => function($query) {
+        $producto->load(['categoria', 'estanterias.zona', 'movimientos' => function ($query) {
             $query->latest('fecha_movimiento')->limit(5);
         }]);
 
@@ -79,9 +79,14 @@ class ProductosController extends Controller
 
         if ($request->hasFile('imagen')) {
             if ($producto->imagen) {
-                Storage::disk('public')->delete($producto->imagen);
+                $rutaAnterior = $producto->imagen;
+                if (Storage::disk('public')->exists($rutaAnterior)) {
+                    Storage::disk('public')->delete($rutaAnterior);
+                }
             }
-            $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
+
+            $path = $request->file('imagen')->store('imagenes/productos', 'public');
+            $datos['imagen'] = $path;
         }
 
         $producto->update($datos);

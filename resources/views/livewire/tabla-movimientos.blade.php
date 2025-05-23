@@ -113,6 +113,8 @@
                             <td>
                                 <span
                                     class="badge bg-{{ $movimiento->tipo === 'entrada' ? 'success' : ($movimiento->tipo === 'salida' ? 'danger' : 'secondary') }}">
+                                    <i
+                                        class="fas fa-{{ $movimiento->tipo === 'entrada' ? 'arrow-right' : ($movimiento->tipo === 'salida' ? 'arrow-left' : 'exchange-alt')}} me-1"></i>
                                     {{ ucfirst($movimiento->tipo) }}
                                 </span>
                             </td>

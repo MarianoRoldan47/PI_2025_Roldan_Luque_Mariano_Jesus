@@ -1,11 +1,11 @@
 <x-app-layout>
-    <div class="container-fluid p-4 h-100 d-flex flex-column">
+    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
         <div class="row mb-4">
             <div class="col">
-                <h1 class="fs-3">MOVIMIENTOS</h1>
-                <p class="">Historial de entradas y salidas de productos</p>
+                <h1 class="h3">MOVIMIENTOS</h1>
+                <p>Historial de entradas y salidas de productos</p>
             </div>
-            <div class="col text-end">
+            <div class="col-12 col-md d-flex justify-content-end align-items-center">
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMovimientosBtn"
                         data-bs-toggle="dropdown" aria-expanded="false">

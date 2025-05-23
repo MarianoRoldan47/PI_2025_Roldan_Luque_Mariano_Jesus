@@ -1,11 +1,11 @@
 <x-app-layout>
-    <div class="container-fluid p-4 h-100 d-flex flex-column">
+    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
         <div class="row mb-4">
             <div class="col">
-                <h1 class="fs-3">EDITAR MOVIMIENTO</h1>
-                <p class="text-muted">Modifica los datos del movimiento</p>
+                <h1 class="h3">EDITAR MOVIMIENTO</h1>
+                <p>Modifica los datos del movimiento</p>
             </div>
-            <div class="col text-end">
+            <div class="col-12 col-md d-flex justify-content-end align-items-center">
                 <a href="{{ route('movimientos.index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Volver
                 </a>

@@ -68,7 +68,7 @@ new class extends Component {
                 <hr class="dropdown-divider">
             </li>
             <li>
-                <button wire:click="logout" class="dropdown-item py-2 text-danger d-flex align-items-center">
+                <button wire:click="logout" class="dropdown-item py-2 bg-danger d-flex align-items-center">
                     <span class="me-2">Cerrar Sesión</span>
                     <i class="fa-solid fa-right-from-bracket ms-auto"></i>
                 </button>

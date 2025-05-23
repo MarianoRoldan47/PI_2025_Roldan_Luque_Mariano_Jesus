@@ -22,7 +22,10 @@ new #[Layout('layouts.guest')] class extends Component {
 
             $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
         } catch (\Exception $e) {
-            // El manejo de errores se hace a través de las sesiones flash
+            // Añadir mensaje de error en sesión
+            session()->flash('status', 'Las credenciales proporcionadas no coinciden con nuestros registros.');
+            session()->flash('status-type', 'danger');
+
             return;
         }
     }

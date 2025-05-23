@@ -1,13 +1,13 @@
 <x-app-layout>
     <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row g-2 g-sm-4 mb-2 mb-sm-4">
-            <div class="col-12 col-md">
-                <h1 class="fs-4 fs-sm-3 mb-0">PRODUCTOS</h1>
-                <p class="text-muted small mb-0">Catálogo de productos</p>
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="h3">PRODUCTOS</h1>
+                <p>Catálogo de productos</p>
             </div>
-            <div class="col-12 col-md text-md-end mt-2 mt-md-0">
-                <a href="{{ route('productos.create') }}" class="btn btn-primary btn-sm btn-md text-white">
-                    <i class="fas fa-plus-circle me-1"></i>Nuevo Producto
+            <div class="col-12 col-md d-flex justify-content-end align-items-center">
+                <a href="{{ route('productos.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle me-2"></i>Nuevo Producto
                 </a>
             </div>
         </div>
