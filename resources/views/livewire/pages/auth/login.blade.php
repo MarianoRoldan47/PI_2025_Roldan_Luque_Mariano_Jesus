@@ -36,7 +36,7 @@ new #[Layout('layouts.guest')] class extends Component {
 
     @if (session('status'))
         <div class="alert alert-{{ session('status-type', 'success') }} d-flex align-items-center small mb-4">
-            @if(session('status-type') === 'warning')
+            @if (session('status-type') === 'warning')
                 <i class="fas fa-exclamation-triangle me-2"></i>
             @else
                 <i class="fas fa-check-circle me-2"></i>
@@ -49,13 +49,9 @@ new #[Layout('layouts.guest')] class extends Component {
         <!-- Email Address -->
         <div class="mb-4">
             <div class="form-floating">
-                <input wire:model="form.email"
-                       type="email"
-                       id="email"
-                       class="form-control form-control-lg bg-dark text-white border-secondary @error('form.email') is-invalid @enderror"
-                       required
-                       autocomplete="username"
-                       placeholder="nombre@ejemplo.com">
+                <input wire:model="form.email" type="email" id="email"
+                    class="form-control form-control-lg bg-dark text-white border-secondary @error('form.email') is-invalid @enderror"
+                    required autocomplete="username" placeholder="nombre@ejemplo.com">
                 <label for="email" class="text-secondary">
                     <i class="fas fa-envelope me-2"></i>Correo electrónico
                 </label>
@@ -70,13 +66,9 @@ new #[Layout('layouts.guest')] class extends Component {
         <!-- Password -->
         <div class="mb-4">
             <div class="form-floating">
-                <input wire:model="form.password"
-                       type="password"
-                       id="password"
-                       class="form-control form-control-lg bg-dark text-white border-secondary @error('form.password') is-invalid @enderror"
-                       required
-                       autocomplete="current-password"
-                       placeholder="••••••••">
+                <input wire:model="form.password" type="password" id="password"
+                    class="form-control form-control-lg bg-dark text-white border-secondary @error('form.password') is-invalid @enderror"
+                    required autocomplete="current-password" placeholder="••••••••">
                 <label for="password" class="text-secondary">
                     <i class="fas fa-lock me-2"></i>Contraseña
                 </label>
@@ -91,30 +83,32 @@ new #[Layout('layouts.guest')] class extends Component {
         <!-- Remember Me -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="form-check">
-                <input wire:model="form.remember"
-                       type="checkbox"
-                       id="remember"
-                       class="form-check-input bg-dark border-secondary">
+                <input wire:model="form.remember" type="checkbox" id="remember"
+                    class="form-check-input bg-dark border-secondary">
                 <label class="form-check-label text-secondary" for="remember">
                     Recordarme
                 </label>
             </div>
 
             @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}"
-                   class="text-primary text-decoration-none small"
-                   wire:navigate>
+                <a href="{{ route('password.request') }}" class="text-primary text-decoration-none small" wire:navigate>
                     ¿Olvidaste tu contraseña?
                 </a>
             @endif
         </div>
 
         <!-- Submit Button -->
-        <button type="submit"
-                class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
-                style="background-color: #22a7e1; border: none;">
+        <button type="submit" class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
+            style="background-color: #22a7e1; border: none;">
             <i class="fas fa-sign-in-alt me-2"></i>
             Iniciar sesión
         </button>
+
+        <div class="text-center mt-4">
+            <p class="text-white mb-0">
+                ¿No tienes una cuenta?
+                <a href="{{ route('register') }}" class="text-primary fw-bold" wire:navigate>Regístrate aquí</a>
+            </p>
+        </div>
     </form>
 </div>

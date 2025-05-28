@@ -18,6 +18,10 @@ class AlertaStock extends Model
         'fecha_alerta',
     ];
 
+    protected $casts = [
+        'fecha_alerta' => 'datetime',
+    ];
+
     public function producto()
     {
         return $this->belongsTo(Producto::class);

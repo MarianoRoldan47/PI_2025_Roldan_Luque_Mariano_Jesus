@@ -15,6 +15,10 @@
                     <a href="{{ route('productos.edit', $producto) }}" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit me-1"></i> Editar
                     </a>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#deleteModal">
+                        <i class="fas fa-trash me-1"></i> Eliminar
+                    </button>
                 @endif
                 <a href="{{ route('productos.index') }}" class="btn btn-secondary btn-sm">
                     <i class="fas fa-arrow-left me-1"></i> Volver
@@ -96,9 +100,7 @@
                 </div>
             </div>
 
-            <!-- Columna derecha -->
             <div class="col-md-8">
-                <!-- Descripción -->
                 <div class="card bg-dark border-secondary shadow-sm mb-2 mb-sm-4">
                     <div class="card-body p-3">
                         <h5 class="d-flex align-items-center text-white mb-3">
@@ -109,7 +111,6 @@
                     </div>
                 </div>
 
-                <!-- Ubicaciones -->
                 <div class="card bg-dark border-secondary shadow-sm mb-2 mb-sm-4">
                     <div class="card-body p-3">
                         <h5 class="d-flex align-items-center text-info mb-3">
@@ -157,7 +158,6 @@
                     </div>
                 </div>
 
-                <!-- Movimientos -->
                 <div class="card bg-dark border-secondary shadow-sm">
                     <div class="card-body p-3">
                         <h5 class="d-flex align-items-center text-info mb-3">
@@ -236,4 +236,47 @@
             }
         </style>
     @endpush
+
+    @if (Auth::user()->rol === 'Administrador')
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark border-danger">
+                    <div class="modal-header border-danger text-white">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-white">
+                        <p>¿Estás seguro de que deseas eliminar este producto?</p>
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Atención:</strong> Esta acción eliminará el producto y todos sus datos relacionados.
+                            Esta acción no se puede deshacer.
+                        </div>
+                        <div class="d-flex align-items-center p-3 border border-secondary rounded">
+                            <img src="{{ $producto->imagen ? asset('storage/' . $producto->imagen) : asset('img/default-product.png') }}"
+                                class="rounded me-3" alt="{{ $producto->nombre }}"
+                                style="width: 50px; height: 50px; object-fit: cover;">
+                            <div>
+                                <h6 class="mb-0">{{ $producto->nombre }}</h6>
+                                <small class="text-muted">{{ $producto->codigo_producto }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-danger">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> Cancelar
+                        </button>
+                        <form action="{{ route('productos.destroy', $producto) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-1"></i> Eliminar producto
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </x-app-layout>

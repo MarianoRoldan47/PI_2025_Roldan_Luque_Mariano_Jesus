@@ -56,7 +56,7 @@
                                         <option value="">Selecciona un producto</option>
                                         @foreach ($productos as $producto)
                                             <option value="{{ $producto->id }}"
-                                                {{ old('producto_id') == $producto->id ? 'selected' : '' }}>
+                                                {{ old('producto_id', request()->producto_id) == $producto->id ? 'selected' : '' }}>
                                                 {{ $producto->nombre }} (Stock: {{ $producto->stock_total }})
                                             </option>
                                         @endforeach
@@ -609,7 +609,7 @@
                             if (totalOrigen !== cantidadRequerida || totalDestino !== cantidadRequerida) {
                                 alert(
                                     'Las cantidades en origen y destino deben ser iguales a la cantidad total del movimiento'
-                                    );
+                                );
                                 return;
                             }
 
