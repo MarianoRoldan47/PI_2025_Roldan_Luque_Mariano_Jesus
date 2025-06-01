@@ -91,7 +91,7 @@
                                 <i class="fas fa-birthday-cake me-2"></i>
                                 <span>Fecha de nacimiento:</span>
                                 <span
-                                    class="ms-1 fw-bold">{{ \Carbon\Carbon::parse($user->fecha_nacimiento)->format('d/m/Y') }}</span>
+                                    class="ms-1 fw-bold">{{ Date::parse($user->fecha_nacimiento)->format('d/m/Y') }}</span>
                             </div>
                         </div>
                     </div>
@@ -168,23 +168,6 @@
                                     </p>
                                 </div>
                             @endif
-
-                            <div class="col-md-6">
-                                <label class="form-label text-info small">Último Acceso</label>
-                                @php
-                                    $lastSession = DB::table('sessions')
-                                        ->where('user_id', $user->id)
-                                        ->orderBy('last_activity', 'desc')
-                                        ->first();
-                                @endphp
-                                @if ($lastSession)
-                                    <p class="mb-1 text-white">
-                                        {{ \Carbon\Carbon::createFromTimestamp($lastSession->last_activity)->format('d/m/Y H:i:s') }}
-                                    </p>
-                                @else
-                                    <p class="mb-1 text-white">No disponible</p>
-                                @endif
-                            </div>
                         </div>
                     </div>
                 </div>

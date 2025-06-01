@@ -80,7 +80,7 @@
                                                     <i class="fas fa-plus-circle"></i>
                                                 </a>
                                                 <a href="{{ route('alertas.show', $alerta->id) }}"
-                                                   class="btn btn-info" title="Ver producto">
+                                                   class="btn btn-info" title="Ver alerta">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </div>

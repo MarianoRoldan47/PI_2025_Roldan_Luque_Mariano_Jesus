@@ -45,12 +45,11 @@ Route::middleware(['auth'])->group(function () {
             // Borrar productos - solo admin
             Route::delete('/productos/{producto}', [ProductosController::class, 'destroy'])->name('productos.destroy');
 
-            // Gestión completa de categorías - solo admin
-            Route::resource('categorias', CategoriasController::class);
-
             // Gestión completa de usuarios - solo admin
             Route::resource('users', UserController::class)->except(['index', 'show']);
-        });
+        }); 
+
+        Route::resource('categorias', CategoriasController::class);
 
         // Rutas de movimientos - controlar acceso a edición/eliminación
         Route::get('/movimientos', [MovimientosController::class, 'index'])->name('movimientos.index');

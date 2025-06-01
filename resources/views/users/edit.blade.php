@@ -54,8 +54,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="dni" class="form-label text-light">DNI <span
-                                            class="text-danger">*</span></label>
+                                    <label for="dni" class="form-label text-light">DNI *</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-dark text-light border-secondary">
                                             <i class="fas fa-id-card"></i>
@@ -72,8 +71,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="name" class="form-label text-light">Nombre <span
-                                            class="text-danger">*</span></label>
+                                    <label for="name" class="form-label text-light">Nombre *</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-dark text-light border-secondary">
                                             <i class="fas fa-user"></i>
@@ -91,8 +89,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="apellido1" class="form-label text-light">Primer Apellido <span
-                                            class="text-danger">*</span></label>
+                                    <label for="apellido1" class="form-label text-light">Primer Apellido *</label>
                                     <input type="text"
                                         class="form-control bg-dark text-light border-secondary @error('apellido1') is-invalid @enderror"
                                         id="apellido1" name="apellido1"
@@ -105,8 +102,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="apellido2" class="form-label text-light">Segundo Apellido <span
-                                            class="text-danger">*</span></label>
+                                    <label for="apellido2" class="form-label text-light">Segundo Apellido *</label>
                                     <input type="text"
                                         class="form-control bg-dark text-light border-secondary @error('apellido2') is-invalid @enderror"
                                         id="apellido2" name="apellido2"
@@ -120,7 +116,7 @@
 
                                 <div class="col-md-6">
                                     <label for="fecha_nacimiento" class="form-label text-light">Fecha de Nacimiento
-                                        <span class="text-danger">*</span></label>
+                                        *</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-dark text-light border-secondary">
                                             <i class="fas fa-calendar"></i>
@@ -139,8 +135,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="telefono" class="form-label text-light">Teléfono <span
-                                            class="text-danger">*</span></label>
+                                    <label for="telefono" class="form-label text-light">Teléfono *</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-dark text-light border-secondary">
                                             <i class="fas fa-phone"></i>
@@ -164,8 +159,7 @@
                         </div>
 
                         <div class="col-12">
-                            <label for="direccion" class="form-label text-light">Dirección <span
-                                    class="text-danger">*</span></label>
+                            <label for="direccion" class="form-label text-light">Dirección *</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-dark text-light border-secondary">
                                     <i class="fas fa-home"></i>
@@ -183,8 +177,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="codigo_postal" class="form-label text-light">Código Postal <span
-                                    class="text-danger">*</span></label>
+                            <label for="codigo_postal" class="form-label text-light">Código Postal *</label>
                             <input type="text"
                                 class="form-control bg-dark text-light border-secondary @error('codigo_postal') is-invalid @enderror"
                                 id="codigo_postal" name="codigo_postal"
@@ -197,8 +190,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="localidad" class="form-label text-light">Localidad <span
-                                    class="text-danger">*</span></label>
+                            <label for="localidad" class="form-label text-light">Localidad *</label>
                             <input type="text"
                                 class="form-control bg-dark text-light border-secondary @error('localidad') is-invalid @enderror"
                                 id="localidad" name="localidad" value="{{ old('localidad', $user->localidad) }}"
@@ -211,8 +203,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="provincia" class="form-label text-light">Provincia <span
-                                    class="text-danger">*</span></label>
+                            <label for="provincia" class="form-label text-light">Provincia *</label>
                             <input type="text"
                                 class="form-control bg-dark text-light border-secondary @error('provincia') is-invalid @enderror"
                                 id="provincia" name="provincia" value="{{ old('provincia', $user->provincia) }}"
@@ -229,8 +220,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="email" class="form-label text-light">Correo Electrónico <span
-                                    class="text-danger">*</span></label>
+                            <label for="email" class="form-label text-light">Correo Electrónico *</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-dark text-light border-secondary">
                                     <i class="fas fa-envelope"></i>
@@ -247,8 +237,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="rol" class="form-label text-light">Rol <span
-                                    class="text-danger">*</span></label>
+                            <label for="rol" class="form-label text-light">Rol *</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-dark text-light border-secondary">
                                     <i class="fas fa-user-tag"></i>

@@ -16,7 +16,7 @@
             <div class="col-12 col-md-8 col-lg-6">
                 <div class="card bg-dark shadow-sm">
                     <div class="card-header bg-dark border-secondary">
-                        <h5 class="card-title mb-0 d-flex align-items-center">
+                        <h5 class="card-title mb-0 d-flex align-items-center text-white">
                             <i class="fas fa-edit text-warning me-2"></i>
                             Información de la Estantería
                         </h5>
@@ -27,7 +27,7 @@
                             @method('PUT')
 
                             <div class="mb-3">
-                                <label for="nombre" class="form-label text-white">Nombre <span class="text-danger">*</span></label>
+                                <label for="nombre" class="form-label text-white">Nombre *</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-dark text-white border-secondary">
                                         <i class="fas fa-warehouse text-primary"></i>
@@ -43,7 +43,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="zona_id" class="form-label text-white">Zona <span class="text-danger">*</span></label>
+                                <label for="zona_id" class="form-label text-white">Zona *</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-dark text-white border-secondary">
                                         <i class="fas fa-map-marker-alt text-info"></i>
@@ -65,7 +65,7 @@
                             </div>
 
                             <div class="mb-4">
-                                <label for="capacidad_maxima" class="form-label text-white">Capacidad Máxima <span class="text-danger">*</span></label>
+                                <label for="capacidad_maxima" class="form-label text-white">Capacidad Máxima *</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-dark text-white border-secondary">
                                         <i class="fas fa-cubes text-warning"></i>
@@ -80,7 +80,7 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <div class="form-text text-muted small">
+                                <div class="form-text text-white small">
                                     El valor mínimo es {{ $estanteria->capacidad_maxima - $estanteria->capacidad_libre }} (productos actualmente almacenados).
                                 </div>
                             </div>
@@ -94,10 +94,10 @@
                                 <div class="mb-2 small">
                                     <div class="d-flex justify-content-between mb-1">
                                         <span>Capacidad máxima: <strong>{{ $estanteria->capacidad_maxima }}</strong></span>
-                                        <span>Capacidad libre: <strong class="text-success">{{ $estanteria->capacidad_libre }}</strong></span>
+                                        <span>Capacidad libre: <strong>{{ $estanteria->capacidad_libre }}</strong></span>
                                     </div>
                                     <div class="d-flex justify-content-between">
-                                        <span>Productos almacenados: <strong class="text-warning">{{ $estanteria->capacidad_maxima - $estanteria->capacidad_libre }}</strong></span>
+                                        <span>Productos almacenados: <strong>{{ $estanteria->capacidad_maxima - $estanteria->capacidad_libre }}</strong></span>
                                         <span>Ocupación: <strong>{{ round((($estanteria->capacidad_maxima - $estanteria->capacidad_libre) / $estanteria->capacidad_maxima) * 100) }}%</strong></span>
                                     </div>
                                 </div>

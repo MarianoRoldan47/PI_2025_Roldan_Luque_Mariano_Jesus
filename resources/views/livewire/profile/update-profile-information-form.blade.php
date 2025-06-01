@@ -27,8 +27,17 @@ new class extends Component {
     public function mount(): void
     {
         $user = Auth::user();
-        foreach (['dni', 'name', 'apellido1', 'apellido2', 'telefono', 'direccion', 'codigo_postal', 'localidad', 'provincia', 'rol', 'email', 'fecha_nacimiento'] as $field) {
-            $this->{$field} = $user->{$field};
+
+        // Asignar valores básicos
+        foreach (['dni', 'name', 'apellido1', 'apellido2', 'telefono', 'direccion', 'codigo_postal', 'localidad', 'provincia', 'rol', 'email'] as $field) {
+            $this->{$field} = $user->{$field} ?? '';
+        }
+
+        // Formatear la fecha de nacimiento en formato Y-m-d para el input date
+        if ($user->fecha_nacimiento) {
+            $this->fecha_nacimiento = $user->fecha_nacimiento->format('Y-m-d');
+        } else {
+            $this->fecha_nacimiento = '';
         }
     }
 
@@ -82,7 +91,6 @@ new class extends Component {
         $user->save();
 
         $this->redirect(request()->header('Referer'));
-
     }
 
     public function sendVerification(): void

@@ -89,7 +89,13 @@ new class extends Component {
                 <span>Almacén</span>
             </a>
         </li>
-        <!-- FIN: Apartado de Almacén -->
+        <li class="nav-item mb-1">
+            <a href="{{ route('categorias.index') }}"
+                class="nav-link {{ request()->routeIs('categorias.*') ? 'active' : '' }} text-white d-flex align-items-center py-2">
+                <i class="fa-solid fa-sitemap fa-fw"></i>
+                <span class="d-none d-sm-block ms-3">Categorías</span>
+            </a>
+        </li>
 
         <!-- INICIO: Apartado de Administración - Solo para administradores -->
         @if (Auth::user()->rol === 'Administrador')
@@ -98,14 +104,6 @@ new class extends Component {
                 <span class="text-primary small fw-bold d-sm-none">
                     <i class="fa-solid fa-shield-alt fa-fw"></i>
                 </span>
-            </li>
-
-            <li class="nav-item mb-1">
-                <a href="{{ route('categorias.index') }}"
-                    class="nav-link {{ request()->routeIs('categorias.*') ? 'active' : '' }} text-white d-flex align-items-center py-2">
-                    <i class="fa-solid fa-sitemap fa-fw"></i>
-                    <span class="d-none d-sm-block ms-3">Categorías</span>
-                </a>
             </li>
 
             <li class="nav-item mb-1">

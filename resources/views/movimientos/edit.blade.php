@@ -27,8 +27,6 @@
             <div class="col-12">
                 <div class="card bg-dark text-white shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title">Formulario de Edición</h5>
-
                         <form action="{{ route('movimientos.update', $movimiento) }}" method="POST" class="mt-3">
                             @csrf
                             @method('PUT')

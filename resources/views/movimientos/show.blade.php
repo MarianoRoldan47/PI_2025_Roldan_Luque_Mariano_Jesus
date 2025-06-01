@@ -190,20 +190,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Footer con metadatos -->
-                    <div class="card-footer bg-dark border-secondary py-2">
-                        <div class="d-flex flex-wrap justify-content-between align-items-center small text-light">
-                            <div>
-                                <i class="fas fa-clock me-1"></i> Creado:
-                                {{ $movimiento->created_at->format('d/m/Y H:i') }}
-                            </div>
-                            <div>
-                                <i class="fas fa-history me-1"></i> Actualizado:
-                                {{ $movimiento->updated_at->format('d/m/Y H:i') }}
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

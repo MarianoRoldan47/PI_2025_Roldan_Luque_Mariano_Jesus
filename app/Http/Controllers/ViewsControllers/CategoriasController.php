@@ -14,7 +14,10 @@ class CategoriasController extends Controller
      */
     public function index()
     {
-        //
+        // Usar withCount para obtener el número de productos por categoría
+        $categorias = Categoria::withCount('productos')->orderBy('nombre')->get();
+
+        return view('categorias.index', compact('categorias'));
     }
 
     /**
@@ -80,7 +83,38 @@ class CategoriasController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $categoria = Categoria::findOrFail($id);
+
+            $validated = $request->validate([
+                'nombre' => 'required|string|max:255|unique:categorias,nombre,' . $id
+            ]);
+
+            $categoria->update($validated);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'categoria' => $categoria,
+                    'message' => '¡Categoría actualizada correctamente!'
+                ]);
+            }
+
+            return redirect()->route('categorias.index')
+                ->with('success', '¡Categoría actualizada correctamente!');
+        } catch (\Exception $e) {
+            Log::error('Error al actualizar categoría: ' . $e->getMessage());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al actualizar la categoría: ' . $e->getMessage()
+                ], 422);
+            }
+
+            return redirect()->route('categorias.index')
+                ->with('error', 'Error al actualizar la categoría: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -88,6 +122,26 @@ class CategoriasController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $categoria = Categoria::withCount('productos')->findOrFail($id);
+
+            if ($categoria->productos_count > 0) {
+                return redirect()->route('categorias.index')
+                    ->with('status', 'No se puede eliminar la categoría "' . $categoria->nombre . '" porque tiene ' . $categoria->productos_count . ' productos asociados.')
+                    ->with('status-type', 'danger');
+            }
+
+            $nombreCategoria = $categoria->nombre;
+            $categoria->delete();
+
+            return redirect()->route('categorias.index')
+                ->with('success', 'Categoría "' . $nombreCategoria . '" eliminada correctamente');
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar categoría: ' . $e->getMessage());
+
+            return redirect()->route('categorias.index')
+                ->with('status', 'Error al eliminar la categoría: ' . $e->getMessage())
+                ->with('status-type', 'danger');
+        }
     }
 }

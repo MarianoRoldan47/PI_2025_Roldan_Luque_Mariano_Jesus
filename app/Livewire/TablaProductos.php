@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Producto;
+use App\Models\Categoria;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Route;
 
 class TablaProductos extends Component
 {
@@ -13,9 +15,30 @@ class TablaProductos extends Component
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
     public $search = '';
+    public $categoriaSeleccionada = null;
+    public $stockFilter = 'todos';  // 'todos', 'disponibles', 'agotados', 'bajoMinimo'
     protected $paginationTheme = 'bootstrap';
 
+    // Constructor para recibir parámetros iniciales
+    public function mount()
+    {
+        // Intentar obtener la categoría inicial desde la URL (para cuando venga desde categorias.index)
+        if (request()->has('categoria_id')) {
+            $this->categoriaSeleccionada = request()->categoria_id;
+        }
+    }
+
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingCategoriaSeleccionada()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingStockFilter()
     {
         $this->resetPage();
     }
@@ -30,22 +53,49 @@ class TablaProductos extends Component
         }
     }
 
+    public function clearFilters()
+    {
+        $this->reset(['categoriaSeleccionada', 'stockFilter', 'search']);
+    }
+
     public function render()
     {
-        return view('livewire.tabla-productos', [
-            'productos' => Producto::with(['categoria', 'estanterias'])
-                ->when($this->sortField === 'categoria', function ($query) {
-                    $query->join('categorias', 'productos.categoria_id', '=', 'categorias.id')
-                        ->orderBy('categorias.nombre', $this->sortDirection)
-                        ->select('productos.*');
-                })
-                ->where(function ($query) {
+        // Obtener todas las categorías para el selector
+        $categorias = Categoria::orderBy('nombre')->get();
+
+        // Consultar productos con filtros aplicados
+        $productosQuery = Producto::with(['categoria', 'estanterias'])
+            ->when($this->sortField === 'categoria', function ($query) {
+                $query->join('categorias', 'productos.categoria_id', '=', 'categorias.id')
+                    ->orderBy('categorias.nombre', $this->sortDirection)
+                    ->select('productos.*');
+            })
+            ->when($this->search, function ($query) {
+                $query->where(function ($query) {
                     $query->where('productos.nombre', 'like', '%' . $this->search . '%')
-                        ->orWhere('productos.codigo_producto', 'like', '%' . $this->search . '%');
-                })
-                ->when($this->sortField !== 'categoria', function ($query) {
-                    $query->orderBy($this->sortField, $this->sortDirection);
-                })->get()
+                        ->orWhere('productos.codigo_producto', 'like', '%' . $this->search . '%')
+                        ->orWhere('productos.referencia', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->when($this->categoriaSeleccionada, function ($query) {
+                $query->where('categoria_id', $this->categoriaSeleccionada);
+            })
+            ->when($this->stockFilter !== 'todos', function ($query) {
+                if ($this->stockFilter === 'disponibles') {
+                    $query->where('stock_total', '>', 0);
+                } elseif ($this->stockFilter === 'agotados') {
+                    $query->where('stock_total', '=', 0);
+                } elseif ($this->stockFilter === 'bajoMinimo') {
+                    $query->whereRaw('stock_total < stock_minimo_alerta AND stock_total > 0');
+                }
+            })
+            ->when($this->sortField !== 'categoria', function ($query) {
+                $query->orderBy($this->sortField, $this->sortDirection);
+            });
+
+        return view('livewire.tabla-productos', [
+            'productos' => $productosQuery->get(),
+            'categorias' => $categorias
         ]);
     }
 }

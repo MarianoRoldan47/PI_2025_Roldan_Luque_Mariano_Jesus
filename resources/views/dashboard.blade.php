@@ -58,7 +58,7 @@
             </div>
 
             <div class="col-12 col-md-6 col-xl-3">
-                <a href="#" class="text-decoration-none">
+                <a href="{{ route('users.index') }}" class="text-decoration-none">
                     <div class="card bg-dark border-0 shadow-sm text-white h-100">
                         <div class="card-body d-flex align-items-center">
                             <i class="bi bi-person-lines-fill fs-2 text-cyan me-3"></i>
@@ -86,7 +86,7 @@
             </div>
 
             <div class="col-12 col-md-6 col-xl-3">
-                <a href="#" class="text-decoration-none">
+                <a href="{{ route('alertas.index') }}" class="text-decoration-none">
                     <div class="card bg-dark border-0 shadow-sm text-white h-100">
                         <div class="card-body d-flex align-items-center">
                             <i class="bi bi-exclamation-triangle fs-2 text-orange me-3"></i>
@@ -130,9 +130,6 @@
             };
 
             window.dashboardRankingData = @json($usuarios);
-
-            console.log('Movimientos data:', window.dashboardMovimientosData);
-            console.log('Ranking data:', window.dashboardRankingData);
         </script>
         @vite('resources/js/charts/dashboard.js')
     @endpush

@@ -20,14 +20,14 @@
                             @csrf
 
                             <div class="mb-3">
-                                <label for="nombre" class="form-label text-white">Nombre de la zona <span class="text-danger">*</span></label>
+                                <label for="nombre" class="form-label text-white">Nombre de la zona *</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-dark border-secondary">
                                         <i class="fas fa-map-marker-alt text-primary"></i>
                                     </span>
                                     <input type="text" name="nombre" id="nombre"
-                                           class="form-control bg-dark text-white border-secondary @error('nombre') is-invalid @enderror"
-                                           value="{{ old('nombre') }}" required autofocus>
+                                        class="form-control bg-dark text-white border-secondary @error('nombre') is-invalid @enderror"
+                                        value="{{ old('nombre') }}" required autofocus>
                                 </div>
                                 @error('nombre')
                                     <div class="invalid-feedback d-block">
@@ -39,13 +39,13 @@
                             <div class="mb-4">
                                 <label for="descripcion" class="form-label text-white">Descripción</label>
                                 <textarea name="descripcion" id="descripcion" rows="3"
-                                          class="form-control bg-dark text-white border-secondary @error('descripcion') is-invalid @enderror">{{ old('descripcion') }}</textarea>
+                                    class="form-control bg-dark text-white border-secondary @error('descripcion') is-invalid @enderror">{{ old('descripcion') }}</textarea>
                                 @error('descripcion')
                                     <div class="invalid-feedback d-block">
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <div class="form-text text-muted small">
+                                <div class="form-text text-white small">
                                     Añade una descripción detallada de esta zona (opcional).
                                 </div>
                             </div>

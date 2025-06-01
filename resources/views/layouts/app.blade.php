@@ -21,6 +21,16 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+            opacity: 1;
+        }
+
+        .form-control:-ms-input-placeholder,
+        .form-control::-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+
         .product-image {
             height: 100px;
         }
