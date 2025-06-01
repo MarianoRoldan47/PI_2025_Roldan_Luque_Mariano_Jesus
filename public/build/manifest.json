@@ -1,0 +1,25 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-l0sNRNKZ.js",
+    "name": "app",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/views/dashboard.css": {
+    "file": "assets/dashboard-m0hosWkB.css",
+    "src": "resources/css/views/dashboard.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DX5iBr6V.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/charts/dashboard.js": {
+    "file": "assets/dashboard-C6BA7V_Y.js",
+    "name": "dashboard",
+    "src": "resources/js/charts/dashboard.js",
+    "isEntry": true
+  }
+}

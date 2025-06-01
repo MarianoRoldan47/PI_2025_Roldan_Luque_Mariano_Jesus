@@ -77,7 +77,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $validated = $request->validate([
+        $rules = [
             'dni' => ['required', 'string', 'max:9', Rule::unique('users')->ignore($user->id)],
             'name' => 'required|string|max:255',
             'apellido1' => 'required|string|max:255',
@@ -92,7 +92,14 @@ class UserController extends Controller
             'fecha_nacimiento' => 'required|date',
             'imagen' => 'nullable|image|max:2048',
             'is_approved' => 'boolean',
-        ]);
+        ];
+
+        // Si se proporcionó una contraseña, añadir reglas de validación
+        if ($request->filled('password')) {
+            $rules['password'] = 'required|string|min:8|confirmed';
+        }
+
+        $validated = $request->validate($rules);
 
         if ($request->hasFile('imagen')) {
             // Eliminar imagen anterior si existe
@@ -100,6 +107,11 @@ class UserController extends Controller
                 Storage::disk('public')->delete($user->imagen);
             }
             $validated['imagen'] = $request->file('imagen')->store('imagenes/perfiles', 'public');
+        }
+
+        // Si se cambió la contraseña, actualizarla
+        if ($request->filled('password')) {
+            $validated['password'] = Hash::make($request->password);
         }
 
         // Si se cambia el estado de aprobación, registrar la fecha

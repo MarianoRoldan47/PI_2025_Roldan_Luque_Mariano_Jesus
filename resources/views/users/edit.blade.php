@@ -270,21 +270,53 @@
                             @enderror
                         </div>
 
-                        @if (Auth::user()->rol === 'Administrador')
-                            <div class="col-md-6">
-                                <div class="form-check form-switch mt-4">
-                                    <input class="form-check-input" type="checkbox" id="is_approved"
-                                        name="is_approved" value="1"
-                                        {{ old('is_approved', $user->is_approved) ? 'checked' : '' }}>
-                                    <label class="form-check-label text-light" for="is_approved">
-                                        Usuario aprobado
-                                    </label>
-                                </div>
-                                <div class="form-text text-info small">
-                                    Un usuario no aprobado no podrá acceder al sistema.
-                                </div>
+                        <div class="col-12">
+                            <div class="border-start border-warning ps-3 my-3">
+                                <h6 class="text-warning">Cambiar contraseña</h6>
+                                <p class="text-white small">Dejar en blanco para mantener la contraseña actual</p>
                             </div>
-                        @endif
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="password" class="form-label text-light">Nueva contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark text-light border-secondary">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password"
+                                    class="form-control bg-dark text-light border-secondary @error('password') is-invalid @enderror"
+                                    id="password" name="password">
+                            </div>
+                            @error('password')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="password_confirmation" class="form-label text-light">Confirmar
+                                contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark text-light border-secondary">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control bg-dark text-light border-secondary"
+                                    id="password_confirmation" name="password_confirmation">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" type="checkbox" id="is_approved" name="is_approved"
+                                    value="1" {{ old('is_approved', $user->is_approved) ? 'checked' : '' }}>
+                                <label class="form-check-label text-light" for="is_approved">
+                                    Usuario aprobado
+                                </label>
+                            </div>
+                            <div class="form-text text-info small">
+                                Un usuario no aprobado no podrá acceder al sistema.
+                            </div>
+                        </div>
 
                         <div class="col-12 mt-4">
                             <div class="d-grid">

@@ -120,6 +120,9 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    @push('scripts')
         <script>
             window.dashboardMovimientosData = {
                 labels: @json($labels),
@@ -127,8 +130,10 @@
             };
 
             window.dashboardRankingData = @json($usuarios);
-        </script>
-    </div>
 
-    @vite('resources/js/charts/dashboard.js')
+            console.log('Movimientos data:', window.dashboardMovimientosData);
+            console.log('Ranking data:', window.dashboardRankingData);
+        </script>
+        @vite('resources/js/charts/dashboard.js')
+    @endpush
 </x-app-layout>

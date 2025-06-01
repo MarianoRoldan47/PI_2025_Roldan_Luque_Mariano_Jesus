@@ -41,13 +41,11 @@
                                                 @if ($alerta->producto->imagen)
                                                     <img src="{{ asset('storage/' . $alerta->producto->imagen) }}" class="rounded-2 me-2" width="40" height="40" alt="{{ $alerta->producto->nombre }}">
                                                 @else
-                                                    <div class="bg-secondary rounded-2 me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                        <i class="fas fa-box"></i>
-                                                    </div>
+                                                    <img src="{{ asset('img/default-product.png') }}" class="rounded-2 me-2" width="40" height="40" alt="{{ $alerta->producto->nombre }}">
                                                 @endif
                                                 <div>
                                                     <div class="fw-bold">{{ $alerta->producto->nombre }}</div>
-                                                    <div class="text-muted small">{{ $alerta->producto->codigo_producto }}</div>
+                                                    <div class="small">{{ $alerta->producto->codigo_producto }}</div>
                                                 </div>
                                             </a>
                                         </td>

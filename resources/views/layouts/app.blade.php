@@ -184,6 +184,34 @@
         </div>
     @endif
 
+    @if (session('status') && session('status-type') === 'danger')
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalTitle">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header border-bottom border-white">
+                        <h5 class="modal-title text-white" id="errorModalTitle">
+                            <i class="fas fa-exclamation-circle text-danger me-2"></i>¡Error!
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex align-items-center">
+                            <div class="modal-icon bg-danger text-white rounded-circle p-3 me-3">
+                                <i class="fas fa-times fa-2x"></i>
+                            </div>
+                            <p class="mb-0">{{ session('status') }}</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-white">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                            id="errorModalButton">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <main class="flex-grow-1 overflow-auto p-4">
         {{ $slot }}
     </main>
@@ -208,6 +236,19 @@
                     });
                 } catch (error) {
                     console.error('Error al inicializar el modal:', error);
+                }
+            }
+
+            const errorModal = document.getElementById('errorModal');
+            if (errorModal) {
+                try {
+                    const modal = new bootstrap.Modal(errorModal);
+                    modal.show();
+                    errorModal.addEventListener('hidden.bs.modal', function() {
+                        modal.dispose();
+                    });
+                } catch (error) {
+                    console.error('Error al inicializar el modal de error:', error);
                 }
             }
         });
