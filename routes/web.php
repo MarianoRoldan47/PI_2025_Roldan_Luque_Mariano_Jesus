@@ -46,8 +46,8 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/productos/{producto}', [ProductosController::class, 'destroy'])->name('productos.destroy');
 
             // Gestión completa de usuarios - solo admin
-            Route::resource('users', UserController::class)->except(['index', 'show']);
-        }); 
+            Route::resource('users', UserController::class);
+        });
 
         Route::resource('categorias', CategoriasController::class);
 
@@ -89,10 +89,6 @@ Route::middleware(['auth'])->group(function () {
 
         // Rutas de almacén
         Route::get('/almacen', [AlmacenController::class, 'index'])->name('almacen.index');
-
-        // Rutas de usuarios - ver para todos
-        Route::get('/users', [UserController::class, 'index'])->name('users.index');
-        Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
         Route::view('perfil', 'profile')->name('perfil');
     });

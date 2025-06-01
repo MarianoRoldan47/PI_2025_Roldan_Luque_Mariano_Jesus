@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
+use App\Notifications\SolicitudAprobada;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -164,6 +166,11 @@ class UserController extends Controller
             'is_approved' => true,
             'approved_at' => now(),
         ]);
+        try {
+            $user->notify(new SolicitudAprobada());
+        } catch (\Exception $e) {
+            Log::error('Error al enviar correo de aprobación: ' . $e->getMessage());
+        }
 
         Session::flash('status', 'Usuario aprobado correctamente.');
         Session::flash('status-type', 'success');
