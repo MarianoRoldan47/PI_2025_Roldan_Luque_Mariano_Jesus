@@ -8,6 +8,8 @@ use App\Models\Categoria;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use PDF;
+
 
 class ProductosController extends Controller
 {
@@ -110,5 +112,44 @@ class ProductosController extends Controller
             return redirect()->route('productos.index')
                 ->with('error', 'No se puede eliminar el producto porque está siendo utilizado');
         }
+    }
+
+    public function generarPdfInventario(Request $request)
+    {
+        $request->validate([
+            'categoria_id' => 'nullable|exists:categorias,id',
+            'orden' => 'nullable|in:nombre,codigo_producto,stock_total',
+            'direccion' => 'nullable|in:asc,desc',
+        ]);
+
+        $query = Producto::with(['categoria', 'estanterias.zona']);
+
+        if ($request->filled('categoria_id')) {
+            $query->where('categoria_id', $request->categoria_id);
+        }
+
+        $orden = $request->input('orden', 'nombre');
+        $direccion = $request->input('direccion', 'asc');
+        $query->orderBy($orden, $direccion);
+
+        $productos = $query->get();
+
+        $fecha = now()->format('d/m/Y');
+        $titulo = 'Informe de Inventario';
+
+        if ($request->filled('categoria_id')) {
+            $categoria = Categoria::find($request->categoria_id);
+            $titulo .= ' - Categoría: ' . $categoria->nombre;
+        }
+
+        $pdf = PDF::loadView('vistasPersonalizadas.informes.pdf.inventario', compact(
+            'productos',
+            'fecha',
+            'titulo'
+        ));
+
+        $pdf->setPaper('a4', 'landscape');
+
+        return $pdf->stream('inventario-' . now()->format('Y-m-d') . '.pdf');
     }
 }

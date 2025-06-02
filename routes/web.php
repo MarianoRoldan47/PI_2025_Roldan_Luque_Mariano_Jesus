@@ -18,6 +18,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware([EnsureUserIsApproved::class])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('/productos/pdf/inventario', [App\Http\Controllers\ViewsControllers\ProductosController::class, 'generarPdfInventario'])->name('productos.pdf.inventario');
 
         Route::middleware(EnsureUserIsAdmin::class)->group(function () {
 

@@ -1,0 +1,13 @@
+node_modules
+vendor
+.git
+.vscode
+.idea
+storage/framework/cache/**
+storage/framework/sessions/**
+storage/framework/views/**
+storage/logs/*
+bootstrap/cache/**
+public/storage
+docker-compose.yml
+README.md

@@ -6,6 +6,9 @@
                 <p>Catálogo de productos</p>
             </div>
             <div class="col-12 col-md d-flex justify-content-end align-items-center">
+                <a href="{{ route('productos.pdf.inventario') }}" target="_blank" class="btn btn-info me-2">
+                    <i class="fas fa-file-pdf me-2"></i>Generar PDF
+                </a>
                 <a href="{{ route('productos.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus-circle me-2"></i>Nuevo Producto
                 </a>

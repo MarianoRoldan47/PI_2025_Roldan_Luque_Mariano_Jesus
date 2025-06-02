@@ -10,9 +10,22 @@
         <div class="card bg-dark shadow-sm">
             <div class="card-body p-0">
                 @if ($alertas->isEmpty())
-                    <div class="alert alert-success m-3 mb-0">
-                        <i class="fas fa-check-circle me-2"></i>
-                        No hay alertas de stock actualmente.
+                    <div class="py-5 text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                        </div>
+                        <h4 class="text-success">¡Todo en orden!</h4>
+                        <p class="text-white mb-4">No hay productos con niveles de stock por debajo del mínimo
+                            establecido.</p>
+                        <div>
+                            <a href="{{ route('productos.index') }}" class="btn btn-outline-light me-2">
+                                <i class="fas fa-box me-1"></i> Ver productos
+                            </a>
+                            <a href="{{ route('productos.pdf.inventario') }}" target="_blank"
+                                class="btn btn-outline-info">
+                                <i class="fas fa-file-pdf me-1"></i> Generar informe
+                            </a>
+                        </div>
                     </div>
                 @else
                     <div class="table-responsive">
@@ -33,15 +46,21 @@
                                         <td class="small">
                                             <div class="d-flex flex-column">
                                                 <span>{{ $alerta->fecha_alerta->format('d/m/Y') }}</span>
-                                                <span class="text-muted">{{ $alerta->fecha_alerta->format('H:i') }}</span>
+                                                <span
+                                                    class="text-muted">{{ $alerta->fecha_alerta->format('H:i') }}</span>
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="{{ route('productos.show', $alerta->producto_id) }}" class="d-flex align-items-center text-decoration-none text-white">
+                                            <a href="{{ route('productos.show', $alerta->producto_id) }}"
+                                                class="d-flex align-items-center text-decoration-none text-white">
                                                 @if ($alerta->producto->imagen)
-                                                    <img src="{{ asset('storage/' . $alerta->producto->imagen) }}" class="rounded-2 me-2" width="40" height="40" alt="{{ $alerta->producto->nombre }}">
+                                                    <img src="{{ asset('storage/' . $alerta->producto->imagen) }}"
+                                                        class="rounded-2 me-2" width="40" height="40"
+                                                        alt="{{ $alerta->producto->nombre }}">
                                                 @else
-                                                    <img src="{{ asset('img/default-product.png') }}" class="rounded-2 me-2" width="40" height="40" alt="{{ $alerta->producto->nombre }}">
+                                                    <img src="{{ asset('img/default-product.png') }}"
+                                                        class="rounded-2 me-2" width="40" height="40"
+                                                        alt="{{ $alerta->producto->nombre }}">
                                                 @endif
                                                 <div>
                                                     <div class="fw-bold">{{ $alerta->producto->nombre }}</div>
@@ -53,14 +72,14 @@
                                             <span class="fw-bold text-danger">{{ $alerta->stock_actual }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <span class="fw-bold text-warning">{{ $alerta->producto->stock_minimo_alerta }}</span>
+                                            <span
+                                                class="fw-bold text-warning">{{ $alerta->producto->stock_minimo_alerta }}</span>
                                         </td>
                                         <td class="text-center">
                                             @php
                                                 $stockMinimo = $alerta->producto->stock_minimo_alerta;
-                                                $porcentaje = $stockMinimo > 0
-                                                    ? ($alerta->stock_actual / $stockMinimo) * 100
-                                                    : 0;
+                                                $porcentaje =
+                                                    $stockMinimo > 0 ? ($alerta->stock_actual / $stockMinimo) * 100 : 0;
                                             @endphp
 
                                             @if ($alerta->stock_actual == 0)
@@ -76,11 +95,11 @@
                                         <td class="text-end">
                                             <div class="btn-group btn-group-sm">
                                                 <a href="{{ route('movimientos.create', ['producto_id' => $alerta->producto_id, 'tipo' => 'entrada']) }}"
-                                                   class="btn btn-success" title="Registrar entrada">
+                                                    class="btn btn-success" title="Registrar entrada">
                                                     <i class="fas fa-plus-circle"></i>
                                                 </a>
-                                                <a href="{{ route('alertas.show', $alerta->id) }}"
-                                                   class="btn btn-info" title="Ver alerta">
+                                                <a href="{{ route('alertas.show', $alerta->id) }}" class="btn btn-info"
+                                                    title="Ver alerta">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </div>
