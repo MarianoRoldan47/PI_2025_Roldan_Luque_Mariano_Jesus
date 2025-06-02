@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\ViewsControllers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Estanteria;
 
@@ -14,7 +13,6 @@ class AlmacenController extends Controller
     public function index()
     {
         $estanterias = Estanteria::with('zona')->get();
-        return view('almacen.index', compact('estanterias'));
+        return view('vistasPersonalizadas.almacen.index', compact('estanterias'));
     }
-
 }

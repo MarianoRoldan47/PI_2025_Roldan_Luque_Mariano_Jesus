@@ -4,13 +4,14 @@ namespace App\Http\Controllers\ViewsControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Zona;
+use Exception;
 use Illuminate\Http\Request;
 
 class ZonasController extends Controller
 {
     public function create()
     {
-        return view('zonas.create');
+        return view('vistasPersonalizadas.zonas.create');
     }
 
     public function store(Request $request)
@@ -30,12 +31,12 @@ class ZonasController extends Controller
     public function show(Zona $zona)
     {
         $zona->load('estanterias');
-        return view('zonas.show', compact('zona'));
+        return view('vistasPersonalizadas.zonas.show', compact('zona'));
     }
 
     public function edit(Zona $zona)
     {
-        return view('zonas.edit', compact('zona'));
+        return view('vistasPersonalizadas.zonas.edit', compact('zona'));
     }
 
     public function update(Request $request, Zona $zona)
@@ -59,7 +60,7 @@ class ZonasController extends Controller
             return redirect()->route('zonas.index')
                 ->with('status', 'Zona eliminada correctamente.')
                 ->with('status-type', 'success');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->route('zonas.index')
                 ->with('status', 'No se pudo eliminar la zona porque tiene estanterías asociadas.')
                 ->with('status-type', 'danger');

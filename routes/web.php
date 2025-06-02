@@ -51,13 +51,14 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('categorias', CategoriasController::class);
 
+        Route::get('/movimientos/get-estanterias', [MovimientosController::class, 'getEstanterias'])
+            ->name('movimientos.get-estanterias');
 
         Route::get('/movimientos', [MovimientosController::class, 'index'])->name('movimientos.index');
         Route::get('/movimientos/create', [MovimientosController::class, 'create'])->name('movimientos.create');
         Route::post('/movimientos', [MovimientosController::class, 'store'])->name('movimientos.store');
         Route::get('/movimientos/{movimiento}', [MovimientosController::class, 'show'])->name('movimientos.show');
-        Route::get('/movimientos/get-estanterias', [MovimientosController::class, 'getEstanterias'])
-            ->name('movimientos.get-estanterias');
+
 
 
         Route::get('/movimientos/{movimiento}/edit', [MovimientosController::class, 'edit'])

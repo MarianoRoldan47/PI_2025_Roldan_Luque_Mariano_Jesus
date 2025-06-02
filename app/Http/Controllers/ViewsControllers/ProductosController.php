@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ViewsControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Producto;
 use App\Models\Categoria;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,13 +15,13 @@ class ProductosController extends Controller
     {
         $productos = Producto::with(['categoria', 'estanterias'])
             ->paginate(10);
-        return view('productos.index', compact('productos'));
+        return view('vistasPersonalizadas.productos.index', compact('productos'));
     }
 
     public function create()
     {
         $categorias = Categoria::all();
-        return view('productos.create', compact('categorias'));
+        return view('vistasPersonalizadas.productos.create', compact('categorias'));
     }
 
     public function store(Request $request)
@@ -54,13 +55,13 @@ class ProductosController extends Controller
             $query->latest('fecha_movimiento')->limit(5);
         }]);
 
-        return view('productos.show', compact('producto'));
+        return view('vistasPersonalizadas.productos.show', compact('producto'));
     }
 
     public function edit(Producto $producto)
     {
         $categorias = Categoria::all();
-        return view('productos.edit', compact('producto', 'categorias'));
+        return view('vistasPersonalizadas.productos.edit', compact('producto', 'categorias'));
     }
 
     public function update(Request $request, Producto $producto)
@@ -105,7 +106,7 @@ class ProductosController extends Controller
             $producto->delete();
             return redirect()->route('productos.index')
                 ->with('success', 'Producto eliminado correctamente');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->route('productos.index')
                 ->with('error', 'No se puede eliminar el producto porque está siendo utilizado');
         }

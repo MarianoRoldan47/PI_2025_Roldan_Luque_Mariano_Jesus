@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ViewsControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Categoria;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -17,7 +18,7 @@ class CategoriasController extends Controller
 
         $categorias = Categoria::withCount('productos')->orderBy('nombre')->get();
 
-        return view('categorias.index', compact('categorias'));
+        return view('vistasPersonalizadas.categorias.index', compact('categorias'));
     }
 
     /**
@@ -50,7 +51,7 @@ class CategoriasController extends Controller
 
             return redirect()->route('categorias.index')
                 ->with('success', '¡Categoría creada correctamente!');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
@@ -102,7 +103,7 @@ class CategoriasController extends Controller
 
             return redirect()->route('categorias.index')
                 ->with('success', '¡Categoría actualizada correctamente!');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error al actualizar categoría: ' . $e->getMessage());
 
             if ($request->expectsJson()) {
@@ -136,7 +137,7 @@ class CategoriasController extends Controller
 
             return redirect()->route('categorias.index')
                 ->with('success', 'Categoría "' . $nombreCategoria . '" eliminada correctamente');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error al eliminar categoría: ' . $e->getMessage());
 
             return redirect()->route('categorias.index')

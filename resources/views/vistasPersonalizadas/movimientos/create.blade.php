@@ -106,7 +106,6 @@
                                     </div>
                                 </div>
                             @elseif($tipo === 'salida')
-
                                 <div class="mb-3 row">
                                     <div class="col-md-12">
                                         <label for="destino_tipo" class="form-label">Destino *</label>
@@ -125,7 +124,7 @@
                                             <select class="text-white form-select bg-dark"
                                                 id="ubicacion_origen_selector">
                                                 <option value="">Selecciona una estantería</option>
-                                                
+
                                             </select>
                                             <button type="button" class="btn btn-info" id="agregar-estanteria-origen">
                                                 <i class="fas fa-plus"></i>
@@ -139,13 +138,15 @@
                                             <select class="text-white form-select bg-dark"
                                                 id="ubicacion_destino_selector">
                                                 <option value="">Selecciona una estantería</option>
-                                                @foreach ($estanteriasDestino as $estanteria)
-                                                    <option value="{{ $estanteria['id'] }}"
-                                                        data-capacidad="{{ $estanteria['capacidad_libre'] }}">
-                                                        {{ $estanteria['nombre'] }} {{ $estanteria['zona'] }}
-                                                        (Espacio: {{ $estanteria['capacidad_libre'] }})
-                                                    </option>
-                                                @endforeach
+                                                @if (isset($estanteriasDestino) && count($estanteriasDestino) > 0)
+                                                    @foreach ($estanteriasDestino as $estanteria)
+                                                        <option value="{{ $estanteria['id'] }}"
+                                                            data-capacidad="{{ $estanteria['capacidad_libre'] }}">
+                                                            {{ $estanteria['nombre'] }} {{ $estanteria['zona'] }}
+                                                            (Espacio: {{ $estanteria['capacidad_libre'] }})
+                                                        </option>
+                                                    @endforeach
+                                                @endif
                                             </select>
                                             <button type="button" class="btn btn-info"
                                                 id="agregar-estanteria-destino">
@@ -194,35 +195,39 @@
                             const cantidad = parseInt(this.value) || 0;
                             const destinoSelect = document.getElementById('ubicacion_destino_selector');
 
-
-                            const capacidadTotal = Array.from(destinoSelect.options)
-                                .filter(opt => opt.value)
-                                .reduce((sum, opt) => sum + (parseInt(opt.dataset.capacidad) || 0), 0);
-
+                            const productoId = productoSelect.value;
+                            if (!productoId) {
+                                isUpdating = false;
+                                return;
+                            }
 
                             const errorExistente = document.getElementById('error-cantidad');
                             if (errorExistente) {
                                 errorExistente.remove();
                             }
 
-                            if (cantidad > capacidadTotal) {
+                            if (destinoSelect.options.length <= 1) {
+                                productoSelect.dispatchEvent(new Event('change'));
+                                isUpdating = false;
+                                return;
+                            }
 
+                            const capacidadTotal = Array.from(destinoSelect.options)
+                                .filter(opt => opt.value && opt.style.display !== 'none')
+                                .reduce((sum, opt) => sum + (parseInt(opt.dataset.capacidad) || 0), 0);
+
+                            if (cantidad > capacidadTotal && capacidadTotal > 0) {
                                 const errorDiv = document.createElement('div');
                                 errorDiv.id = 'error-cantidad';
                                 errorDiv.className = 'alert alert-danger mt-2';
                                 errorDiv.innerHTML = `
-                                    <i class="fas fa-exclamation-triangle me-2"></i>
-                                    No hay suficiente espacio disponible en las estanterías para realizar el traslado. Espacio total disponible para trasladar: ${capacidadTotal}
-                                `;
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            No hay suficiente espacio disponible en las estanterías para realizar el traslado. Espacio total disponible para trasladar: ${capacidadTotal}
+        `;
 
                                 this.parentNode.appendChild(errorDiv);
                                 this.value = capacidadTotal;
                                 cantidadRequerida = capacidadTotal;
-                            }
-
-
-                            if (productoSelect.value && !isUpdating) {
-                                productoSelect.dispatchEvent(new Event('change'));
                             }
 
                             isUpdating = false;

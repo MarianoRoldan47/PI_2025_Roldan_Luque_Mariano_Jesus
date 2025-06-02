@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use App\Notifications\SolicitudAprobada;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -20,12 +21,12 @@ class UserController extends Controller
         $users = User::orderBy('name')->get();
         $usersPendientesAprobar = User::where('is_approved', false)->where('rol', 'Usuario')->count();
 
-        return view('users.index', compact('users', 'usersPendientesAprobar'));
+        return view('vistasPersonalizadas.users.index', compact('users', 'usersPendientesAprobar'));
     }
 
     public function create()
     {
-        return view('users.create');
+        return view('vistasPersonalizadas.users.create');
     }
 
     public function store(Request $request)
@@ -69,12 +70,12 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        return view('users.show', compact('user'));
+        return view('vistasPersonalizadas.users.show', compact('user'));
     }
 
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        return view('vistasPersonalizadas.users.edit', compact('user'));
     }
 
     public function update(Request $request, User $user)
@@ -157,7 +158,7 @@ class UserController extends Controller
             ->where('rol', 'Usuario')
             ->get();
 
-        return view('users.solicitudes', compact('pendingUsers'));
+        return view('vistasPersonalizadas.users.solicitudes', compact('pendingUsers'));
     }
 
     public function aprobar(User $user)
@@ -168,7 +169,7 @@ class UserController extends Controller
         ]);
         try {
             $user->notify(new SolicitudAprobada());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error al enviar correo de aprobación: ' . $e->getMessage());
         }
 

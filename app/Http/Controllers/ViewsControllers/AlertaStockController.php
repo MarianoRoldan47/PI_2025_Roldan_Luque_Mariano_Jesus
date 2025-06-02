@@ -4,16 +4,13 @@ namespace App\Http\Controllers\ViewsControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\AlertaStock;
-use App\Models\Producto;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AlertaStockController extends Controller
 {
     public function index()
     {
         $alertas = AlertaStock::with('producto')->latest('fecha_alerta')->get();
-        return view('alertas.index', compact('alertas'));
+        return view('vistasPersonalizadas.alertas.index', compact('alertas'));
     }
 
     public function show(AlertaStock $alerta)
@@ -24,7 +21,7 @@ class AlertaStockController extends Controller
             }]);
         }]);
 
-        return view('alertas.show', compact('alerta'));
+        return view('vistasPersonalizadas.alertas.show', compact('alerta'));
     }
 
     public function destroy(AlertaStock $alerta)

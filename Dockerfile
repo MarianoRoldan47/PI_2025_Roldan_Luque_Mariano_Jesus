@@ -16,7 +16,17 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libmcrypt-dev \
     default-mysql-client \
+    ca-certificates \
+    openssl \
     && docker-php-ext-install pdo pdo_mysql zip bcmath
+
+# Actualizar certificados CA
+RUN update-ca-certificates
+
+RUN { \
+    echo 'openssl.cafile = /etc/ssl/certs/ca-certificates.crt'; \
+    echo 'curl.cainfo = /etc/ssl/certs/ca-certificates.crt'; \
+    } > /usr/local/etc/php/conf.d/docker-php-ssl-ca.ini
 
 # Configurar Git para aceptar el directorio como seguro
 RUN git config --global --add safe.directory /var/www

@@ -52,7 +52,7 @@ class TablaMovimientos extends Component
                     });
                 })
                 ->when(count($this->tiposFiltrados) > 0, function ($query) {
-                    $query->whereIn('movimientos.tipo', $this->tiposFiltrados); // Especificamos la tabla
+                    $query->whereIn('movimientos.tipo', $this->tiposFiltrados);
                 })
                 ->when($this->sortField === 'producto', function ($query) {
                     $query->join('productos', 'movimientos.producto_id', '=', 'productos.id')
@@ -65,7 +65,7 @@ class TablaMovimientos extends Component
                         ->select('movimientos.*');
                 })
                 ->when($this->sortField === 'fecha_movimiento', function ($query) {
-                    $query->orderBy('movimientos.fecha_movimiento', $this->sortDirection); // También especificamos aquí la tabla
+                    $query->orderBy('movimientos.fecha_movimiento', $this->sortDirection);
                 })
                 ->paginate(10)
         ]);

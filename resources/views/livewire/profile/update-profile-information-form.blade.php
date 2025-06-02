@@ -28,11 +28,9 @@ new class extends Component {
     {
         $user = Auth::user();
 
-
         foreach (['dni', 'name', 'apellido1', 'apellido2', 'telefono', 'direccion', 'codigo_postal', 'localidad', 'provincia', 'rol', 'email'] as $field) {
             $this->{$field} = $user->{$field} ?? '';
         }
-
 
         if ($user->fecha_nacimiento) {
             $this->fecha_nacimiento = $user->fecha_nacimiento->format('Y-m-d');
@@ -60,7 +58,6 @@ new class extends Component {
             'imagen' => ['nullable', 'image', 'max:1024'],
         ]);
 
-
         $user->dni = $validated['dni'];
         $user->name = $validated['name'];
         $user->apellido1 = $validated['apellido1'];
@@ -71,7 +68,6 @@ new class extends Component {
         $user->localidad = $validated['localidad'];
         $user->provincia = $validated['provincia'];
 
-
         if ($user->email !== $validated['email']) {
             $user->email = $validated['email'];
             $user->email_verified_at = null;
@@ -79,10 +75,9 @@ new class extends Component {
 
         $user->fecha_nacimiento = $validated['fecha_nacimiento'];
 
-        
         if ($this->imagen) {
             if ($user->imagen) {
-                \Storage::disk('public')->delete($user->imagen);
+                Storage::disk('public')->delete($user->imagen);
             }
             $path = $this->imagen->store('imagenes/perfiles', 'public');
             $user->imagen = $path;
@@ -95,11 +90,17 @@ new class extends Component {
 
     public function sendVerification(): void
     {
-        $user = Auth::user();
-        if (!$user->hasVerifiedEmail()) {
-            $user->sendEmailVerificationNotification();
-            Session::flash('status', 'verification-link-sent');
+        if (Auth::user()->hasVerifiedEmail()) {
+            redirect()->intended(route('profile', absolute: false));
+
+            return;
         }
+
+        Auth::user()->sendEmailVerificationNotification();
+
+        session()->flash('success', 'Se ha enviado un nuevo enlace de verificación a tu correo electrónico.');
+
+        $this->dispatch('verification-link-sent');
     }
     public function deleteImage(): void
     {

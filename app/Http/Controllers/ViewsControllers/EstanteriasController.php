@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ViewsControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Estanteria;
 use App\Models\Zona;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -14,7 +15,7 @@ class EstanteriasController extends Controller
     public function create()
     {
         $zonas = Zona::all();
-        return view('estanterias.create', compact('zonas'));
+        return view('vistasPersonalizadas.estanterias.create', compact('zonas'));
     }
 
     public function store(Request $request)
@@ -44,13 +45,13 @@ class EstanteriasController extends Controller
     public function show(Estanteria $estanteria)
     {
         $estanteria->load('zona', 'productos');
-        return view('estanterias.show', compact('estanteria'));
+        return view('vistasPersonalizadas.estanterias.show', compact('estanteria'));
     }
 
     public function edit(Estanteria $estanteria)
     {
         $zonas = Zona::all();
-        return view('estanterias.edit', compact('estanteria', 'zonas'));
+        return view('vistasPersonalizadas.estanterias.edit', compact('estanteria', 'zonas'));
     }
 
     public function update(Request $request, Estanteria $estanteria)
@@ -94,7 +95,7 @@ class EstanteriasController extends Controller
             return redirect()->route('estanterias.index')
                 ->with('status', 'Estantería eliminada correctamente.')
                 ->with('status-type', 'success');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->route('estanterias.index')
                 ->with('status', 'No se pudo eliminar la estantería.')
                 ->with('status-type', 'danger');

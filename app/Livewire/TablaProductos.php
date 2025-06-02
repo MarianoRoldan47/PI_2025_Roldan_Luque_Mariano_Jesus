@@ -16,13 +16,11 @@ class TablaProductos extends Component
     public $sortDirection = 'desc';
     public $search = '';
     public $categoriaSeleccionada = null;
-    public $stockFilter = 'todos';  // 'todos', 'disponibles', 'agotados', 'bajoMinimo'
+    public $stockFilter = 'todos';
     protected $paginationTheme = 'bootstrap';
 
-    // Constructor para recibir parámetros iniciales
     public function mount()
     {
-        // Intentar obtener la categoría inicial desde la URL (para cuando venga desde categorias.index)
         if (request()->has('categoria_id')) {
             $this->categoriaSeleccionada = request()->categoria_id;
         }
@@ -60,10 +58,8 @@ class TablaProductos extends Component
 
     public function render()
     {
-        // Obtener todas las categorías para el selector
         $categorias = Categoria::orderBy('nombre')->get();
 
-        // Consultar productos con filtros aplicados
         $productosQuery = Producto::with(['categoria', 'estanterias'])
             ->when($this->sortField === 'categoria', function ($query) {
                 $query->join('categorias', 'productos.categoria_id', '=', 'categorias.id')
@@ -73,8 +69,7 @@ class TablaProductos extends Component
             ->when($this->search, function ($query) {
                 $query->where(function ($query) {
                     $query->where('productos.nombre', 'like', '%' . $this->search . '%')
-                        ->orWhere('productos.codigo_producto', 'like', '%' . $this->search . '%')
-                        ->orWhere('productos.referencia', 'like', '%' . $this->search . '%');
+                        ->orWhere('productos.codigo_producto', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->categoriaSeleccionada, function ($query) {

@@ -31,7 +31,7 @@ class MovimientosController extends Controller
             ->orderBy('fecha_movimiento', 'desc')
             ->paginate(10);
 
-        return view('movimientos.index', compact('movimientos'));
+        return view('vistasPersonalizadas.movimientos.index', compact('movimientos'));
     }
 
     /**
@@ -40,65 +40,78 @@ class MovimientosController extends Controller
     public function create(Request $request)
     {
         $tipo = $request->tipo ?? 'entrada';
-        if (!in_array($tipo, ['entrada', 'traslado', 'salida'])) {
-            return redirect()->route('movimientos.index')
-                ->with('error', 'Tipo de movimiento no válido');
-        }
-
         $productos = Producto::all();
         $usuarios = User::all();
-
-        $estanteriasBase = Estanteria::with(['zona', 'productos'])
-            ->get()
-            ->map(function ($estanteria) use ($request) {
-                $data = [
-                    'id' => $estanteria->id,
-                    'nombre' => "Estantería {$estanteria->nombre}",
-                    'zona' => $estanteria->zona ? "- Zona {$estanteria->zona->nombre}" : '',
-                    'capacidad_libre' => $estanteria->capacidad_libre,
-                    'capacidad_maxima' => $estanteria->capacidad_maxima
-                ];
-
-                if ($request->producto_id) {
-                    $stock = $estanteria->productos()
-                        ->where('producto_id', $request->producto_id)
-                        ->first();
-                    $data['stock_producto'] = $stock ? $stock->pivot->cantidad : 0;
-                }
-
-                return $data;
-            });
+        $producto_id = $request->producto_id ? (int)$request->producto_id : null;
 
         $viewData = [
             'productos' => $productos,
             'usuarios' => $usuarios,
-            'tipo' => $tipo
+            'tipo' => $tipo,
+            'producto_id' => $producto_id,
+            'estanterias' => [],
+            'estanteriasOrigen' => [],
+            'estanteriasDestino' => []
         ];
 
-        if ($tipo === 'entrada') {
-            $viewData['estanterias'] = $estanteriasBase->filter(function ($estanteria) {
-                return $estanteria['capacidad_libre'] > 0;
-            })->values();
-        } elseif ($tipo === 'traslado') {
-            $viewData['estanteriasOrigen'] = $estanteriasBase
-                ->filter(function ($estanteria) {
-                    return isset($estanteria['stock_producto']) && $estanteria['stock_producto'] > 0;
-                })
-                ->values();
+        if ($tipo === 'traslado' && $producto_id) {
+            try {
+                $estanteriasOrigen = DB::table('estanterias')
+                    ->join('producto_estanteria', 'estanterias.id', '=', 'producto_estanteria.estanteria_id')
+                    ->leftJoin('zonas', 'estanterias.zona_id', '=', 'zonas.id')
+                    ->where('producto_estanteria.producto_id', $producto_id)
+                    ->where('producto_estanteria.cantidad', '>', 0)
+                    ->select(
+                        'estanterias.id',
+                        'estanterias.nombre',
+                        'zonas.nombre as zona_nombre',
+                        'producto_estanteria.cantidad as stock_producto'
+                    )
+                    ->get()
+                    ->map(function ($estanteria) {
+                        return [
+                            'id' => $estanteria->id,
+                            'nombre' => "Estantería {$estanteria->nombre}",
+                            'zona' => $estanteria->zona_nombre ? "- {$estanteria->zona_nombre}" : '',
+                            'stock_producto' => $estanteria->stock_producto
+                        ];
+                    });
 
-            $estanteriasConProducto = $viewData['estanteriasOrigen']->pluck('id')->toArray();
+                $estanteriasDestino = Estanteria::with('zona')
+                    ->where('capacidad_libre', '>', 0)
+                    ->whereNotIn('id', $estanteriasOrigen->pluck('id'))
+                    ->get()
+                    ->map(function ($estanteria) {
+                        return [
+                            'id' => $estanteria->id,
+                            'nombre' => "Estantería {$estanteria->nombre}",
+                            'zona' => $estanteria->zona ? "- {$estanteria->zona->nombre}" : '',
+                            'capacidad_libre' => $estanteria->capacidad_libre
+                        ];
+                    });
 
-            $viewData['estanteriasDestino'] = $estanteriasBase
-                ->filter(function ($estanteria) use ($estanteriasConProducto) {
-                    return $estanteria['capacidad_libre'] > 0 &&
-                        !in_array($estanteria['id'], $estanteriasConProducto);
-                })
-                ->values();
-        } else {
-            $viewData['estanterias'] = $estanteriasBase;
+                $viewData['estanteriasOrigen'] = $estanteriasOrigen;
+                $viewData['estanteriasDestino'] = $estanteriasDestino;
+                $viewData['stockTotal'] = Producto::find($producto_id)->stock_total;
+            } catch (Exception $e) {
+                Log::error("Error cargando estanterías para traslado: " . $e->getMessage());
+            }
+        } elseif ($tipo === 'entrada') {
+            $viewData['estanterias'] = Estanteria::where('capacidad_libre', '>', 0)
+                ->with('zona')
+                ->get()
+                ->map(function ($estanteria) {
+                    return [
+                        'id' => $estanteria->id,
+                        'nombre' => "Estantería {$estanteria->nombre}",
+                        'zona' => $estanteria->zona ? "- {$estanteria->zona->nombre}" : '',
+                        'capacidad_libre' => $estanteria->capacidad_libre,
+                        'capacidad_maxima' => $estanteria->capacidad_maxima
+                    ];
+                });
         }
 
-        return view('movimientos.create', $viewData);
+        return view('vistasPersonalizadas.movimientos.create', $viewData);
     }
 
     /**
@@ -176,7 +189,7 @@ class MovimientosController extends Controller
 
                 case 'salida':
                     if ($producto->stock_total < $request->cantidad) {
-                        throw new \Exception('No hay suficiente stock disponible.');
+                        throw new Exception('No hay suficiente stock disponible.');
                     }
 
                     $ubicaciones = DB::table('producto_estanteria')
@@ -230,7 +243,7 @@ class MovimientosController extends Controller
                     }
 
                     if ($cantidadPendiente > 0) {
-                        throw new \Exception('Error al procesar la salida del stock. Cantidad pendiente: ' . $cantidadPendiente);
+                        throw new Exception('Error al procesar la salida del stock. Cantidad pendiente: ' . $cantidadPendiente);
                     }
 
                     break;
@@ -247,7 +260,7 @@ class MovimientosController extends Controller
                     $totalDestino = array_sum($request->ubicaciones_destino);
 
                     if ($totalOrigen !== (int)$request->cantidad || $totalDestino !== (int)$request->cantidad) {
-                        throw new \Exception('Las cantidades en origen y destino deben coincidir con la cantidad total del movimiento');
+                        throw new Exception('Las cantidades en origen y destino deben coincidir con la cantidad total del movimiento');
                     }
 
                     foreach ($request->ubicaciones_origen as $origenId => $cantidadOrigen) {
@@ -257,7 +270,7 @@ class MovimientosController extends Controller
                             ->value('cantidad') ?? 0;
 
                         if ($stockDisponible < $cantidadOrigen) {
-                            throw new \Exception("No hay suficiente stock en la estantería origen ID: {$origenId}");
+                            throw new Exception("No hay suficiente stock en la estantería origen ID: {$origenId}");
                         }
                     }
 
@@ -332,7 +345,7 @@ class MovimientosController extends Controller
 
                     foreach ($destinos as $destinoId => $destino) {
                         if ($destino['cantidad_pendiente'] > 0) {
-                            throw new \Exception("No se pudo distribuir toda la cantidad requerida para el destino {$destinoId}");
+                            throw new Exception("No se pudo distribuir toda la cantidad requerida para el destino {$destinoId}");
                         }
                     }
                     break;
@@ -358,7 +371,7 @@ class MovimientosController extends Controller
             $query->withTrashed();
         }]);
 
-        return view('movimientos.show', compact('movimiento'));
+        return view('vistasPersonalizadas.movimientos.show', compact('movimiento'));
     }
 
     /**
@@ -385,7 +398,7 @@ class MovimientosController extends Controller
                 ];
             });
 
-        return view('movimientos.edit', compact('movimiento', 'productos', 'usuarios', 'estanterias'));
+        return view('vistasPersonalizadas.movimientos.edit', compact('movimiento', 'productos', 'usuarios', 'estanterias'));
     }
 
     /**
@@ -421,6 +434,9 @@ class MovimientosController extends Controller
         return redirect()->route('movimientos.index')->with('success', 'Movimiento eliminado con éxito');
     }
 
+    /**
+     * Obtiene las estanterías disponibles para un producto
+     */
     public function getEstanterias(Request $request)
     {
         try {
@@ -432,7 +448,7 @@ class MovimientosController extends Controller
                 ], 400);
             }
 
-            $stockTotal = Producto::find($producto_id)->stock_total;
+            $producto = Producto::findOrFail($producto_id);
 
             $estanteriasOrigen = DB::table('estanterias')
                 ->join('producto_estanteria', 'estanterias.id', '=', 'producto_estanteria.estanteria_id')
@@ -455,17 +471,11 @@ class MovimientosController extends Controller
                     ];
                 });
 
-            $stockEnEstanterias = $estanteriasOrigen->sum('stock_producto');
-
-            if ($stockEnEstanterias !== $stockTotal) {
-                Log::warning("Discrepancia en stock del producto {$producto_id}:
-                Stock total: {$stockTotal},
-                Suma en estanterías: {$stockEnEstanterias}");
-            }
+            $estanteriasIds = $estanteriasOrigen->pluck('id')->toArray();
 
             $estanteriasDestino = Estanteria::with('zona')
                 ->where('capacidad_libre', '>', 0)
-                ->whereNotIn('id', $estanteriasOrigen->pluck('id'))
+                ->whereNotIn('id', $estanteriasIds)
                 ->get()
                 ->map(function ($estanteria) {
                     return [
@@ -479,9 +489,9 @@ class MovimientosController extends Controller
             return response()->json([
                 'estanteriasOrigen' => $estanteriasOrigen,
                 'estanteriasDestino' => $estanteriasDestino,
-                'stockTotal' => $stockTotal
+                'stockTotal' => $producto->stock_total
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'error' => 'Error al obtener las estanterías: ' . $e->getMessage()
             ], 500);
