@@ -85,7 +85,7 @@
                                 </div>
                             </div>
 
-                            <!-- Información de ocupación actual -->
+
                             <div class="alert alert-dark border border-secondary mb-4">
                                 <h6 class="alert-heading d-flex align-items-center">
                                     <i class="fas fa-info-circle text-info me-2"></i>

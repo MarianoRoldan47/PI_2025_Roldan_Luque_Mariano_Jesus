@@ -1,17 +1,17 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">USUARIOS</h1>
                 <p class="text-muted">Gestión de usuarios del sistema</p>
             </div>
-            <div class="col-12 col-md-auto d-flex justify-content-end align-items-center gap-2">
+            <div class="gap-2 col-12 col-md-auto d-flex justify-content-end align-items-center">
                 @if (Auth::user()->rol === 'Administrador')
                     <a href="{{ route('users.create') }}" class="btn btn-primary">
                         <i class="fas fa-user-plus me-2"></i>Nuevo Usuario
                     </a>
 
-                    <a href="{{ route('users.solicitudes') }}" class="btn btn-info text-white">
+                    <a href="{{ route('users.solicitudes') }}" class="text-white btn btn-info">
                         <i class="fas fa-user-check me-2"></i>Solicitudes
                         @if ($usersPendientesAprobar > 0)
                             <span class="badge bg-danger ms-2">{{ $usersPendientesAprobar }}</span>
@@ -21,14 +21,14 @@
             </div>
         </div>
 
-        <div class="card bg-dark shadow-sm">
-            <div class="card-body p-0">
+        <div class="shadow-sm card bg-dark">
+            <div class="p-0 card-body">
                 @if ($users->isEmpty())
-                    <div class="card-body text-center py-5">
+                    <div class="py-5 text-center card-body">
                         <div class="empty-state">
-                            <i class="fas fa-users text-primary fa-4x mb-3"></i>
+                            <i class="mb-3 fas fa-users text-primary fa-4x"></i>
                             <h4 class="text-white">No hay usuarios registrados</h4>
-                            <p class="text-light mb-4">
+                            <p class="mb-4 text-light">
                                 No se encontraron usuarios en el sistema.
                             </p>
                             @if (Auth::user()->rol === 'Administrador')
@@ -40,7 +40,7 @@
                     </div>
                 @else
                     <div class="table-responsive">
-                        <table class="table table-dark table-hover align-middle mb-0">
+                        <table class="table mb-0 align-middle table-dark table-hover">
                             <thead>
                                 <tr>
                                     <th>Usuario</th>
@@ -66,7 +66,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge text-bg-dark border border-secondary">
+                                            <span class="border badge text-bg-dark border-secondary">
                                                 {{ $user->dni }}
                                             </span>
                                         </td>
@@ -122,10 +122,10 @@
     </div>
 
     @if (Auth::user()->rol === 'Administrador')
-        <!-- Modal de confirmación para eliminar -->
+
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-white">
+                <div class="text-white modal-content bg-dark">
                     <div class="modal-header border-bottom border-danger">
                         <h5 class="modal-title">
                             <i class="fas fa-exclamation-triangle text-danger me-2"></i>
@@ -135,7 +135,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="d-flex align-items-center">
-                            <div class="modal-icon bg-danger text-white rounded-circle p-3 me-3">
+                            <div class="p-3 text-white modal-icon bg-danger rounded-circle me-3">
                                 <i class="fas fa-trash fa-2x"></i>
                             </div>
                             <p class="mb-0">
@@ -159,7 +159,7 @@
         @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Manejo del modal de eliminación
+
                 const deleteModal = document.getElementById('deleteModal');
                 if (deleteModal) {
                     deleteModal.addEventListener('show.bs.modal', function (event) {
@@ -172,14 +172,14 @@
                     });
                 }
 
-                // Hacer que las filas sean clickeables
+
                 const userRows = document.querySelectorAll('.user-row');
                 userRows.forEach(row => {
                     row.addEventListener('click', function() {
                         window.location.href = this.getAttribute('data-href');
                     });
 
-                    // Efecto visual al pasar el mouse
+
                     row.addEventListener('mouseenter', function() {
                         this.classList.add('table-active');
                     });

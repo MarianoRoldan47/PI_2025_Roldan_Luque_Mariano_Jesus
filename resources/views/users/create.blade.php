@@ -1,6 +1,7 @@
+
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">NUEVO USUARIO</h1>
                 <p class="text-muted">Crear un nuevo usuario en el sistema</p>
@@ -12,9 +13,9 @@
             </div>
         </div>
 
-        <div class="card bg-dark shadow-sm">
+        <div class="shadow-sm card bg-dark">
             <div class="card-header bg-dark border-secondary">
-                <h5 class="card-title mb-0 d-flex align-items-center text-white">
+                <h5 class="mb-0 text-white card-title d-flex align-items-center">
                     <i class="fas fa-user-plus text-success me-2"></i>
                     Información del Usuario
                 </h5>
@@ -24,13 +25,13 @@
                     @csrf
 
                     <div class="row g-3">
-                        <div class="col-12 col-md-3 text-center">
+                        <div class="text-center col-12 col-md-3">
                             <div class="mb-3">
                                 <img id="preview-imagen" src="{{ asset('img/default-profile.png') }}"
-                                    class="img-fluid rounded-circle border border-secondary mb-2" alt="Vista previa"
+                                    class="mb-2 border img-fluid rounded-circle border-secondary" alt="Vista previa"
                                     style="width: 180px; height: 180px; object-fit: cover;">
 
-                                <label for="imagen" class="form-label d-block text-white">Imagen de Perfil</label>
+                                <label for="imagen" class="text-white form-label d-block">Imagen de Perfil</label>
                                 <input type="file"
                                     class="form-control bg-dark text-white border-secondary @error('imagen') is-invalid @enderror"
                                     id="imagen" name="imagen" accept="image/*">
@@ -48,13 +49,13 @@
                         <div class="col-12 col-md-9">
                             <div class="row g-3">
                                 <div class="col-12">
-                                    <h5 class="border-bottom border-secondary pb-2 text-info">Información Personal</h5>
+                                    <h5 class="pb-2 border-bottom border-secondary text-info">Información Personal</h5>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="dni" class="form-label text-white">DNI *</label>
+                                    <label for="dni" class="text-white form-label">DNI *</label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-dark text-white border-secondary">
+                                        <span class="text-white input-group-text bg-dark border-secondary">
                                             <i class="fas fa-id-card"></i>
                                         </span>
                                         <input type="text"
@@ -69,9 +70,9 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="name" class="form-label text-white">Nombre *</label>
+                                    <label for="name" class="text-white form-label">Nombre *</label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-dark text-white border-secondary">
+                                        <span class="text-white input-group-text bg-dark border-secondary">
                                             <i class="fas fa-user"></i>
                                         </span>
                                         <input type="text"
@@ -86,7 +87,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="apellido1" class="form-label text-white">Primer Apellido *</label>
+                                    <label for="apellido1" class="text-white form-label">Primer Apellido *</label>
                                     <input type="text"
                                         class="form-control bg-dark text-white border-secondary @error('apellido1') is-invalid @enderror"
                                         id="apellido1" name="apellido1" value="{{ old('apellido1') }}" required>
@@ -98,7 +99,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="apellido2" class="form-label text-white">Segundo Apellido *</label>
+                                    <label for="apellido2" class="text-white form-label">Segundo Apellido *</label>
                                     <input type="text"
                                         class="form-control bg-dark text-white border-secondary @error('apellido2') is-invalid @enderror"
                                         id="apellido2" name="apellido2" value="{{ old('apellido2') }}" required>
@@ -110,10 +111,10 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="fecha_nacimiento" class="form-label text-white">Fecha de Nacimiento
+                                    <label for="fecha_nacimiento" class="text-white form-label">Fecha de Nacimiento
                                         *</label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-dark text-white border-secondary">
+                                        <span class="text-white input-group-text bg-dark border-secondary">
                                             <i class="fas fa-calendar"></i>
                                         </span>
                                         <input type="date"
@@ -129,9 +130,9 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="telefono" class="form-label text-white">Teléfono *</label>
+                                    <label for="telefono" class="text-white form-label">Teléfono *</label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-dark text-white border-secondary">
+                                        <span class="text-white input-group-text bg-dark border-secondary">
                                             <i class="fas fa-phone"></i>
                                         </span>
                                         <input type="text"
@@ -148,13 +149,13 @@
                         </div>
 
                         <div class="col-12">
-                            <h5 class="border-bottom border-secondary pb-2 mt-3 text-info">Dirección</h5>
+                            <h5 class="pb-2 mt-3 border-bottom border-secondary text-info">Dirección</h5>
                         </div>
 
                         <div class="col-12">
-                            <label for="direccion" class="form-label text-white">Dirección *</label>
+                            <label for="direccion" class="text-white form-label">Dirección *</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-dark text-white border-secondary">
+                                <span class="text-white input-group-text bg-dark border-secondary">
                                     <i class="fas fa-home"></i>
                                 </span>
                                 <input type="text"
@@ -169,7 +170,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="codigo_postal" class="form-label text-white">Código Postal *</label>
+                            <label for="codigo_postal" class="text-white form-label">Código Postal *</label>
                             <input type="text"
                                 class="form-control bg-dark text-white border-secondary @error('codigo_postal') is-invalid @enderror"
                                 id="codigo_postal" name="codigo_postal" value="{{ old('codigo_postal') }}" required>
@@ -181,7 +182,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="localidad" class="form-label text-white">Localidad *</label>
+                            <label for="localidad" class="text-white form-label">Localidad *</label>
                             <input type="text"
                                 class="form-control bg-dark text-white border-secondary @error('localidad') is-invalid @enderror"
                                 id="localidad" name="localidad" value="{{ old('localidad') }}" required>
@@ -193,7 +194,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="provincia" class="form-label text-white">Provincia *</label>
+                            <label for="provincia" class="text-white form-label">Provincia *</label>
                             <input type="text"
                                 class="form-control bg-dark text-white border-secondary @error('provincia') is-invalid @enderror"
                                 id="provincia" name="provincia" value="{{ old('provincia') }}" required>
@@ -205,13 +206,13 @@
                         </div>
 
                         <div class="col-12">
-                            <h5 class="border-bottom border-secondary pb-2 mt-3 text-info">Información de Cuenta</h5>
+                            <h5 class="pb-2 mt-3 border-bottom border-secondary text-info">Información de Cuenta</h5>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="email" class="form-label text-white">Correo Electrónico *</label>
+                            <label for="email" class="text-white form-label">Correo Electrónico *</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-dark text-white border-secondary">
+                                <span class="text-white input-group-text bg-dark border-secondary">
                                     <i class="fas fa-envelope"></i>
                                 </span>
                                 <input type="email"
@@ -226,9 +227,9 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="rol" class="form-label text-white">Rol *</label>
+                            <label for="rol" class="text-white form-label">Rol *</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-dark text-white border-secondary">
+                                <span class="text-white input-group-text bg-dark border-secondary">
                                     <i class="fas fa-user-tag"></i>
                                 </span>
                                 <select
@@ -249,9 +250,9 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="password" class="form-label text-white">Contraseña *</label>
+                            <label for="password" class="text-white form-label">Contraseña *</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-dark text-white border-secondary">
+                                <span class="text-white input-group-text bg-dark border-secondary">
                                     <i class="fas fa-lock"></i>
                                 </span>
                                 <input type="password"
@@ -266,22 +267,22 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="password_confirmation" class="form-label text-white">Confirmar
+                            <label for="password_confirmation" class="text-white form-label">Confirmar
                                 contraseña *</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-dark text-white border-secondary">
+                                <span class="text-white input-group-text bg-dark border-secondary">
                                     <i class="fas fa-lock"></i>
                                 </span>
-                                <input type="password" class="form-control bg-dark text-white border-secondary"
+                                <input type="password" class="text-white form-control bg-dark border-secondary"
                                     id="password_confirmation" name="password_confirmation" required>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-check form-switch mt-4">
+                            <div class="mt-4 form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="is_approved" name="is_approved"
                                     value="1" {{ old('is_approved', true) ? 'checked' : '' }}>
-                                <label class="form-check-label text-white" for="is_approved">
+                                <label class="text-white form-check-label" for="is_approved">
                                     Usuario aprobado
                                 </label>
                             </div>
@@ -290,7 +291,7 @@
                             </div>
                         </div>
 
-                        <div class="col-12 mt-4">
+                        <div class="mt-4 col-12">
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-success">
                                     <i class="fas fa-save me-2"></i>Crear Usuario
@@ -306,7 +307,7 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Vista previa de imagen
+
                 const inputImagen = document.getElementById('imagen');
                 const previewImagen = document.getElementById('preview-imagen');
 

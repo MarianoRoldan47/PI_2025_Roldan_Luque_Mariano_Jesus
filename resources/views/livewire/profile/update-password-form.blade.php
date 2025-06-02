@@ -33,26 +33,26 @@ new class extends Component {
 
         $this->reset('current_password', 'password', 'password_confirmation');
 
-        // Añadir mensaje a la sesión flash
+
         Session::flash('success', 'La contraseña se ha actualizado correctamente.');
 
-        // Redirigir a la misma página para mostrar el modal
+        
         $this->redirect(request()->header('Referer'), navigate: true);
     }
 }; ?>
 
-<section class="card bg-dark shadow-lg border-0">
-    <div class="card-body p-3 p-sm-4">
-        <!-- Header -->
-        <h4 class="text-white mb-1">{{ __('Actualizar Contraseña') }}</h4>
-        <p class="text-white-50 small mb-4">
+<section class="border-0 shadow-lg card bg-dark">
+    <div class="p-3 card-body p-sm-4">
+
+        <h4 class="mb-1 text-white">{{ __('Actualizar Contraseña') }}</h4>
+        <p class="mb-4 text-white-50 small">
             {{ __('Asegúrate de usar una contraseña segura para mantener tu cuenta protegida.') }}
         </p>
 
         <form wire:submit="updatePassword" class="mt-4">
-            <!-- Contraseña actual -->
-            <div class="form-group mb-3">
-                <label for="current_password" class="form-label text-white small mb-1">
+
+            <div class="mb-3 form-group">
+                <label for="current_password" class="mb-1 text-white form-label small">
                     {{ __('Contraseña Actual') }}
                 </label>
                 <div class="input-group input-group-sm">
@@ -70,9 +70,9 @@ new class extends Component {
                 @enderror
             </div>
 
-            <!-- Nueva contraseña -->
-            <div class="form-group mb-3">
-                <label for="password" class="form-label text-white small mb-1">
+
+            <div class="mb-3 form-group">
+                <label for="password" class="mb-1 text-white form-label small">
                     {{ __('Nueva Contraseña') }}
                 </label>
                 <div class="input-group input-group-sm">
@@ -90,9 +90,9 @@ new class extends Component {
                 @enderror
             </div>
 
-            <!-- Confirmar contraseña -->
-            <div class="form-group mb-4">
-                <label for="password_confirmation" class="form-label text-white small mb-1">
+
+            <div class="mb-4 form-group">
+                <label for="password_confirmation" class="mb-1 text-white form-label small">
                     {{ __('Confirmar Contraseña') }}
                 </label>
                 <div class="input-group input-group-sm">
@@ -100,13 +100,13 @@ new class extends Component {
                         <i class="fas fa-check-double text-primary"></i>
                     </span>
                     <input wire:model="password_confirmation" type="password" id="password_confirmation"
-                        class="form-control form-control-sm bg-dark text-white border-secondary" required>
+                        class="text-white form-control form-control-sm bg-dark border-secondary" required>
                 </div>
             </div>
 
-            <!-- Footer del formulario -->
+
             <div
-                class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-2 gap-sm-3 border-top border-secondary mt-4 pt-3 pt-sm-4">
+                class="gap-2 pt-3 mt-4 d-flex flex-column flex-sm-row justify-content-end align-items-center gap-sm-3 border-top border-secondary pt-sm-4">
                 <div wire:loading class="text-primary small">
                     <i class="fas fa-spinner fa-spin me-1"></i> {{ __('Guardando...') }}
                 </div>

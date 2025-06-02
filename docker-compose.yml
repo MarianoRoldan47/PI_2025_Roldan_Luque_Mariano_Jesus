@@ -13,6 +13,7 @@ services:
       - "8000:8000"
     environment:
       - COMPOSER_ALLOW_SUPERUSER=1
+    command: bash -c "php artisan serve --host=0.0.0.0 --port=8000"
 
   mysql:
     image: mysql:8.0

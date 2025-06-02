@@ -1,11 +1,11 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">PERFIL DE USUARIO</h1>
                 <p class="text-muted">Detalles de cuenta</p>
             </div>
-            <div class="col-12 col-md d-flex justify-content-end align-items-center gap-2">
+            <div class="gap-2 col-12 col-md d-flex justify-content-end align-items-center">
                 @if (Auth::user()->rol === 'Administrador' || Auth::id() === $user->id)
                     <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit me-1"></i> Editar
@@ -26,18 +26,18 @@
         </div>
 
         <div class="row g-4">
-            <!-- Columna de información personal -->
+
             <div class="col-12 col-lg-4">
-                <div class="card bg-dark shadow-sm">
-                    <div class="card-body text-center">
-                        <div class="position-relative mx-auto mb-3" style="width: 150px; height: 150px;">
+                <div class="shadow-sm card bg-dark">
+                    <div class="text-center card-body">
+                        <div class="mx-auto mb-3 position-relative" style="width: 150px; height: 150px;">
                             <img src="{{ $user->imagen ? asset('storage/' . $user->imagen) : asset('img/default-profile.png') }}"
                                 class="rounded-circle img-thumbnail bg-dark border-secondary"
                                 style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $user->name }}">
 
                             @if ($user->rol === 'Administrador')
                                 <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    class="top-0 position-absolute start-100 translate-middle badge rounded-pill bg-danger">
                                     <i class="fas fa-star"></i>
                                 </span>
                             @endif
@@ -68,9 +68,9 @@
                             @endif
                         </div>
 
-                        <div class="alert alert-secondary border border-secondary text-start p-3 mb-0">
+                        <div class="p-3 mb-0 border alert alert-secondary border-secondary text-start">
                             <div class="mb-2">
-                                <i class="fas fa-id-card text-black me-2"></i>
+                                <i class="text-black fas fa-id-card me-2"></i>
                                 <span>DNI:</span>
                                 <span class="ms-1 fw-bold">{{ $user->dni }}</span>
                             </div>
@@ -98,11 +98,11 @@
                 </div>
             </div>
 
-            <!-- Columna de detalles de contacto y actividad -->
+
             <div class="col-12 col-lg-8">
-                <div class="card bg-dark shadow-sm mb-4">
+                <div class="mb-4 shadow-sm card bg-dark">
                     <div class="card-header bg-dark border-secondary">
-                        <h5 class="card-title mb-0 d-flex align-items-center text-white">
+                        <h5 class="mb-0 text-white card-title d-flex align-items-center">
                             <i class="fas fa-map-marker-alt text-primary me-2"></i>
                             Información de Contacto
                         </h5>
@@ -132,9 +132,9 @@
                     </div>
                 </div>
 
-                <div class="card bg-dark shadow-sm">
+                <div class="shadow-sm card bg-dark">
                     <div class="card-header bg-dark border-secondary">
-                        <h5 class="card-title mb-0 d-flex align-items-center text-white">
+                        <h5 class="mb-0 text-white card-title d-flex align-items-center">
                             <i class="fas fa-history text-primary me-2"></i>
                             Información del Sistema
                         </h5>
@@ -173,7 +173,7 @@
                 </div>
 
                 @if (Auth::user()->rol === 'Administrador' && !$user->is_approved)
-                    <div class="card bg-warning text-dark mt-4">
+                    <div class="mt-4 card bg-warning text-dark">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
@@ -181,7 +181,7 @@
                                     <p class="mb-0 small">Este usuario no podrá acceder al sistema hasta que sea
                                         aprobado.</p>
                                 </div>
-                                <div class="d-flex gap-2">
+                                <div class="gap-2 d-flex">
                                     <form action="{{ route('users.rechazar', $user) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
@@ -205,13 +205,13 @@
     </div>
 
     @if (Auth::user()->rol === 'Administrador' && Auth::id() !== $user->id)
-        <!-- Modal de confirmación para eliminar -->
+
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-white border-danger">
+                <div class="text-white modal-content bg-dark border-danger">
                     <div class="modal-header border-danger">
-                        <h5 class="modal-title text-white" id="deleteModalLabel">Confirmar eliminación</h5>
+                        <h5 class="text-white modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>

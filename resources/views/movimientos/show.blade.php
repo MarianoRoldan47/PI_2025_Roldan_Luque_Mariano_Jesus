@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-3 py-sm-4">
-        <!-- Header simple -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div class="px-2 py-3 container-fluid px-sm-4 py-sm-4">
+
+        <div class="flex-wrap mb-4 d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="h3 mb-1">Movimiento #{{ $movimiento->id }}</h1>
+                <h1 class="mb-1 h3">Movimiento #{{ $movimiento->id }}</h1>
 
                 <span
                     class="badge bg-{{ $movimiento->tipo === 'entrada' ? 'success' : ($movimiento->tipo === 'salida' ? 'danger' : 'secondary') }} text-white">
@@ -11,7 +11,7 @@
                 </span>
             </div>
 
-            <div class="d-flex gap-2 mt-3 mt-md-0">
+            <div class="gap-2 mt-3 d-flex mt-md-0">
                 @if (Auth::user()->rol === 'Administrador' || Auth::user()->id === $movimiento->user_id)
                     <a href="{{ route('movimientos.edit', $movimiento) }}" class="btn btn-warning">
                         <i class="fas fa-edit"></i> Editar
@@ -26,23 +26,23 @@
             </div>
         </div>
 
-        <!-- Contenido principal -->
+
         <div class="row g-4">
-            <!-- Tarjeta de información -->
+
             <div class="col-12">
-                <div class="card bg-dark border-secondary shadow-sm">
+                <div class="shadow-sm card bg-dark border-secondary">
                     <div class="card-body">
                         <div class="row g-4">
-                            <!-- Detalles básicos -->
+
                             <div class="col-lg-6">
-                                <h5 class=" mb-4 fw-bold text-white">
+                                <h5 class="mb-4 text-white  fw-bold">
                                     <i class="fas fa-info-circle me-2 text-primary"></i> Información básica
                                 </h5>
 
-                                <div class="d-flex mb-4 align-items-center text-white">
-                                    <div class="bg-primary rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
+                                <div class="mb-4 text-white d-flex align-items-center">
+                                    <div class="p-2 bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center"
                                         style="width: 40px; height: 40px;">
-                                        <i class="far fa-calendar-alt text-white"></i>
+                                        <i class="text-white far fa-calendar-alt"></i>
                                     </div>
                                     <div>
                                         <div class="text-light fw-bold">Fecha y hora</div>
@@ -51,10 +51,10 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex mb-4 align-items-center text-white">
-                                    <div class="bg-primary rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
+                                <div class="mb-4 text-white d-flex align-items-center">
+                                    <div class="p-2 bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center"
                                         style="width: 40px; height: 40px;">
-                                        <i class="fas fa-user text-white"></i>
+                                        <i class="text-white fas fa-user"></i>
                                     </div>
                                     <div>
                                         <div class="text-light fw-bold">Usuario</div>
@@ -71,10 +71,10 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex mb-4 align-items-center text-white">
-                                    <div class="bg-primary rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
+                                <div class="mb-4 text-white d-flex align-items-center">
+                                    <div class="p-2 bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center"
                                         style="width: 40px; height: 40px;">
-                                        <i class="fas fa-box text-white"></i>
+                                        <i class="text-white fas fa-box"></i>
                                     </div>
                                     <div>
                                         <div class="text-light fw-bold">Producto</div>
@@ -100,10 +100,10 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex mb-4 align-items-center text-white">
-                                    <div class="bg-primary rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
+                                <div class="mb-4 text-white d-flex align-items-center">
+                                    <div class="p-2 bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center"
                                         style="width: 40px; height: 40px;">
-                                        <i class="fas fa-hashtag text-white"></i>
+                                        <i class="text-white fas fa-hashtag"></i>
                                     </div>
                                     <div>
                                         <div class="text-light fw-bold">Cantidad</div>
@@ -112,22 +112,22 @@
                                 </div>
                             </div>
 
-                            <!-- Ubicaciones -->
+
                             <div class="col-lg-6">
-                                <h5 class=" text-white mb-4 fw-bold">
+                                <h5 class="mb-4 text-white  fw-bold">
                                     <i class="fas fa-map-marker-alt me-2 text-primary"></i> Ubicaciones
                                 </h5>
 
-                                <div class="card bg-secondary bg-opacity-25 border-secondary mb-4">
-                                    <div class="card-body p-3">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <div class="bg-danger rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
+                                <div class="mb-4 bg-opacity-25 card bg-secondary border-secondary">
+                                    <div class="p-3 card-body">
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <div class="p-2 bg-danger rounded-circle me-3 d-flex align-items-center justify-content-center"
                                                 style="width: 40px; height: 40px;">
-                                                <i class="fas fa-sign-out-alt text-white"></i>
+                                                <i class="text-white fas fa-sign-out-alt"></i>
                                             </div>
                                             <h6 class="mb-0 text-white">Origen</h6>
                                         </div>
-                                        <div class="ps-5 text-white">
+                                        <div class="text-white ps-5">
                                             @if ($movimiento->origen)
                                                 <div class="mb-1">
                                                     <a href="{{ route('estanterias.show', $movimiento->origen) }}"
@@ -151,20 +151,20 @@
                                     </div>
                                 </div>
 
-                                <div class="text-center my-4">
+                                <div class="my-4 text-center">
                                     <i class="fas fa-arrow-down text-primary fa-2x"></i>
                                 </div>
 
-                                <div class="card bg-secondary bg-opacity-25 border-secondary">
-                                    <div class="card-body p-3">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <div class="bg-success rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
+                                <div class="bg-opacity-25 card bg-secondary border-secondary">
+                                    <div class="p-3 card-body">
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <div class="p-2 bg-success rounded-circle me-3 d-flex align-items-center justify-content-center"
                                                 style="width: 40px; height: 40px;">
-                                                <i class="fas fa-sign-in-alt text-white"></i>
+                                                <i class="text-white fas fa-sign-in-alt"></i>
                                             </div>
                                             <h6 class="mb-0 text-white">Destino</h6>
                                         </div>
-                                        <div class="ps-5 text-white">
+                                        <div class="text-white ps-5">
                                             @if ($movimiento->destino)
                                                 <div class="mb-1">
                                                     <a href="{{ route('estanterias.show', $movimiento->destino) }}"
@@ -195,16 +195,16 @@
         </div>
     </div>
 
-    <!-- Modal simple para eliminar -->
+
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-white border border-danger">
+            <div class="text-white border modal-content bg-dark border-danger">
                 <div class="modal-header border-bottom border-danger">
-                    <h5 class="modal-title text-white">Eliminar movimiento</h5>
+                    <h5 class="text-white modal-title">Eliminar movimiento</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body text-center">
-                    <div class="text-danger mb-4">
+                <div class="text-center modal-body">
+                    <div class="mb-4 text-danger">
                         <i class="fas fa-exclamation-triangle fa-4x"></i>
                     </div>
                     <h5 class="mb-3 text-white">¿Deseas eliminar este movimiento?</h5>

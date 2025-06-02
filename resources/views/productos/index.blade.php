@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">PRODUCTOS</h1>
                 <p>Catálogo de productos</p>
@@ -12,15 +12,15 @@
             </div>
         </div>
 
-        <div class="card bg-dark text-white shadow-sm">
-            <div class="card-body p-2 p-sm-3">
+        <div class="text-white shadow-sm card bg-dark">
+            <div class="p-2 card-body p-sm-3">
                 @livewire('tabla-productos')
             </div>
         </div>
 
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-white">
+                <div class="text-white modal-content bg-dark">
                     <div class="modal-header border-bottom border-danger">
                         <h5 class="modal-title">
                             <i class="fas fa-exclamation-triangle text-danger me-2"></i>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="d-flex align-items-center">
-                            <div class="modal-icon bg-danger text-white rounded-circle p-3 me-3">
+                            <div class="p-3 text-white modal-icon bg-danger rounded-circle me-3">
                                 <i class="fas fa-trash fa-2x"></i>
                             </div>
                             <p class="mb-0">¿Estás seguro de que deseas eliminar este producto? Esta acción no se
@@ -53,11 +53,11 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Obtener todos los botones de eliminar
+
                 const deleteButtons = document.querySelectorAll('.delete-btn');
                 const deleteForm = document.getElementById('deleteForm');
 
-                // Agregar evento a cada botón
+
                 deleteButtons.forEach(button => {
                     button.addEventListener('click', function() {
                         const productoId = this.getAttribute('data-producto-id');

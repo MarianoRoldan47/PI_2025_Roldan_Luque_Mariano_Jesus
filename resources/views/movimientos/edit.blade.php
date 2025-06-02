@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">EDITAR MOVIMIENTO</h1>
                 <p>Modifica los datos del movimiento</p>
@@ -25,16 +25,16 @@
 
         <div class="row g-4">
             <div class="col-12">
-                <div class="card bg-dark text-white shadow-sm">
+                <div class="text-white shadow-sm card bg-dark">
                     <div class="card-body">
                         <form action="{{ route('movimientos.update', $movimiento) }}" method="POST" class="mt-3">
                             @csrf
                             @method('PUT')
 
-                            <div class="row mb-3">
+                            <div class="mb-3 row">
                                 <div class="col-md-6">
                                     <label for="producto_id" class="form-label">Producto</label>
-                                    <select class="form-select bg-dark text-white" id="producto_id" name="producto_id"
+                                    <select class="text-white form-select bg-dark" id="producto_id" name="producto_id"
                                         required>
                                         <option value="">Selecciona un producto</option>
                                         @foreach ($productos as $producto)
@@ -48,7 +48,7 @@
 
                                 <div class="col-md-6">
                                     <label for="user_id" class="form-label">Usuario</label>
-                                    <select class="form-select bg-dark text-white" id="user_id" name="user_id"
+                                    <select class="text-white form-select bg-dark" id="user_id" name="user_id"
                                         required>
                                         <option value="">Selecciona un usuario</option>
                                         @foreach ($usuarios as $usuario)
@@ -61,10 +61,10 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
+                            <div class="mb-3 row">
                                 <div class="col-md-4">
                                     <label for="tipo" class="form-label">Tipo de Movimiento</label>
-                                    <select class="form-select bg-dark text-white" id="tipo" name="tipo"
+                                    <select class="text-white form-select bg-dark" id="tipo" name="tipo"
                                         required>
                                         <option value="entrada" {{ $movimiento->tipo == 'entrada' ? 'selected' : '' }}>
                                             Entrada</option>
@@ -77,13 +77,13 @@
 
                                 <div class="col-md-4">
                                     <label for="cantidad" class="form-label">Cantidad</label>
-                                    <input type="number" class="form-control bg-dark text-white" id="cantidad"
+                                    <input type="number" class="text-white form-control bg-dark" id="cantidad"
                                         name="cantidad" value="{{ $movimiento->cantidad }}" required min="1">
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="estado" class="form-label">Estado</label>
-                                    <select class="form-select bg-dark text-white" id="estado" name="estado"
+                                    <select class="text-white form-select bg-dark" id="estado" name="estado"
                                         required>
                                         <option value="pendiente"
                                             {{ $movimiento->estado == 'pendiente' ? 'selected' : '' }}>Pendiente
@@ -98,7 +98,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
+                            <div class="mb-3 row">
                                 <div class="col-md-6">
                                     <label for="origen_tipo" class="form-label">Tipo de Origen</label>
                                     <select
@@ -122,7 +122,7 @@
                                 <div class="col-md-6" id="origen_estanteria_container"
                                     style="{{ $movimiento->origen_tipo != 'estanteria' ? 'display: none;' : '' }}">
                                     <label for="ubicacion_origen_id" class="form-label">Ubicación Origen</label>
-                                    <select class="form-select bg-dark text-white" id="ubicacion_origen_id"
+                                    <select class="text-white form-select bg-dark" id="ubicacion_origen_id"
                                         name="ubicacion_origen_id">
                                         <option value="">Selecciona una estantería</option>
                                         @foreach ($estanterias as $estanteria)
@@ -136,7 +136,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
+                            <div class="mb-3 row">
                                 <div class="col-md-6">
                                     <label for="destino_tipo" class="form-label">Tipo de Destino</label>
                                     <select
@@ -160,7 +160,7 @@
                                 <div class="col-md-6" id="destino_estanteria_container"
                                     style="{{ $movimiento->destino_tipo != 'estanteria' ? 'display: none;' : '' }}">
                                     <label for="ubicacion_destino_id" class="form-label">Ubicación Destino</label>
-                                    <select class="form-select bg-dark text-white" id="ubicacion_destino_id"
+                                    <select class="text-white form-select bg-dark" id="ubicacion_destino_id"
                                         name="ubicacion_destino_id">
                                         <option value="">Selecciona una estantería</option>
                                         @foreach ($estanterias as $estanteria)
@@ -174,10 +174,10 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
+                            <div class="mb-3 row">
                                 <div class="col-md-6">
                                     <label for="fecha_movimiento" class="form-label">Fecha del Movimiento</label>
-                                    <input type="datetime-local" class="form-control bg-dark text-white"
+                                    <input type="datetime-local" class="text-white form-control bg-dark"
                                         id="fecha_movimiento" name="fecha_movimiento"
                                         value="{{ $movimiento->fecha_movimiento->format('Y-m-d\TH:i') }}" required>
                                 </div>
@@ -205,14 +205,14 @@
                 const ubicacionOrigenId = document.getElementById('ubicacion_origen_id');
                 const ubicacionDestinoId = document.getElementById('ubicacion_destino_id');
 
-                // Datos de las estanterías (los pasamos desde PHP)
+                
                 const estanterias = @json($estanterias);
 
                 function actualizarTiposSegunMovimiento() {
                     const tipo = tipoMovimiento.value;
                     const cantidadValue = parseInt(cantidad.value) || 0;
 
-                    // Establecer valores por defecto según el tipo de movimiento
+
                     switch (tipo) {
                         case 'entrada':
                             origenTipo.value = 'proveedor';
@@ -227,16 +227,16 @@
                             destinoTipo.value = 'estanteria';
                             break;
                         default:
-                            // Si no hay tipo seleccionado, usar los valores actuales del movimiento
+
                             origenTipo.value = '{{ $movimiento->origen_tipo }}' || 'estanteria';
                             destinoTipo.value = '{{ $movimiento->destino_tipo }}' || 'estanteria';
                     }
 
-                    // Deshabilitar los selects según el tipo
+
                     origenTipo.readOnly  = true;
                     destinoTipo.readOnly  = true;
 
-                    // Actualizar visibilidad y contenido de los contenedores
+
                     if (origenTipo.value === 'estanteria') {
                         origenEstanteriaContainer.style.display = 'block';
                         actualizarEstanteriasOrigen(cantidadValue);
@@ -256,7 +256,7 @@
                     ubicacionOrigenId.innerHTML = '<option value="">Selecciona una estantería</option>';
 
                     estanterias.forEach(estanteria => {
-                        // Incluir si tiene stock suficiente O si es la estantería origen actual
+
                         if (parseInt(estanteria.stock_producto) >= parseInt(cantidadRequerida) ||
                             estanteria.id == {{ $movimiento->ubicacion_origen_id ?? 'null' }}) {
                             const option = new Option(
@@ -280,7 +280,7 @@
                     ubicacionDestinoId.innerHTML = '<option value="">Selecciona una estantería</option>';
 
                     estanterias.forEach(estanteria => {
-                        // Incluir si tiene espacio suficiente O si es la estantería destino actual
+
                         if (parseInt(estanteria.espacio_disponible) >= parseInt(cantidadRequerida) ||
                             estanteria.id == {{ $movimiento->ubicacion_destino_id ?? 'null' }}) {
                             const option = new Option(
@@ -300,11 +300,11 @@
                     }
                 }
 
-                // Event listeners
+
                 tipoMovimiento.addEventListener('change', actualizarTiposSegunMovimiento);
                 cantidad.addEventListener('change', actualizarTiposSegunMovimiento);
 
-                // Inicialización
+
                 actualizarTiposSegunMovimiento();
             });
         </script>

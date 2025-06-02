@@ -38,9 +38,9 @@ new #[Layout('layouts.guest')] class extends Component {
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
+
+
+
         $status = Password::reset($this->only('email', 'password', 'password_confirmation', 'token'), function ($user) {
             $user
                 ->forceFill([
@@ -52,9 +52,9 @@ new #[Layout('layouts.guest')] class extends Component {
             event(new PasswordReset($user));
         });
 
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
+
+
+        
         if ($status != Password::PASSWORD_RESET) {
             $this->addError('email', __($status));
 
@@ -68,10 +68,10 @@ new #[Layout('layouts.guest')] class extends Component {
 }; ?>
 
 <div>
-    <h4 class="text-white text-center mb-4">{{ __('Restablecer Contraseña') }}</h4>
+    <h4 class="mb-4 text-center text-white">{{ __('Restablecer Contraseña') }}</h4>
 
     <form wire:submit="resetPassword">
-        <!-- Email Address -->
+
         <div class="mb-4">
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary text-primary">
@@ -88,7 +88,7 @@ new #[Layout('layouts.guest')] class extends Component {
             @enderror
         </div>
 
-        <!-- Password -->
+
         <div class="mb-4">
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary text-primary">
@@ -105,7 +105,7 @@ new #[Layout('layouts.guest')] class extends Component {
             @enderror
         </div>
 
-        <!-- Confirm Password -->
+
         <div class="mb-4">
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary text-primary">
@@ -122,7 +122,7 @@ new #[Layout('layouts.guest')] class extends Component {
             @enderror
         </div>
 
-        <!-- Submit Button -->
+
         <button type="submit" class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
             style="background-color: #22a7e1; border: none;">
             <i class="fas fa-key me-2"></i>

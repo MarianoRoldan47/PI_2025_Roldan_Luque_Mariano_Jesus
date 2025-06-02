@@ -1,11 +1,11 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4">
+        <div class="mb-4 row">
             <div class="col">
-                <h1 class="h3 mb-0">ZONA: {{ $zona->nombre }}</h1>
+                <h1 class="mb-0 h3">ZONA: {{ $zona->nombre }}</h1>
                 <p class="text-muted">Detalles y gestión de estanterías</p>
             </div>
-            <div class="col-auto d-flex align-items-center gap-2">
+            <div class="col-auto gap-2 d-flex align-items-center">
                 @if (Auth::user()->rol === 'Administrador')
                     <a href="{{ route('zonas.edit', $zona) }}" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit me-1"></i> Editar
@@ -30,37 +30,37 @@
 
         <div class="row g-4">
             <div class="col-lg-4">
-                <div class="card bg-dark shadow-sm h-100">
+                <div class="shadow-sm card bg-dark h-100">
                     <div class="card-header bg-dark-subtle d-flex align-items-center">
                         <i class="fas fa-info-circle me-2 text-primary"></i>
                         <span class="fw-bold">Información de la Zona</span>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-center mb-4">
+                        <div class="mb-4 d-flex align-items-center justify-content-center">
                             <div class="zone-icon rounded-circle d-flex align-items-center justify-content-center"
                                 style="width: 80px; height: 80px; background-color: #2a3444;">
                                 <i class="fas fa-map-marker-alt fa-2x text-info"></i>
                             </div>
                         </div>
 
-                        <ul class="list-group list-group-flush bg-transparent">
+                        <ul class="bg-transparent list-group list-group-flush">
                             <li
-                                class="list-group-item bg-transparent border-secondary py-3 d-flex justify-content-between">
+                                class="py-3 bg-transparent list-group-item border-secondary d-flex justify-content-between">
                                 <span class="text-white">ID:</span>
-                                <span class="fw-bold text-white">{{ $zona->id }}</span>
+                                <span class="text-white fw-bold">{{ $zona->id }}</span>
                             </li>
                             <li
-                                class="list-group-item bg-transparent border-secondary py-3 d-flex justify-content-between">
+                                class="py-3 bg-transparent list-group-item border-secondary d-flex justify-content-between">
                                 <span class="text-white">Nombre:</span>
-                                <span class="fw-bold text-white">{{ $zona->nombre }}</span>
+                                <span class="text-white fw-bold">{{ $zona->nombre }}</span>
                             </li>
                             <li
-                                class="list-group-item bg-transparent border-secondary py-3 d-flex justify-content-between">
+                                class="py-3 bg-transparent list-group-item border-secondary d-flex justify-content-between">
                                 <span class="text-white">Fecha de creación:</span>
                                 <span class="text-white">{{ $zona->created_at->format('d/m/Y H:i') }}</span>
                             </li>
                             <li
-                                class="list-group-item bg-transparent border-secondary py-3 d-flex justify-content-between">
+                                class="py-3 bg-transparent list-group-item border-secondary d-flex justify-content-between">
                                 <span class="text-white">Estanterías:</span>
                                 <span class="badge bg-secondary">{{ $zona->estanterias->count() }}</span>
                             </li>
@@ -68,7 +68,7 @@
 
                         @if ($zona->descripcion)
                             <div class="mt-3">
-                                <h6 class="text-white mb-2">Descripción:</h6>
+                                <h6 class="mb-2 text-white">Descripción:</h6>
                                 <p class="mb-0 text-white">{{ $zona->descripcion }}</p>
                             </div>
                         @endif
@@ -77,7 +77,7 @@
             </div>
 
             <div class="col-lg-8">
-                <div class="card bg-dark shadow-sm">
+                <div class="shadow-sm card bg-dark">
                     <div class="card-header bg-dark-subtle d-flex justify-content-between align-items-center">
                         <div>
                             <i class="fas fa-th-large me-2 text-primary"></i>
@@ -90,21 +90,21 @@
                             </a>
                         @endif
                     </div>
-                    <div class="card-body p-0">
+                    <div class="p-0 card-body">
                         @if ($zona->estanterias->isEmpty())
-                            <div class="text-center py-5">
-                                <i class="fas fa-th-large fa-3x mb-3 text-secondary"></i>
+                            <div class="py-5 text-center">
+                                <i class="mb-3 fas fa-th-large fa-3x text-secondary"></i>
                                 <p class="mb-0 text-white">No hay estanterías en esta zona</p>
                                 @if (Auth::user()->rol === 'Administrador')
                                     <a href="{{ route('estanterias.create', ['zona_id' => $zona->id]) }}"
-                                        class="btn btn-primary btn-sm mt-3">
+                                        class="mt-3 btn btn-primary btn-sm">
                                         <i class="fas fa-plus-circle me-1"></i> Crear primera estantería
                                     </a>
                                 @endif
                             </div>
                         @else
                             <div class="table-responsive">
-                                <table class="table table-dark table-hover mb-0 align-middle">
+                                <table class="table mb-0 align-middle table-dark table-hover">
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
@@ -156,7 +156,7 @@
                                                             aria-valuemin="0" aria-valuemax="100">
                                                         </div>
                                                     </div>
-                                                    <small class="text-white mt-1 d-block">
+                                                    <small class="mt-1 text-white d-block">
                                                         {{ round($porcentajeOcupacion) }}% ocupado
                                                     </small>
                                                 </td>
@@ -179,12 +179,12 @@
         </div>
     </div>
 
-    <!-- Modal Eliminar Zona -->
+
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark border-danger text-white">
+            <div class="text-white modal-content bg-dark border-danger">
                 <div class="modal-header border-danger">
-                    <h5 class="modal-title text-white" id="deleteModalLabel">Confirmar eliminación</h5>
+                    <h5 class="text-white modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -215,14 +215,14 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Hacer que las filas de estanterías sean clickeables
+
                 const estanteriaRows = document.querySelectorAll('.estanteria-row');
                 estanteriaRows.forEach(row => {
                     row.addEventListener('click', function() {
                         window.location.href = this.getAttribute('data-href');
                     });
 
-                    // Efecto visual al pasar el mouse
+
                     row.addEventListener('mouseenter', function() {
                         this.classList.add('table-active');
                     });

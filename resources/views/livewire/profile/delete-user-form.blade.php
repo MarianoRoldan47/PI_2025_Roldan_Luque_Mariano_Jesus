@@ -24,18 +24,18 @@ new class extends Component {
 
 <section class="card bg-dark shadow-lg border-0">
     <div class="card-body p-3 p-sm-4">
-        <!-- Header -->
+
         <h4 class="text-white mb-2">{{ __('Eliminar Cuenta') }}</h4>
         <p class="text-white-50 small mb-4">
             {{ __('Una vez que tu cuenta sea eliminada, todos sus recursos y datos serán eliminados permanentemente. Antes de eliminar tu cuenta, por favor descarga cualquier dato o información que desees conservar.') }}
         </p>
 
-        <!-- Delete Button -->
+
         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
             <i class="fas fa-trash-alt me-2"></i>{{ __('Eliminar Cuenta') }}
         </button>
 
-        <!-- Modal -->
+
         <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

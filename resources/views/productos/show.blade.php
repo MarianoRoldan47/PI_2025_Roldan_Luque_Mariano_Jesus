@@ -1,7 +1,7 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <!-- Header mejorado -->
-        <div class="row g-2 mb-2 mb-sm-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+
+        <div class="mb-2 row g-2 mb-sm-4">
             <div class="col-12 col-md">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md d-flex justify-content-end align-items-center gap-2">
+            <div class="gap-2 col-12 col-md d-flex justify-content-end align-items-center">
                 @if (Auth::user()->rol === 'Administrador')
                     <a href="{{ route('productos.edit', $producto) }}" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit me-1"></i> Editar
@@ -26,67 +26,67 @@
             </div>
         </div>
 
-        <!-- Contenido -->
+
         <div class="row g-2 g-sm-4">
-            <!-- Tarjeta de información -->
+
             <div class="col-md-4">
-                <div class="card bg-dark border-secondary shadow-lg h-100">
-                    <!-- Imagen con overlay gradiente -->
+                <div class="shadow-lg card bg-dark border-secondary h-100">
+
                     <div class="position-relative" style="height: 200px;">
                         <img src="{{ $producto->imagen ? asset('storage/' . $producto->imagen) : asset('img/default-product.png') }}"
                             class="w-100 h-100 object-fit-cover" alt="{{ $producto->nombre }}">
-                        <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-75 p-2">
-                            <h5 class="card-title text-white mb-0 fs-6">
+                        <div class="bottom-0 p-2 bg-opacity-75 position-absolute start-0 w-100 bg-dark">
+                            <h5 class="mb-0 text-white card-title fs-6">
                                 <i class="fas fa-info-circle me-2"></i>Información General
                             </h5>
                         </div>
                     </div>
 
-                    <!-- Contenido -->
-                    <div class="card-body p-3">
-                        <div class="list-group list-group-flush bg-transparent">
-                            <!-- Código -->
-                            <div class="list-group-item bg-transparent text-white border-secondary py-2 px-0">
+
+                    <div class="p-3 card-body">
+                        <div class="bg-transparent list-group list-group-flush">
+
+                            <div class="px-0 py-2 text-white bg-transparent list-group-item border-secondary">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="text-white">Código</span>
                                     <span class="badge bg-secondary">{{ $producto->codigo_producto }}</span>
                                 </div>
                             </div>
 
-                            <!-- Categoría -->
-                            <div class="list-group-item bg-transparent text-white border-secondary py-2 px-0">
+
+                            <div class="px-0 py-2 text-white bg-transparent list-group-item border-secondary">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="text-white">Categoría</span>
                                     <span class="badge bg-info">{{ $producto->categoria->nombre }}</span>
                                 </div>
                             </div>
 
-                            <!-- Tipo -->
-                            <div class="list-group-item bg-transparent text-white border-secondary py-2 px-0">
+
+                            <div class="px-0 py-2 text-white bg-transparent list-group-item border-secondary">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="text-white">Tipo</span>
                                     <span class="badge bg-primary">{{ ucfirst($producto->tipo) }}</span>
                                 </div>
                             </div>
 
-                            <!-- Stock -->
-                            <div class="list-group-item bg-transparent text-white border-secondary py-2 px-0">
+
+                            <div class="px-0 py-2 text-white bg-transparent list-group-item border-secondary">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="text-white">Stock Total</span>
                                     <span class="badge bg-light text-dark">{{ $producto->stock_total }}</span>
                                 </div>
                             </div>
 
-                            <!-- Stock Mínimo -->
-                            <div class="list-group-item bg-transparent text-white border-secondary py-2 px-0">
+
+                            <div class="px-0 py-2 text-white bg-transparent list-group-item border-secondary">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="text-white">Stock Mínimo</span>
                                     <span class="badge bg-light text-dark">{{ $producto->stock_minimo_alerta }}</span>
                                 </div>
                             </div>
 
-                            <!-- Estado -->
-                            <div class="list-group-item bg-transparent text-white border-secondary py-2 px-0">
+
+                            <div class="px-0 py-2 text-white bg-transparent list-group-item border-secondary">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="text-white">Estado</span>
                                     <span
@@ -101,30 +101,30 @@
             </div>
 
             <div class="col-md-8">
-                <div class="card bg-dark border-secondary shadow-sm mb-2 mb-sm-4">
-                    <div class="card-body p-3">
-                        <h5 class="d-flex align-items-center text-white mb-3">
+                <div class="mb-2 shadow-sm card bg-dark border-secondary mb-sm-4">
+                    <div class="p-3 card-body">
+                        <h5 class="mb-3 text-white d-flex align-items-center">
                             <i class="fas fa-align-left me-2 text-info"></i>
                             <span class="fs-6">Descripción</span>
                         </h5>
-                        <p class="text-white mb-0">{{ $producto->descripcion ?: 'Sin descripción' }}</p>
+                        <p class="mb-0 text-white">{{ $producto->descripcion ?: 'Sin descripción' }}</p>
                     </div>
                 </div>
 
-                <div class="card bg-dark border-secondary shadow-sm mb-2 mb-sm-4">
-                    <div class="card-body p-3">
-                        <h5 class="d-flex align-items-center text-info mb-3">
+                <div class="mb-2 shadow-sm card bg-dark border-secondary mb-sm-4">
+                    <div class="p-3 card-body">
+                        <h5 class="mb-3 d-flex align-items-center text-info">
                             <i class="fas fa-map-marker-alt me-2"></i>
                             <span class="fs-6">Ubicaciones</span>
                         </h5>
                         @if ($producto->estanterias->isEmpty() || $producto->estanterias->sum('pivot.cantidad') == 0)
-                            <div class="alert alert-dark bg-dark-subtle border-secondary mb-0">
+                            <div class="mb-0 alert alert-dark bg-dark-subtle border-secondary">
                                 <i class="fas fa-info-circle me-2"></i>
                                 Este producto no está almacenado en ninguna estantería.
                             </div>
                         @else
                             <div class="table-responsive">
-                                <table class="table table-dark table-hover small mb-0">
+                                <table class="table mb-0 table-dark table-hover small">
                                     <thead>
                                         <tr>
                                             <th>Estantería</th>
@@ -158,20 +158,20 @@
                     </div>
                 </div>
 
-                <div class="card bg-dark border-secondary shadow-sm">
-                    <div class="card-body p-3">
-                        <h5 class="d-flex align-items-center text-info mb-3">
+                <div class="shadow-sm card bg-dark border-secondary">
+                    <div class="p-3 card-body">
+                        <h5 class="mb-3 d-flex align-items-center text-info">
                             <i class="fas fa-exchange-alt me-2"></i>
                             <span class="fs-6">Últimos Movimientos</span>
                         </h5>
                         @if ($producto->movimientos->isEmpty())
-                            <div class="alert alert-dark bg-dark-subtle border-secondary mb-0">
+                            <div class="mb-0 alert alert-dark bg-dark-subtle border-secondary">
                                 <i class="fas fa-info-circle me-2"></i>
                                 No hay movimientos registrados para este producto.
                             </div>
                         @else
                             <div class="table-responsive">
-                                <table class="table table-dark table-hover small mb-0">
+                                <table class="table mb-0 table-dark table-hover small">
                                     <thead>
                                         <tr>
                                             <th>Fecha</th>
@@ -241,19 +241,19 @@
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content bg-dark border-danger">
-                    <div class="modal-header border-danger text-white">
+                    <div class="text-white modal-header border-danger">
                         <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <div class="modal-body text-white">
+                    <div class="text-white modal-body">
                         <p>¿Estás seguro de que deseas eliminar este producto?</p>
                         <div class="alert alert-warning">
                             <i class="fas fa-exclamation-triangle me-2"></i>
                             <strong>Atención:</strong> Esta acción eliminará el producto y todos sus datos relacionados.
                             Esta acción no se puede deshacer.
                         </div>
-                        <div class="d-flex align-items-center p-3 border border-secondary rounded">
+                        <div class="p-3 border rounded d-flex align-items-center border-secondary">
                             <img src="{{ $producto->imagen ? asset('storage/' . $producto->imagen) : asset('img/default-product.png') }}"
                                 class="rounded me-3" alt="{{ $producto->nombre }}"
                                 style="width: 50px; height: 50px; object-fit: cover;">

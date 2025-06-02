@@ -1,11 +1,11 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">DETALLES DE ALERTA</h1>
                 <p class="text-muted">Producto: {{ $alerta->producto->nombre }}</p>
             </div>
-            <div class="col-12 col-md d-flex justify-content-end align-items-center gap-2">
+            <div class="gap-2 col-12 col-md d-flex justify-content-end align-items-center">
                 <a href="{{ route('movimientos.create', ['tipo' => 'entrada', 'producto_id' => $alerta->producto->id]) }}"
                     class="btn btn-success btn-sm">
                     <i class="fas fa-arrow-right me-1"></i> Registrar Entrada
@@ -24,24 +24,24 @@
 
         <div class="row g-4">
             <div class="col-12 col-lg-5">
-                <div class="card bg-dark shadow-sm">
+                <div class="shadow-sm card bg-dark">
                     <div class="card-header bg-dark border-secondary">
-                        <h5 class="card-title mb-0 d-flex align-items-center text-white">
+                        <h5 class="mb-0 text-white card-title d-flex align-items-center">
                             <i class="fas fa-exclamation-triangle text-warning me-2"></i>
                             Información de la Alerta
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label class="text-white small mb-1">Fecha de Alerta:</label>
-                            <p class="mb-0 d-flex align-items-center text-white">
+                            <label class="mb-1 text-white small">Fecha de Alerta:</label>
+                            <p class="mb-0 text-white d-flex align-items-center">
                                 <i class="fas fa-calendar-alt text-info me-2"></i>
                                 {{ $alerta->fecha_alerta->format('d/m/Y H:i:s') }}
                             </p>
                         </div>
 
                         <div class="mb-3">
-                            <label class="text-white small mb-1">Estado:</label>
+                            <label class="mb-1 text-white small">Estado:</label>
                             @php
                                 $porcentaje = ($alerta->stock_actual / $alerta->producto->stock_minimo_alerta) * 100;
                             @endphp
@@ -58,22 +58,22 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="text-white small mb-1">Stock Actual:</label>
+                            <label class="mb-1 text-white small">Stock Actual:</label>
                             <h4 class="mb-0 text-danger">{{ $alerta->stock_actual }}</h4>
                         </div>
 
                         <div class="mb-3">
-                            <label class="text-white small mb-1">Stock Mínimo Alerta:</label>
+                            <label class="mb-1 text-white small">Stock Mínimo Alerta:</label>
                             <h4 class="mb-0 text-warning">{{ $alerta->producto->stock_minimo_alerta }}</h4>
                         </div>
 
                         <div>
-                            <label class="text-white small mb-1">Estado del Stock:</label>
+                            <label class="mb-1 text-white small">Estado del Stock:</label>
                             <div class="progress bg-dark-subtle" style="height: 10px;">
                                 <div class="progress-bar {{ $porcentaje <= 30 ? 'bg-danger' : 'bg-warning' }}"
                                     style="width: {{ $porcentaje }}%"></div>
                             </div>
-                            <div class="text-end small text-white mt-1">
+                            <div class="mt-1 text-white text-end small">
                                 {{ number_format($porcentaje, 0) }}% del stock mínimo
                             </div>
                         </div>
@@ -82,22 +82,22 @@
             </div>
 
             <div class="col-12 col-lg-7">
-                <div class="card bg-dark shadow-sm">
+                <div class="shadow-sm card bg-dark">
                     <div class="card-header bg-dark border-secondary">
-                        <h5 class="card-title mb-0 d-flex align-items-center text-white">
+                        <h5 class="mb-0 text-white card-title d-flex align-items-center">
                             <i class="fas fa-box text-primary me-2"></i>
                             Detalles del Producto
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-4">
-                            <div class="col-12 col-sm-4 col-lg-3 text-center mb-3 mb-sm-0">
+                            <div class="mb-3 text-center col-12 col-sm-4 col-lg-3 mb-sm-0">
                                 <img src="{{ $alerta->producto->imagen ? asset('storage/' . $alerta->producto->imagen) : asset('img/default-product.png') }}"
-                                    class="img-fluid rounded mb-2" alt="{{ $alerta->producto->nombre }}"
+                                    class="mb-2 rounded img-fluid" alt="{{ $alerta->producto->nombre }}"
                                     style="max-height: 150px; object-fit: contain;">
                                 <div>
                                     <a href="{{ route('productos.show', $alerta->producto) }}"
-                                        class="btn btn-primary btn-sm d-block mt-2">
+                                        class="mt-2 btn btn-primary btn-sm d-block">
                                         <i class="fas fa-eye me-2"></i>Ver Producto
                                     </a>
                                 </div>
@@ -106,8 +106,8 @@
                                 <h4 class="mb-2 text-white">{{ $alerta->producto->nombre }}</h4>
 
                                 <div class="mb-2">
-                                    <span class="badge text-bg-dark border border-secondary">
-                                        <i class="fas fa-barcode text-white me-1"></i>
+                                    <span class="border badge text-bg-dark border-secondary">
+                                        <i class="text-white fas fa-barcode me-1"></i>
                                         {{ $alerta->producto->codigo_producto }}
                                     </span>
 
@@ -117,23 +117,23 @@
                                     </span>
                                 </div>
 
-                                <p class="mb-3 small text-white">
+                                <p class="mb-3 text-white small">
                                     {{ $alerta->producto->descripcion ? $alerta->producto->descripcion : 'Sin descripción' }}
                                 </p>
 
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card bg-dark-subtle border-secondary">
-                                            <div class="card-body p-3">
+                                            <div class="p-3 card-body">
                                                 <h6 class="card-title d-flex align-items-center">
-                                                    <i class="fas fa-warehouse text-black me-2"></i>
+                                                    <i class="text-black fas fa-warehouse me-2"></i>
                                                     Ubicación
                                                 </h6>
                                                 @if ($alerta->producto->estanterias->isNotEmpty())
                                                     <div class="small">
                                                         @foreach ($alerta->producto->estanterias as $estanteria)
                                                             <div
-                                                                class="d-flex justify-content-between align-items-center mb-1">
+                                                                class="mb-1 d-flex justify-content-between align-items-center">
                                                                 <span>
                                                                     <i
                                                                         class="fas fa-map-marker-alt text-danger me-1"></i>
@@ -148,7 +148,7 @@
                                                         @endforeach
                                                     </div>
                                                 @else
-                                                    <p class="small mb-0">No asignado a estanterías</p>
+                                                    <p class="mb-0 small">No asignado a estanterías</p>
                                                 @endif
                                             </div>
                                         </div>
@@ -159,9 +159,9 @@
                     </div>
                 </div>
 
-                <div class="card bg-dark shadow-sm mt-4">
+                <div class="mt-4 shadow-sm card bg-dark">
                     <div class="card-header bg-dark border-secondary d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 d-flex align-items-center text-white">
+                        <h5 class="mb-0 text-white card-title d-flex align-items-center">
                             <i class="fas fa-history text-primary me-2"></i>
                             Últimos Movimientos
                         </h5>
@@ -170,15 +170,15 @@
                             Ver todos
                         </a>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="p-0 card-body">
                         @if ($alerta->producto->movimientos->isEmpty())
-                            <div class="alert alert-dark m-3 mb-3">
+                            <div class="m-3 mb-3 alert alert-dark">
                                 <i class="fas fa-info-circle me-2"></i>
                                 No hay movimientos registrados para este producto.
                             </div>
                         @else
                             <div class="table-responsive">
-                                <table class="table table-dark table-hover align-middle small mb-0">
+                                <table class="table mb-0 align-middle table-dark table-hover small">
                                     <thead>
                                         <tr>
                                             <th>Fecha</th>
@@ -216,7 +216,7 @@
                                                 <td>
                                                     @if ($movimiento->usuario)
                                                         <span class="d-inline-flex align-items-center">
-                                                            <i class="fas fa-user text-white me-1"></i>
+                                                            <i class="text-white fas fa-user me-1"></i>
                                                             {{ $movimiento->usuario->name }}
                                                         </span>
                                                     @else
@@ -236,11 +236,11 @@
     </div>
 
     @if (Auth::user()->rol === 'Administrador')
-        <!-- Modal de confirmación para eliminar -->
+        
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-white border-danger">
+                <div class="text-white modal-content bg-dark border-danger">
                     <div class="modal-header border-danger">
                         <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"

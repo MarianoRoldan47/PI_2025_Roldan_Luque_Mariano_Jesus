@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col-12 col-md">
                 <h1 class="h3">NUEVO MOVIMIENTO - {{ ucfirst($tipo) }}</h1>
                 <p>Introduce los datos del nuevo movimiento</p>
@@ -36,7 +36,7 @@
 
         <div class="row g-4">
             <div class="col-12">
-                <div class="card bg-dark text-white shadow-sm">
+                <div class="text-white shadow-sm card bg-dark">
                     <div class="card-body">
                         <h5 class="card-title">
                             <i
@@ -48,10 +48,10 @@
                             @csrf
                             <input type="hidden" name="tipo" value="{{ $tipo }}">
 
-                            <div class="row mb-3">
+                            <div class="mb-3 row">
                                 <div class="col-md-6">
                                     <label for="producto_id" class="form-label">Producto *</label>
-                                    <select class="form-select bg-dark text-white" id="producto_id" name="producto_id"
+                                    <select class="text-white form-select bg-dark" id="producto_id" name="producto_id"
                                         required>
                                         <option value="">Selecciona un producto</option>
                                         @foreach ($productos as $producto)
@@ -66,18 +66,18 @@
                                 <div class="col-md-6">
                                     <label for="cantidad" class="form-label">Cantidad *</label>
                                     <div class="cantidad-container">
-                                        <input type="number" class="form-control bg-dark text-white" id="cantidad"
+                                        <input type="number" class="text-white form-control bg-dark" id="cantidad"
                                             name="cantidad" value="{{ old('cantidad') }}" required min="1">
                                     </div>
                                 </div>
                             </div>
 
                             @if ($tipo === 'entrada')
-                                <!-- Sección de entrada -->
-                                <div class="row mb-3">
+
+                                <div class="mb-3 row">
                                     <div class="col-md-6">
                                         <label for="origen_tipo" class="form-label">Origen *</label>
-                                        <select class="form-select bg-dark text-white" id="origen_tipo"
+                                        <select class="text-white form-select bg-dark" id="origen_tipo"
                                             name="origen_tipo" required readonly>
                                             <option value="proveedor" selected>Proveedor</option>
                                         </select>
@@ -85,10 +85,10 @@
                                     <div class="col-md-6" id="contenedor-estanterias">
                                         <label class="form-label">Ubicaciones Destino *</label>
                                         <div id="estanterias-seleccionadas" class="mb-2">
-                                            <!-- Aquí se mostrarán las estanterías seleccionadas -->
+
                                         </div>
                                         <div class="input-group">
-                                            <select class="form-select bg-dark text-white"
+                                            <select class="text-white form-select bg-dark"
                                                 id="ubicacion_destino_selector">
                                                 <option value="">Selecciona una estantería</option>
                                                 @foreach ($estanterias as $estanteria)
@@ -106,26 +106,26 @@
                                     </div>
                                 </div>
                             @elseif($tipo === 'salida')
-                                <!-- Sección de salida -->
-                                <div class="row mb-3">
+
+                                <div class="mb-3 row">
                                     <div class="col-md-12">
                                         <label for="destino_tipo" class="form-label">Destino *</label>
-                                        <select class="form-select bg-dark text-white" id="destino_tipo"
+                                        <select class="text-white form-select bg-dark" id="destino_tipo"
                                             name="destino_tipo" required readonly>
                                             <option value="cliente" selected>Cliente</option>
                                         </select>
                                     </div>
                                 </div>
                             @else
-                                <div class="row mb-3">
+                                <div class="mb-3 row">
                                     <div class="col-md-6">
                                         <label class="form-label">Ubicaciones Origen *</label>
                                         <div id="estanterias-origen-seleccionadas" class="mb-2"></div>
                                         <div class="input-group">
-                                            <select class="form-select bg-dark text-white"
+                                            <select class="text-white form-select bg-dark"
                                                 id="ubicacion_origen_selector">
                                                 <option value="">Selecciona una estantería</option>
-                                                {{-- Las opciones se cargarán dinámicamente al seleccionar un producto --}}
+                                                
                                             </select>
                                             <button type="button" class="btn btn-info" id="agregar-estanteria-origen">
                                                 <i class="fas fa-plus"></i>
@@ -136,7 +136,7 @@
                                         <label class="form-label">Ubicaciones Destino *</label>
                                         <div id="estanterias-destino-seleccionadas" class="mb-2"></div>
                                         <div class="input-group">
-                                            <select class="form-select bg-dark text-white"
+                                            <select class="text-white form-select bg-dark"
                                                 id="ubicacion_destino_selector">
                                                 <option value="">Selecciona una estantería</option>
                                                 @foreach ($estanteriasDestino as $estanteria)
@@ -179,34 +179,34 @@
                     let cantidadRequerida = parseInt(cantidadInput.value) || 0;
 
 
-                    // Mapas para almacenar las estanterías seleccionadas
+
                     const estanteriasEntradaSeleccionadas = new Map();
                     const estanteriasOrigenSeleccionadas = new Map();
                     const estanteriasDestinoSeleccionadas = new Map();
 
                     if (tipo === 'traslado') {
-                        let isUpdating = false; // Bandera para evitar recursión
+                        let isUpdating = false;
 
                         cantidadInput.addEventListener('change', function() {
-                            if (isUpdating) return; // Evitar recursión
+                            if (isUpdating) return;
                             isUpdating = true;
 
                             const cantidad = parseInt(this.value) || 0;
                             const destinoSelect = document.getElementById('ubicacion_destino_selector');
 
-                            // Calcular capacidad total disponible
+
                             const capacidadTotal = Array.from(destinoSelect.options)
                                 .filter(opt => opt.value)
                                 .reduce((sum, opt) => sum + (parseInt(opt.dataset.capacidad) || 0), 0);
 
-                            // Eliminar mensaje de error anterior
+
                             const errorExistente = document.getElementById('error-cantidad');
                             if (errorExistente) {
                                 errorExistente.remove();
                             }
 
                             if (cantidad > capacidadTotal) {
-                                // Crear mensaje de error
+
                                 const errorDiv = document.createElement('div');
                                 errorDiv.id = 'error-cantidad';
                                 errorDiv.className = 'alert alert-danger mt-2';
@@ -220,7 +220,7 @@
                                 cantidadRequerida = capacidadTotal;
                             }
 
-                            // Actualizar las opciones solo si es necesario
+
                             if (productoSelect.value && !isUpdating) {
                                 productoSelect.dispatchEvent(new Event('change'));
                             }
@@ -237,7 +237,7 @@
                             const destinoSelect = document.getElementById('ubicacion_destino_selector');
                             const cantidad = parseInt(cantidadInput.value) || 0;
 
-                            // Limpiar selectores
+
                             origenSelect.innerHTML = '<option value="">Selecciona una estantería</option>';
                             destinoSelect.innerHTML = '<option value="">Selecciona una estantería</option>';
 
@@ -259,7 +259,7 @@
 
                                 const data = await response.json();
 
-                                // Actualizar estanterías origen (con stock del producto)
+
                                 if (data.estanteriasOrigen && data.estanteriasOrigen.length > 0) {
                                     data.estanteriasOrigen.forEach(estanteria => {
                                         const option = document.createElement('option');
@@ -271,7 +271,7 @@
                                     });
                                 }
 
-                                // Actualizar estanterías destino (con espacio libre)
+
                                 if (data.estanteriasDestino && data.estanteriasDestino.length > 0) {
                                     data.estanteriasDestino.forEach(estanteria => {
                                         const option = document.createElement('option');
@@ -283,7 +283,7 @@
                                     });
                                 }
 
-                                // Validar capacidad disponible si hay cantidad seleccionada
+
                                 if (cantidad > 0) {
                                     cantidadInput.dispatchEvent(new Event('change'));
                                 }
@@ -304,14 +304,14 @@
                                     return sum + (parseInt(option.dataset.capacidad) || 0);
                                 }, 0);
 
-                            // Eliminar mensaje de error anterior si existe
+
                             const errorExistente = document.getElementById('error-cantidad');
                             if (errorExistente) {
                                 errorExistente.remove();
                             }
 
                             if (cantidad > capacidadTotal) {
-                                // Crear mensaje de error
+
                                 const errorDiv = document.createElement('div');
                                 errorDiv.id = 'error-cantidad';
                                 errorDiv.className = 'alert alert-danger mt-2';
@@ -320,10 +320,10 @@
                                     No hay suficiente espacio disponible en las estanterías. Espacio total disponible: ${capacidadTotal}
                                 `;
 
-                                // Insertar mensaje después del input
+
                                 this.parentNode.appendChild(errorDiv);
 
-                                // Ajustar el valor al máximo disponible
+
                                 this.value = capacidadTotal;
                             }
                         });
@@ -334,7 +334,7 @@
                             const producto = this.options[this.selectedIndex];
                             const stockTotal = parseInt(producto.textContent.match(/Stock: (\d+)/)[1]);
 
-                            // Actualizar máximo permitido en cantidad
+
                             cantidadInput.max = stockTotal;
 
                             if (cantidadInput.value > stockTotal) {
@@ -342,7 +342,7 @@
                                 cantidadRequerida = stockTotal;
                             }
 
-                            // Mostrar alerta si no hay stock suficiente
+
                             if (stockTotal === 0) {
                                 alert('Este producto no tiene stock disponible');
                                 cantidadInput.disabled = true;
@@ -351,7 +351,7 @@
                             }
                         });
 
-                        // Validar cantidad en salidas
+
                         cantidadInput.addEventListener('change', function() {
                             const producto = productoSelect.options[productoSelect.selectedIndex];
                             const stockTotal = parseInt(producto.textContent.match(/Stock: (\d+)/)[1]);
@@ -363,7 +363,7 @@
                             }
                         });
 
-                        // Validación del formulario para salidas
+
                         document.querySelector('form').addEventListener('submit', function(e) {
                             const producto = productoSelect.options[productoSelect.selectedIndex];
                             if (!producto.value) {
@@ -389,13 +389,13 @@
                         });
                     }
 
-                    // Función genérica para actualizar vista de estanterías
+
                     function actualizarVistaEstanterias(tipo, contenedorId, selectorId, estanteriasMap, dataAttribute) {
                         const contenedor = document.getElementById(contenedorId);
                         const selector = document.getElementById(selectorId);
                         contenedor.innerHTML = '';
 
-                        // Actualizar opciones visibles en el selector
+
                         Array.from(selector.options).forEach(option => {
                             if (option.value && estanteriasMap.has(option.value)) {
                                 option.style.display = 'none';
@@ -404,7 +404,7 @@
                             }
                         });
 
-                        // Mostrar estanterías seleccionadas
+
                         estanteriasMap.forEach((cantidad, estanteriaId) => {
                             const estanteria = selector.querySelector(`option[value="${estanteriaId}"]`);
                             const nombreCompleto = estanteria.textContent.split('(')[0].trim();
@@ -418,13 +418,13 @@
                                     <span class="me-3">${nombreCompleto}</span>
                                     <div class="input-group" style="width: 150px;">
                                         <input type="number"
-                                            class="form-control form-control-sm bg-dark text-white"
+                                            class="text-white form-control form-control-sm bg-dark"
                                             value="${cantidad}"
                                             min="1"
                                             max="${maxValue}"
                                             onchange="actualizarCantidad('${tipo}', '${estanteriaId}', this.value)"
                                             oninput="this.value = Math.min(this.value, ${maxValue})">
-                                        <!-- Cambiar el nombre del campo según el tipo -->
+
                                         ${tipo === 'entrada' ?
                                             `<input type="hidden" name="ubicaciones[${estanteriaId}]" value="${cantidad}">` :
                                             tipo === 'origen' ?
@@ -440,7 +440,7 @@
                             contenedor.appendChild(div);
                         });
 
-                        // Mostrar información de cantidades
+
                         const cantidadTotal = Array.from(estanteriasMap.values()).reduce((a, b) => a + parseInt(b), 0);
                         const faltante = cantidadRequerida - cantidadTotal;
 
@@ -462,7 +462,7 @@
                         contenedor.appendChild(infoDiv);
                     }
 
-                    // Funciones globales para manejar cambios
+
                     window.actualizarCantidad = function(tipo, estanteriaId, nuevaCantidad) {
                         const mapa = tipo === 'entrada' ? estanteriasEntradaSeleccionadas :
                             tipo === 'origen' ? estanteriasOrigenSeleccionadas :
@@ -531,7 +531,7 @@
                         );
                     };
 
-                    // Eventos para los botones de agregar
+
                     const botonesAgregar = {
                         'entrada': document.getElementById('agregar-estanteria'),
                         'origen': document.getElementById('agregar-estanteria-origen'),
@@ -581,7 +581,7 @@
                         }
                     });
 
-                    // Validación del formulario
+
                     document.querySelector('form').addEventListener('submit', function(e) {
                         if (tipo === 'entrada') {
                             const totalEntrada = Array.from(estanteriasEntradaSeleccionadas.values())
@@ -591,16 +591,16 @@
                                 alert('La cantidad total asignada debe ser igual a la cantidad requerida');
                             }
                         } else if (tipo === 'traslado') {
-                            e.preventDefault(); // Prevenir envío por defecto
+                            e.preventDefault();
 
-                            // Verificar que hay ubicaciones seleccionadas
+
                             if (estanteriasOrigenSeleccionadas.size === 0 || estanteriasDestinoSeleccionadas
                                 .size === 0) {
                                 alert('Debes seleccionar al menos una ubicación de origen y una de destino');
                                 return;
                             }
 
-                            // Verificar cantidades
+
                             const totalOrigen = Array.from(estanteriasOrigenSeleccionadas.values())
                                 .reduce((a, b) => a + parseInt(b), 0);
                             const totalDestino = Array.from(estanteriasDestinoSeleccionadas.values())
@@ -613,12 +613,12 @@
                                 return;
                             }
 
-                            // Si todo está bien, enviar el formulario
+
                             this.submit();
                         }
                     });
 
-                    // Actualizar cuando cambie la cantidad inicial
+
                     cantidadInput.addEventListener('change', function() {
                         cantidadRequerida = parseInt(this.value) || 0;
                         estanteriasEntradaSeleccionadas.clear();
@@ -645,7 +645,7 @@
                     const ubicacionOrigenId = document.getElementById('ubicacion_origen_id');
                     const ubicacionDestinoId = document.getElementById('ubicacion_destino_id');
 
-                    // Usar las variables correctas según el tipo de movimiento
+
                     const estanteriasOrigen = @json($estanteriasOrigen ?? []);
                     const estanteriasDestino = @json($estanteriasDestino ?? []);
 

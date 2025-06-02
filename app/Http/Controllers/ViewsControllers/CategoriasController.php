@@ -14,7 +14,7 @@ class CategoriasController extends Controller
      */
     public function index()
     {
-        // Usar withCount para obtener el número de productos por categoría
+
         $categorias = Categoria::withCount('productos')->orderBy('nombre')->get();
 
         return view('categorias.index', compact('categorias'));
@@ -25,7 +25,7 @@ class CategoriasController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -67,7 +67,7 @@ class CategoriasController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -75,7 +75,7 @@ class CategoriasController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
     }
 
     /**

@@ -9,13 +9,13 @@
 
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
     <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e1e1e1;">
-        <!-- Cabecera -->
+
         <div style="background: #1e293b; color: #ffffff; text-align: center; padding: 20px;">
             <h1 style="color: #22a7e1; margin-top: 10px; margin-bottom: 0;">CyberStock WMS</h1>
             <p style="color: #ffffff; font-size: 16px; margin-top: 5px;">Sistema de gestión de almacén</p>
         </div>
 
-        <!-- Contenido -->
+
         <div style="padding: 20px;">
             <h2>¡Hola {{ $notifiable->name }}!</h2>
 
@@ -36,7 +36,7 @@
                 <p style="margin: 5px 0; color: #ffffff;"><strong>Rol:</strong> {{ $notifiable->rol }}</p>
             </div>
 
-            <!-- Botón -->
+
             <div style="text-align: center; margin: 30px 0;">
                 <a href="{{ $loginLink }}"
                     style="background: #198754; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 4px; font-weight: bold; display: inline-block;">Iniciar
@@ -47,7 +47,7 @@
             <p><a href="{{ $loginLink }}" style="color: #22a7e1;">{{ $loginLink }}</a></p>
         </div>
 
-        <!-- Pie -->
+
         <div
             style="background: #f5f5f5; padding: 15px; text-align: center; font-size: 14px; color: #6c757d; border-top: 1px solid #e1e1e1;">
             <p>Saludos,<br>El equipo de CyberStock WMS</p>

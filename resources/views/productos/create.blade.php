@@ -1,7 +1,7 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <!-- Header -->
-        <div class="row g-2 mb-2 mb-sm-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+
+        <div class="mb-2 row g-2 mb-sm-4">
             <div class="col-12 col-md">
                 <h1 class="h3">NUEVO PRODUCTO</h1>
                 <p>Introduce los datos del nuevo producto</p>
@@ -13,15 +13,15 @@
             </div>
         </div>
 
-        <!-- Formulario -->
-        <div class="card bg-dark text-white shadow-sm">
-            <div class="card-body p-2 p-sm-3">
+
+        <div class="text-white shadow-sm card bg-dark">
+            <div class="p-2 card-body p-sm-3">
                 <form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data"
                     class="needs-validation" novalidate>
                     @csrf
                     <div class="row g-2 g-sm-3">
-                        <!-- Código y Nombre -->
-                        <div class="col-12 col-md-6 mb-2">
+
+                        <div class="mb-2 col-12 col-md-6">
                             <label for="codigo_producto" class="form-label small">Código *</label>
                             <input type="text"
                                 class="form-control form-control-sm bg-dark text-white @error('codigo_producto') is-invalid @enderror"
@@ -32,7 +32,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-12 col-md-6 mb-2">
+                        <div class="mb-2 col-12 col-md-6">
                             <label for="nombre" class="form-label small">Nombre *</label>
                             <input type="text"
                                 class="form-control form-control-sm bg-dark text-white @error('nombre') is-invalid @enderror"
@@ -42,8 +42,8 @@
                             @enderror
                         </div>
 
-                        <!-- Descripción -->
-                        <div class="col-12 mb-2">
+
+                        <div class="mb-2 col-12">
                             <label for="descripcion" class="form-label small">Descripción</label>
                             <textarea class="form-control form-control-sm bg-dark text-white @error('descripcion') is-invalid @enderror"
                                 id="descripcion" name="descripcion" rows="3">{{ old('descripcion') }}</textarea>
@@ -52,8 +52,8 @@
                             @enderror
                         </div>
 
-                        <!-- Tipo y Categoría -->
-                        <div class="col-12 col-md-6 mb-2">
+
+                        <div class="mb-2 col-12 col-md-6">
                             <label for="tipo" class="form-label small">Tipo *</label>
                             <select
                                 class="form-select form-select-sm bg-dark text-white @error('tipo') is-invalid @enderror"
@@ -72,7 +72,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-12 col-md-6 mb-2">
+                        <div class="mb-2 col-12 col-md-6">
                             <label for="categoria_id" class="form-label small">Categoría *</label>
                             <div class="input-group input-group-sm">
                                 <select
@@ -96,8 +96,8 @@
                             @enderror
                         </div>
 
-                        <!-- Stock Mínimo e Imagen -->
-                        <div class="col-12 col-md-6 mb-2">
+
+                        <div class="mb-2 col-12 col-md-6">
                             <label for="stock_minimo_alerta" class="form-label small">Stock Mínimo de Alerta *</label>
                             <input type="number"
                                 class="form-control form-control-sm bg-dark text-white @error('stock_minimo_alerta') is-invalid @enderror"
@@ -108,17 +108,17 @@
                             @enderror
                         </div>
 
-                        <div class="col-12 col-md-6 mb-2">
+                        <div class="mb-2 col-12 col-md-6">
                             <label for="imagen" class="form-label small">Imagen</label>
                             <div class="image-upload-container">
-                                <!-- Previsualización de imagen -->
-                                <div class="image-preview mb-2 d-flex justify-content-center align-items-center bg-dark-subtle rounded"
+
+                                <div class="mb-2 rounded image-preview d-flex justify-content-center align-items-center bg-dark-subtle"
                                     style="height: 150px; border: 2px dashed #6c757d;">
                                     <img id="preview" src="{{ asset('img/default-product.png') }}" class="img-fluid"
                                         style="max-height: 100%; object-fit: contain;" alt="Vista previa">
                                 </div>
 
-                                <!-- Input file personalizado -->
+
                                 <div class="input-group input-group-sm">
                                     <input type="file"
                                         class="form-control form-control-sm bg-dark text-white @error('imagen') is-invalid @enderror"
@@ -135,7 +135,7 @@
                         </div>
                     </div>
 
-                    <!-- Botones de acción -->
+
                     <div class="mt-3 mt-sm-4">
                         <button type="submit" class="btn btn-primary btn-sm">
                             <i class="fas fa-save me-1"></i>Guardar
@@ -148,28 +148,28 @@
             </div>
         </div>
 
-        <!-- Modal Nueva Categoría -->
+
         <div class="modal fade" id="nuevaCategoriaModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-white">
-                    <div class="modal-header border-bottom border-info p-2 p-sm-3">
+                <div class="text-white modal-content bg-dark">
+                    <div class="p-2 modal-header border-bottom border-info p-sm-3">
                         <h5 class="modal-title fs-6">
                             <i class="fas fa-folder-plus text-info me-2"></i>Nueva Categoría
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <div class="modal-body p-2 p-sm-3">
+                    <div class="p-2 modal-body p-sm-3">
                         <div class="mb-2">
                             <label for="nombreCategoria" class="form-label small">Nombre de la categoría *</label>
-                            <input type="text" class="form-control form-control-sm bg-dark text-white"
+                            <input type="text" class="text-white form-control form-control-sm bg-dark"
                                 id="nombreCategoria" name="nombre" required>
                             <div class="invalid-feedback small">
                                 El nombre de la categoría es obligatorio
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer border-top border-info p-2 p-sm-3">
+                    <div class="p-2 modal-footer border-top border-info p-sm-3">
                         <button type="button" class="btn btn-secondary btn-sm"
                             data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn btn-info btn-sm" id="guardarCategoria">
@@ -183,7 +183,7 @@
 
     @push('scripts')
         <script>
-            // Previsualización de imagen
+
             document.getElementById('imagen').addEventListener('change', function(e) {
                 const preview = document.getElementById('preview');
                 const removeButton = document.getElementById('removeImage');
@@ -200,7 +200,7 @@
                 }
             });
 
-            // Botón para eliminar imagen
+
             document.getElementById('removeImage').addEventListener('click', function() {
                 const input = document.getElementById('imagen');
                 const preview = document.getElementById('preview');
@@ -242,15 +242,15 @@
                         const data = await response.json();
 
                         if (data.success) {
-                            // Añadir la nueva categoría al select y seleccionarla
+
                             const option = new Option(data.categoria.nombre, data.categoria.id, true, true);
                             categoriaSelect.appendChild(option);
 
-                            // Limpiar y cerrar modal de categoría
+
                             document.getElementById('nombreCategoria').value = '';
                             modal.hide();
 
-                            // Crear el modal de éxito con atributos de accesibilidad
+
                             const successModal = document.createElement('div');
                             successModal.className = 'modal';
                             successModal.id = 'successModal';
@@ -259,9 +259,9 @@
                             successModal.setAttribute('aria-labelledby', 'successModalTitle');
                             successModal.innerHTML = `
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-white">
-                <div class="modal-header border-bottom border-white">
-                    <h5 class="modal-title text-white" id="successModalTitle">
+            <div class="text-white modal-content bg-dark">
+                <div class="border-white modal-header border-bottom">
+                    <h5 class="text-white modal-title" id="successModalTitle">
                         <i class="fas fa-check-circle text-success me-2"></i>¡Éxito!
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -269,13 +269,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="d-flex align-items-center">
-                        <div class="modal-icon bg-success text-white rounded-circle p-3 me-3">
+                        <div class="p-3 text-white modal-icon bg-success rounded-circle me-3">
                             <i class="fas fa-check fa-2x"></i>
                         </div>
                         <p class="mb-0">${data.message}</p>
                     </div>
                 </div>
-                <div class="modal-footer border-top border-white">
+                <div class="border-white modal-footer border-top">
                     <button type="button" class="btn btn-success" data-bs-dismiss="modal"
                         tabindex="0">Aceptar</button>
                 </div>
@@ -290,17 +290,17 @@
                                 focus: true
                             });
 
-                            // Manejar el foco cuando se muestre el modal
+
                             successModal.addEventListener('shown.bs.modal', function() {
                                 successModal.querySelector('.btn-success').focus();
                             });
 
                             successModalInstance.show();
 
-                            // Limpiar cuando se cierre el modal
+
                             successModal.addEventListener('hidden.bs.modal', function() {
                                 document.body.removeChild(successModal);
-                                // Devolver el foco al select de categorías
+
                                 categoriaSelect.focus();
                             });
                         } else {
@@ -313,12 +313,12 @@
                     }
                 });
 
-                // Limpiar validación al escribir
+
                 document.getElementById('nombreCategoria').addEventListener('input', function() {
                     this.classList.remove('is-invalid');
                 });
 
-                // Limpiar al cerrar modal
+
                 modalElement.addEventListener('hidden.bs.modal', function() {
                     document.getElementById('nombreCategoria').value = '';
                     document.getElementById('nombreCategoria').classList.remove('is-invalid');
@@ -347,7 +347,6 @@
                 padding: 0.25rem 0.5rem;
             }
 
-            /* Estilo para el estado de arrastrar y soltar */
             .image-preview.dragover {
                 border-color: #0dcaf0 !important;
                 background-color: rgba(13, 202, 240, 0.1);

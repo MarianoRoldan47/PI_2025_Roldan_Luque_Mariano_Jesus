@@ -96,7 +96,7 @@ class UserController extends Controller
             'is_approved' => 'boolean',
         ];
 
-        // Si se proporcionó una contraseña, añadir reglas de validación
+
         if ($request->filled('password')) {
             $rules['password'] = 'required|string|min:8|confirmed';
         }
@@ -104,19 +104,19 @@ class UserController extends Controller
         $validated = $request->validate($rules);
 
         if ($request->hasFile('imagen')) {
-            // Eliminar imagen anterior si existe
+
             if ($user->imagen) {
                 Storage::disk('public')->delete($user->imagen);
             }
             $validated['imagen'] = $request->file('imagen')->store('imagenes/perfiles', 'public');
         }
 
-        // Si se cambió la contraseña, actualizarla
+
         if ($request->filled('password')) {
             $validated['password'] = Hash::make($request->password);
         }
 
-        // Si se cambia el estado de aprobación, registrar la fecha
+
         if (isset($validated['is_approved']) && $validated['is_approved'] && !$user->is_approved) {
             $validated['approved_at'] = now();
         }
@@ -131,14 +131,14 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        // No permitir eliminar al propio usuario
+
         if ($user->id === Auth::user()->id) {
             Session::flash('status', 'No puedes eliminar tu propio usuario.');
             Session::flash('status-type', 'danger');
             return back();
         }
 
-        // Eliminar imagen si existe
+
         if ($user->imagen) {
             Storage::disk('public')->delete($user->imagen);
         }
@@ -180,7 +180,7 @@ class UserController extends Controller
 
     public function rechazar(User $user)
     {
-        // Opcionalmente podríamos eliminar el usuario o marcarlo como rechazado
+
         $user->delete();
 
         Session::flash('status', 'Usuario rechazado y eliminado correctamente.');

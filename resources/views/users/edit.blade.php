@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">EDITAR USUARIO</h1>
                 <p class="text-muted">{{ $user->name }} {{ $user->apellido1 }} {{ $user->apellido2 }}</p>
@@ -12,9 +12,9 @@
             </div>
         </div>
 
-        <div class="card bg-dark shadow-sm">
+        <div class="shadow-sm card bg-dark">
             <div class="card-header bg-dark border-secondary">
-                <h5 class="card-title mb-0 d-flex align-items-center text-white">
+                <h5 class="mb-0 text-white card-title d-flex align-items-center">
                     <i class="fas fa-user-edit text-warning me-2"></i>
                     Información del Usuario
                 </h5>
@@ -25,11 +25,11 @@
                     @method('PUT')
 
                     <div class="row g-3">
-                        <div class="col-12 col-md-3 text-center">
+                        <div class="text-center col-12 col-md-3">
                             <div class="mb-3">
                                 <img id="preview-imagen"
                                     src="{{ $user->imagen ? asset('storage/' . $user->imagen) : asset('img/default-profile.png') }}"
-                                    class="img-fluid rounded-circle border border-secondary mb-2"
+                                    class="mb-2 border img-fluid rounded-circle border-secondary"
                                     alt="{{ $user->name }}" style="width: 180px; height: 180px; object-fit: cover;">
 
                                 <label for="imagen" class="form-label d-block text-light">Imagen de Perfil</label>
@@ -50,7 +50,7 @@
                         <div class="col-12 col-md-9">
                             <div class="row g-3">
                                 <div class="col-12">
-                                    <h5 class="border-bottom border-secondary pb-2 text-info">Información Personal</h5>
+                                    <h5 class="pb-2 border-bottom border-secondary text-info">Información Personal</h5>
                                 </div>
 
                                 <div class="col-md-6">
@@ -155,7 +155,7 @@
                         </div>
 
                         <div class="col-12">
-                            <h5 class="border-bottom border-secondary pb-2 mt-3 text-info">Dirección</h5>
+                            <h5 class="pb-2 mt-3 border-bottom border-secondary text-info">Dirección</h5>
                         </div>
 
                         <div class="col-12">
@@ -216,7 +216,7 @@
                         </div>
 
                         <div class="col-12">
-                            <h5 class="border-bottom border-secondary pb-2 mt-3 text-info">Información de Cuenta</h5>
+                            <h5 class="pb-2 mt-3 border-bottom border-secondary text-info">Información de Cuenta</h5>
                         </div>
 
                         <div class="col-md-6">
@@ -260,7 +260,7 @@
                         </div>
 
                         <div class="col-12">
-                            <div class="border-start border-warning ps-3 my-3">
+                            <div class="my-3 border-start border-warning ps-3">
                                 <h6 class="text-warning">Cambiar contraseña</h6>
                                 <p class="text-white small">Dejar en blanco para mantener la contraseña actual</p>
                             </div>
@@ -295,7 +295,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-check form-switch mt-4">
+                            <div class="mt-4 form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="is_approved" name="is_approved"
                                     value="1" {{ old('is_approved', $user->is_approved) ? 'checked' : '' }}>
                                 <label class="form-check-label text-light" for="is_approved">
@@ -307,7 +307,7 @@
                             </div>
                         </div>
 
-                        <div class="col-12 mt-4">
+                        <div class="mt-4 col-12">
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-warning">
                                     <i class="fas fa-save me-2"></i>Actualizar Usuario
@@ -323,7 +323,7 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Vista previa de imagen
+
                 const inputImagen = document.getElementById('imagen');
                 const previewImagen = document.getElementById('preview-imagen');
 

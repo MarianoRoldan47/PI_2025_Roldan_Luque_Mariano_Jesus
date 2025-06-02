@@ -45,7 +45,7 @@ new #[Layout('layouts.guest')] class extends Component {
     @endif
 
     <form wire:submit="login">
-        <!-- Email Address -->
+
         <div class="mb-4">
             <label for="email" class="form-label text-white">
                 <i class="fas fa-envelope me-2"></i>Correo electrónico
@@ -60,7 +60,7 @@ new #[Layout('layouts.guest')] class extends Component {
             @enderror
         </div>
 
-        <!-- Password -->
+
         <div class="mb-4">
             <label for="password" class="form-label text-white">
                 <i class="fas fa-lock me-2"></i>Contraseña
@@ -75,7 +75,7 @@ new #[Layout('layouts.guest')] class extends Component {
             @enderror
         </div>
 
-        <!-- Remember Me -->
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="form-check">
                 <input wire:model="form.remember" type="checkbox" id="remember"
@@ -92,7 +92,7 @@ new #[Layout('layouts.guest')] class extends Component {
             @endif
         </div>
 
-        <!-- Submit Button -->
+
         <button type="submit" class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
             style="background-color: #22a7e1; border: none;">
             <i class="fas fa-sign-in-alt me-2"></i>

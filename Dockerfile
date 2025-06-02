@@ -16,7 +16,10 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libmcrypt-dev \
     default-mysql-client \
-    && docker-php-ext-install pdo pdo_mysql zip
+    && docker-php-ext-install pdo pdo_mysql zip bcmath
+
+# Configurar Git para aceptar el directorio como seguro
+RUN git config --global --add safe.directory /var/www
 
 # Instala Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -35,9 +38,13 @@ COPY . /var/www
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www
 
+# Configurar Git para aceptar el directorio como seguro (nuevamente después de copiar archivos)
+RUN git config --global --add safe.directory /var/www
+
 # Instalar dependencias de Composer
 RUN composer install --no-interaction --optimize-autoloader
 
-RUN composer install
-
+# Instalar dependencias de npm
 RUN npm install
+
+RUN php artisan storage:link

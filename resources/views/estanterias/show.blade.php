@@ -1,11 +1,11 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">DETALLES DE ESTANTERÍA</h1>
                 <p>{{ $estanteria->nombre }} - {{ $estanteria->zona->nombre }}</p>
             </div>
-            <div class="col-12 col-md d-flex justify-content-end align-items-center gap-2">
+            <div class="gap-2 col-12 col-md d-flex justify-content-end align-items-center">
                 @if (Auth::user()->rol === 'Administrador')
                     <a href="{{ route('estanterias.edit', $estanteria) }}" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit me-1"></i> Editar
@@ -24,23 +24,23 @@
 
         <div class="row g-4">
             <div class="col-12 col-lg-5 col-xl-4">
-                <div class="card bg-dark shadow-sm">
+                <div class="shadow-sm card bg-dark">
                     <div class="card-header bg-dark border-secondary">
-                        <h5 class="card-title mb-0 d-flex align-items-center text-white">
+                        <h5 class="mb-0 text-white card-title d-flex align-items-center">
                             <i class="fas fa-info-circle text-info me-2"></i>
                             Información de la Estantería
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label class="text-info small mb-1">Nombre:</label>
-                            <p class="mb-0 fs-5 text-white">{{ $estanteria->nombre }}</p>
+                            <label class="mb-1 text-info small">Nombre:</label>
+                            <p class="mb-0 text-white fs-5">{{ $estanteria->nombre }}</p>
                         </div>
 
                         <div class="mb-3">
-                            <label class="text-info small mb-1">Zona:</label>
+                            <label class="mb-1 text-info small">Zona:</label>
                             <p class="mb-0">
-                                <span class="badge text-bg-dark border border-secondary p-2">
+                                <span class="p-2 border badge text-bg-dark border-secondary">
                                     <i class="fas fa-map-marker-alt text-info me-1"></i>
                                     {{ $estanteria->zona->nombre }}
                                 </span>
@@ -48,8 +48,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="text-info small mb-1">Capacidad:</label>
-                            <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="mb-1 text-info small">Capacidad:</label>
+                            <div class="mb-1 d-flex justify-content-between align-items-center">
                                 <span class="text-light">Disponible: <strong
                                         class="text-success fw-bold">{{ $estanteria->capacidad_libre }}</strong></span>
                                 <span class="text-light">Total: <strong
@@ -72,13 +72,13 @@
                                     style="width: {{ $porcentajeOcupado }}%">
                                 </div>
                             </div>
-                            <div class="text-end small text-light mt-1">
+                            <div class="mt-1 text-end small text-light">
                                 {{ number_format($porcentajeOcupado, 0) }}% ocupado
                             </div>
                         </div>
 
                         <div>
-                            <label class="text-info small mb-1">Estado:</label>
+                            <label class="mb-1 text-info small">Estado:</label>
                             @if ($estanteria->capacidad_libre == 0)
                                 <span class="badge text-bg-danger">Lleno</span>
                             @elseif ($porcentajeOcupado >= 90)
@@ -96,23 +96,23 @@
             </div>
 
             <div class="col-12 col-lg-7 col-xl-8">
-                <div class="card bg-dark shadow-sm">
+                <div class="shadow-sm card bg-dark">
                     <div class="card-header bg-dark border-secondary d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 d-flex align-items-center text-white">
+                        <h5 class="mb-0 text-white card-title d-flex align-items-center">
                             <i class="fas fa-boxes text-warning me-2"></i>
                             Productos en esta Estantería
                         </h5>
                         <span class="badge text-bg-primary">{{ $estanteria->productos->count() }} productos</span>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="p-0 card-body">
                         @if ($estanteria->productos->isEmpty())
-                            <div class="alert alert-dark m-3 mb-3">
+                            <div class="m-3 mb-3 alert alert-dark">
                                 <i class="fas fa-info-circle me-2"></i>
                                 <span class="text-light">No hay productos almacenados en esta estantería.</span>
                             </div>
                         @else
                             <div class="table-responsive">
-                                <table class="table table-dark table-hover align-middle mb-0">
+                                <table class="table mb-0 align-middle table-dark table-hover">
                                     <thead>
                                         <tr>
                                             <th class="text-white">Producto</th>
@@ -134,7 +134,7 @@
                                                                 style="object-fit: cover;">
                                                         </div>
                                                         <div>
-                                                            <div class="fw-medium text-white">{{ $producto->nombre }}
+                                                            <div class="text-white fw-medium">{{ $producto->nombre }}
                                                             </div>
                                                             <div class="text-light small">
                                                                 {{ $producto->categoria->nombre }}</div>
@@ -142,7 +142,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="text-center">
-                                                    <span class="badge text-bg-dark border border-secondary text-light">
+                                                    <span class="border badge text-bg-dark border-secondary text-light">
                                                         {{ $producto->codigo_producto }}
                                                     </span>
                                                 </td>
@@ -164,10 +164,10 @@
     </div>
 
     @if (Auth::user()->rol === 'Administrador')
-        <!-- Modal de confirmación para eliminar -->
+
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-white border-danger">
+                <div class="text-white modal-content bg-dark border-danger">
                     <div class="modal-header border-danger">
                         <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -197,7 +197,7 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Manejo del modal de eliminación
+                
                 const deleteModal = document.getElementById('deleteModal');
                 if (deleteModal) {
                     deleteModal.addEventListener('show.bs.modal', function(event) {
@@ -210,14 +210,14 @@
                     });
                 }
 
-                // Hacer que las filas sean clickeables
+
                 const productoRows = document.querySelectorAll('.producto-row');
                 productoRows.forEach(row => {
                     row.addEventListener('click', function() {
                         window.location.href = this.getAttribute('data-href');
                     });
 
-                    // Efecto visual al pasar el mouse
+
                     row.addEventListener('mouseenter', function() {
                         this.classList.add('table-active');
                     });

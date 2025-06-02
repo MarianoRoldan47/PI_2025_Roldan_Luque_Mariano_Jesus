@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">SOLICITUDES DE ACCESO</h1>
                 <p class="text-muted">Usuarios pendientes de aprobación</p>
@@ -12,13 +12,13 @@
             </div>
         </div>
 
-        <div class="card bg-dark shadow-sm">
+        <div class="shadow-sm card bg-dark">
             @if ($pendingUsers->isEmpty())
-                <div class="card-body text-center py-5">
+                <div class="py-5 text-center card-body">
                     <div class="empty-state">
-                        <i class="fas fa-check-circle text-success fa-4x mb-3"></i>
+                        <i class="mb-3 fas fa-check-circle text-success fa-4x"></i>
                         <h4 class="text-white">No hay solicitudes pendientes</h4>
-                        <p class="text-light mb-4">
+                        <p class="mb-4 text-light">
                             Todas las solicitudes de acceso han sido procesadas.
                         </p>
                         <a href="{{ route('users.index') }}" class="btn btn-primary">
@@ -27,9 +27,9 @@
                     </div>
                 </div>
             @else
-                <div class="card-body p-0">
+                <div class="p-0 card-body">
                     <div class="table-responsive">
-                        <table class="table table-dark table-hover align-middle mb-0">
+                        <table class="table mb-0 align-middle table-dark table-hover">
                             <thead>
                                 <tr>
                                     <th>Usuario</th>
@@ -54,7 +54,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge text-bg-dark border border-secondary">
+                                            <span class="border badge text-bg-dark border-secondary">
                                                 {{ $user->dni }}
                                             </span>
                                         </td>
@@ -70,7 +70,7 @@
                                             <span class="text-light">{{ $user->created_at->format('d/m/Y H:i:s') }}</span>
                                         </td>
                                         <td class="text-end" onclick="event.stopPropagation();">
-                                            <div class="d-flex justify-content-end gap-1">
+                                            <div class="gap-1 d-flex justify-content-end">
                                                 <form action="{{ route('users.aprobar', $user) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success btn-sm" title="Aprobar usuario">
@@ -94,12 +94,12 @@
         </div>
     </div>
 
-    <!-- Modal de confirmación para rechazar -->
+
     <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-white border-danger">
+            <div class="text-white modal-content bg-dark border-danger">
                 <div class="modal-header border-danger">
-                    <h5 class="modal-title text-white" id="rejectModalLabel">Confirmar rechazo</h5>
+                    <h5 class="text-white modal-title" id="rejectModalLabel">Confirmar rechazo</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -124,7 +124,7 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Manejo del modal de rechazo
+
             const rejectModal = document.getElementById('rejectModal');
             if (rejectModal) {
                 rejectModal.addEventListener('show.bs.modal', function (event) {
@@ -137,14 +137,14 @@
                 });
             }
 
-            // Hacer que las filas sean clickeables
+
             const userRows = document.querySelectorAll('.user-row');
             userRows.forEach(row => {
                 row.addEventListener('click', function() {
                     window.location.href = this.getAttribute('data-href');
                 });
 
-                // Efecto visual al pasar el mouse
+
                 row.addEventListener('mouseenter', function() {
                     this.classList.add('table-active');
                 });

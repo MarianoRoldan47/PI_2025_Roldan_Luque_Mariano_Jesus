@@ -28,12 +28,12 @@ new class extends Component {
     {
         $user = Auth::user();
 
-        // Asignar valores básicos
+
         foreach (['dni', 'name', 'apellido1', 'apellido2', 'telefono', 'direccion', 'codigo_postal', 'localidad', 'provincia', 'rol', 'email'] as $field) {
             $this->{$field} = $user->{$field} ?? '';
         }
 
-        // Formatear la fecha de nacimiento en formato Y-m-d para el input date
+
         if ($user->fecha_nacimiento) {
             $this->fecha_nacimiento = $user->fecha_nacimiento->format('Y-m-d');
         } else {
@@ -60,7 +60,7 @@ new class extends Component {
             'imagen' => ['nullable', 'image', 'max:1024'],
         ]);
 
-        // Actualizar manualmente sin fillable
+
         $user->dni = $validated['dni'];
         $user->name = $validated['name'];
         $user->apellido1 = $validated['apellido1'];
@@ -71,7 +71,7 @@ new class extends Component {
         $user->localidad = $validated['localidad'];
         $user->provincia = $validated['provincia'];
 
-        // Email y verificación
+
         if ($user->email !== $validated['email']) {
             $user->email = $validated['email'];
             $user->email_verified_at = null;
@@ -79,7 +79,7 @@ new class extends Component {
 
         $user->fecha_nacimiento = $validated['fecha_nacimiento'];
 
-        // Procesar imagen si se sube
+        
         if ($this->imagen) {
             if ($user->imagen) {
                 \Storage::disk('public')->delete($user->imagen);
@@ -120,15 +120,15 @@ new class extends Component {
 };
 ?>
 
-<section class="card bg-dark shadow-lg border-0">
-    <div class="card-body p-3 p-sm-4">
-        <!-- Header del perfil -->
-        <div class="row mb-4">
+<section class="border-0 shadow-lg card bg-dark">
+    <div class="p-3 card-body p-sm-4">
+
+        <div class="mb-4 row">
             <div class="col-12">
-                <div class="d-flex flex-column flex-sm-row align-items-center gap-3 gap-sm-4">
-                    <!-- Imagen de perfil -->
-                    <div class="position-relative mb-3 mb-sm-0">
-                        <div class="image-upload-container rounded-circle overflow-hidden border border-secondary"
+                <div class="gap-3 d-flex flex-column flex-sm-row align-items-center gap-sm-4">
+
+                    <div class="mb-3 position-relative mb-sm-0">
+                        <div class="overflow-hidden border image-upload-container rounded-circle border-secondary"
                             style="width: 120px; height: 120px;">
                             @if ($imagen)
                                 <img src="{{ $imagen->temporaryUrl() }}" class="w-100 h-100 object-fit-cover">
@@ -137,31 +137,31 @@ new class extends Component {
                                     class="w-100 h-100 object-fit-cover">
                             @endif
 
-                            <!-- Overlay para cambiar imagen -->
+
                             <label for="imagen"
-                                class="image-upload-overlay d-flex align-items-center justify-content-center mb-0">
+                                class="mb-0 image-upload-overlay d-flex align-items-center justify-content-center">
                                 <i class="fas fa-camera fs-4"></i>
                                 <input type="file" wire:model="imagen" id="imagen" class="d-none"
                                     accept="image/*">
                             </label>
                         </div>
 
-                        <!-- Botón eliminar imagen separado del overlay -->
+
                         @if (Auth::user()->imagen || $imagen)
                             <button type="button" wire:click="deleteImage"
-                                class="position-absolute top-0 end-0 btn btn-danger btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm"
+                                class="top-0 p-0 shadow-sm position-absolute end-0 btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center"
                                 style="width: 24px; height: 24px; transform: translate(25%, -25%);"
                                 title="Eliminar imagen">
                                 <i class="fas fa-times small"></i>
                             </button>
                         @endif
                     </div>
-                    <!-- Info del usuario -->
+
                     <div class="text-center text-sm-start">
-                        <h3 class="text-white mb-1 fs-4">{{ auth()->user()->name }} {{ auth()->user()->apellido1 }}</h3>
+                        <h3 class="mb-1 text-white fs-4">{{ auth()->user()->name }} {{ auth()->user()->apellido1 }}</h3>
                         <span class="badge bg-primary">{{ Auth::user()->rol }}</span>
                         @if ($imagen)
-                            <div class="text-success small mt-2">
+                            <div class="mt-2 text-success small">
                                 <i class="fas fa-check-circle me-1"></i> Nueva imagen seleccionada
                             </div>
                         @endif
@@ -170,7 +170,7 @@ new class extends Component {
             </div>
         </div>
 
-        <!-- Formulario -->
+
         <form wire:submit="updateProfileInformation">
             <div class="row g-3">
                 @foreach ([
@@ -188,7 +188,7 @@ new class extends Component {
                     <div
                         class="col-{{ $config['col']['xs'] }} col-sm-{{ $config['col']['sm'] ?? $config['col']['xs'] }} col-md-{{ $config['col']['md'] ?? ($config['col']['sm'] ?? $config['col']['xs']) }}">
                         <div class="form-group">
-                            <label for="{{ $field }}" class="form-label text-white small mb-1">
+                            <label for="{{ $field }}" class="mb-1 text-white form-label small">
                                 {{ __($config['label']) }}
                             </label>
                             <div class="input-group input-group-sm">
@@ -207,10 +207,10 @@ new class extends Component {
                     </div>
                 @endforeach
 
-                <!-- Fecha de nacimiento -->
+
                 <div class="col-12 col-sm-6 col-md-4">
                     <div class="form-group">
-                        <label for="fecha_nacimiento" class="form-label text-white small mb-1">
+                        <label for="fecha_nacimiento" class="mb-1 text-white form-label small">
                             {{ __('Fecha de Nacimiento') }}
                         </label>
                         <div class="input-group input-group-sm">
@@ -228,10 +228,10 @@ new class extends Component {
                     </div>
                 </div>
 
-                <!-- Rol -->
+
                 <div class="col-12 col-sm-6 col-md-4">
                     <div class="form-group">
-                        <label class="form-label text-white small mb-1">
+                        <label class="mb-1 text-white form-label small">
                             {{ __('Rol') }}
                         </label>
                         <div class="input-group input-group-sm">
@@ -239,7 +239,7 @@ new class extends Component {
                                 <i class="fas fa-user-shield text-primary"></i>
                             </span>
                             <div
-                                class="form-control form-control-sm bg-dark text-white border-secondary user-select-none">
+                                class="text-white form-control form-control-sm bg-dark border-secondary user-select-none">
                                 {{ Auth::user()->rol }}
                             </div>
                         </div>
@@ -247,22 +247,22 @@ new class extends Component {
                 </div>
             </div>
 
-            <!-- Alerta de verificación de email -->
+
             @if (!Auth::user()->hasVerifiedEmail())
-                <div class="alert alert-warning d-flex align-items-center mt-4 p-2 p-sm-3" role="alert">
+                <div class="p-2 mt-4 alert alert-warning d-flex align-items-center p-sm-3" role="alert">
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     <div class="small">
                         <div class="fw-bold">{{ __('Tu correo electrónico no está verificado.') }}</div>
-                        <button wire:click.prevent="sendVerification" class="btn btn-link text-warning p-0 small">
+                        <button wire:click.prevent="sendVerification" class="p-0 btn btn-link text-warning small">
                             {{ __('Haz clic aquí para reenviar el correo de verificación.') }}
                         </button>
                     </div>
                 </div>
             @endif
 
-            <!-- Footer del formulario -->
+
             <div
-                class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-2 gap-sm-3 border-top border-secondary mt-4 pt-3 pt-sm-4">
+                class="gap-2 pt-3 mt-4 d-flex flex-column flex-sm-row justify-content-end align-items-center gap-sm-3 border-top border-secondary pt-sm-4">
                 <div wire:loading class="text-primary small">
                     <i class="fas fa-spinner fa-spin me-1"></i> Guardando...
                 </div>

@@ -19,7 +19,7 @@ class EstanteriasController extends Controller
 
     public function store(Request $request)
     {
-        // Regla personalizada para validar que el nombre no esté duplicado en la misma zona
+
         $uniqueInZone = Rule::unique('estanterias', 'nombre')
             ->where('zona_id', $request->zona_id);
 
@@ -31,7 +31,7 @@ class EstanteriasController extends Controller
             'nombre.unique' => 'Ya existe una estantería con este nombre en la zona seleccionada.',
         ]);
 
-        // Inicialmente la capacidad libre es igual a la máxima
+
         $request->merge(['capacidad_libre' => $request->capacidad_maxima]);
 
         Estanteria::create($request->all());
@@ -55,7 +55,7 @@ class EstanteriasController extends Controller
 
     public function update(Request $request, Estanteria $estanteria)
     {
-        // Regla personalizada para validar que el nombre no esté duplicado en la misma zona
+
         $uniqueInZone = Rule::unique('estanterias', 'nombre')
             ->where('zona_id', $request->zona_id)
             ->ignore($estanteria->id);
@@ -68,7 +68,7 @@ class EstanteriasController extends Controller
             'nombre.unique' => 'Ya existe una estantería con este nombre en la zona seleccionada.',
         ]);
 
-        // Actualizar capacidad libre si cambió la máxima
+
         if ($request->capacidad_maxima != $estanteria->capacidad_maxima) {
             $diferencia = $request->capacidad_maxima - $estanteria->capacidad_maxima;
             $request->merge(['capacidad_libre' => $estanteria->capacidad_libre + $diferencia]);

@@ -34,14 +34,14 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <h4 class="text-white text-center mb-4">{{ __('Confirmar Contraseña') }}</h4>
+    <h4 class="mb-4 text-center text-white">{{ __('Confirmar Contraseña') }}</h4>
 
-    <div class="mb-4 text-white-50 small text-center">
+    <div class="mb-4 text-center text-white-50 small">
         {{ __('Esta es un área segura de la aplicación. Por favor, confirma tu contraseña antes de continuar.') }}
     </div>
 
     <form wire:submit="confirmPassword">
-        <!-- Password -->
+
         <div class="mb-4">
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary text-primary">
@@ -63,7 +63,7 @@ new #[Layout('layouts.guest')] class extends Component
             @enderror
         </div>
 
-        <!-- Submit Button -->
+
         <button type="submit"
                 class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
                 style="background-color: #22a7e1; border: none;">
@@ -71,8 +71,8 @@ new #[Layout('layouts.guest')] class extends Component
             {{ __('Confirmar') }}
         </button>
 
-        <!-- Back Link -->
-        <div class="text-center mt-4">
+
+        <div class="mt-4 text-center">
             <a href="{{ route('dashboard') }}"
                class="text-primary text-decoration-none small"
                wire:navigate>

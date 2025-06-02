@@ -12,7 +12,7 @@ class MovimientoPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true; // Todos los usuarios autenticados pueden ver la lista
+        return true;
     }
 
     /**
@@ -20,7 +20,7 @@ class MovimientoPolicy
      */
     public function view(User $user, Movimiento $movimiento): bool
     {
-        return true; // Todos los usuarios autenticados pueden ver los detalles
+        return true;
     }
 
     /**
@@ -28,7 +28,7 @@ class MovimientoPolicy
      */
     public function create(User $user): bool
     {
-        return true; // Todos los usuarios autenticados pueden crear
+        return true;
     }
 
     /**
@@ -36,12 +36,12 @@ class MovimientoPolicy
      */
     public function update(User $user, Movimiento $movimiento): bool
     {
-        // Administradores pueden editar cualquier movimiento
+
         if ($user->rol === 'Administrador') {
             return true;
         }
 
-        // Usuarios normales solo pueden editar sus propios movimientos
+
         return $user->id === $movimiento->user_id;
     }
 
@@ -50,12 +50,12 @@ class MovimientoPolicy
      */
     public function delete(User $user, Movimiento $movimiento): bool
     {
-        // Administradores pueden eliminar cualquier movimiento
+
         if ($user->rol === 'Administrador') {
             return true;
         }
 
-        // Usuarios normales solo pueden eliminar sus propios movimientos
+        
         return $user->id === $movimiento->user_id;
     }
 }

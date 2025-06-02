@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">ZONAS DEL ALMACÉN</h1>
                 <p class="text-muted">Gestión de zonas de almacenamiento</p>
@@ -23,21 +23,21 @@
 
         <div class="row g-4">
             <div class="col-12">
-                <div class="card bg-dark shadow-sm">
-                    <div class="card-body p-0">
+                <div class="shadow-sm card bg-dark">
+                    <div class="p-0 card-body">
                         @if ($zonas->isEmpty())
-                            <div class="text-center py-5">
-                                <i class="fas fa-warehouse fa-3x mb-3 text-secondary"></i>
+                            <div class="py-5 text-center">
+                                <i class="mb-3 fas fa-warehouse fa-3x text-secondary"></i>
                                 <p class="mb-0 text-muted">No hay zonas registradas</p>
                                 @if (Auth::user()->rol === 'Administrador')
-                                    <a href="{{ route('zonas.create') }}" class="btn btn-primary btn-sm mt-3">
+                                    <a href="{{ route('zonas.create') }}" class="mt-3 btn btn-primary btn-sm">
                                         <i class="fas fa-plus-circle me-1"></i> Crear primera zona
                                     </a>
                                 @endif
                             </div>
                         @else
                             <div class="table-responsive">
-                                <table class="table table-dark table-hover mb-0 align-middle">
+                                <table class="table mb-0 align-middle table-dark table-hover">
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
@@ -81,14 +81,14 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Hacer que las filas sean clickeables
+
                 const zonaRows = document.querySelectorAll('.zona-row');
                 zonaRows.forEach(row => {
                     row.addEventListener('click', function() {
                         window.location.href = this.getAttribute('data-href');
                     });
 
-                    // Efecto visual al pasar el mouse
+
                     row.addEventListener('mouseenter', function() {
                         this.classList.add('table-active');
                     });

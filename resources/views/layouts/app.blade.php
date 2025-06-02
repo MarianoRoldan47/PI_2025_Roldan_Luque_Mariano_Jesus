@@ -8,14 +8,14 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-..." crossorigin="anonymous">
 
-    <!-- Font Awesome -->
+
     <script src="https://kit.fontawesome.com/3896197f07.js" crossorigin="anonymous"></script>
 
-    <!-- Bootstrap Icons -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -113,7 +113,7 @@
             }
         }
 
-        /* Estilos para la paginación */
+
         .pagination {
             justify-content: center;
             margin-bottom: 0;
@@ -145,7 +145,7 @@
             border-color: #373b3e;
         }
 
-        /* Ajustes específicos para el contenedor de paginación */
+
         .pagination-container {
             width: 100%;
             display: flex;
@@ -169,9 +169,9 @@
     @if (session('success'))
         <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalTitle">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content bg-dark text-white">
-                    <div class="modal-header border-bottom border-white">
-                        <h5 class="modal-title text-white" id="successModalTitle">
+                <div class="text-white modal-content bg-dark">
+                    <div class="border-white modal-header border-bottom">
+                        <h5 class="text-white modal-title" id="successModalTitle">
                             <i class="fas fa-check-circle text-success me-2"></i>¡Éxito!
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -179,13 +179,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="d-flex align-items-center">
-                            <div class="modal-icon bg-success text-white rounded-circle p-3 me-3">
+                            <div class="p-3 text-white modal-icon bg-success rounded-circle me-3">
                                 <i class="fas fa-check fa-2x"></i>
                             </div>
                             <p class="mb-0">{{ session('success') }}</p>
                         </div>
                     </div>
-                    <div class="modal-footer border-top border-white">
+                    <div class="border-white modal-footer border-top">
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal"
                             id="successModalButton">Aceptar</button>
                     </div>
@@ -197,9 +197,9 @@
     @if (session('status') && session('status-type') === 'danger')
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalTitle">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content bg-dark text-white">
-                    <div class="modal-header border-bottom border-white">
-                        <h5 class="modal-title text-white" id="errorModalTitle">
+                <div class="text-white modal-content bg-dark">
+                    <div class="border-white modal-header border-bottom">
+                        <h5 class="text-white modal-title" id="errorModalTitle">
                             <i class="fas fa-exclamation-circle text-danger me-2"></i>¡Error!
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -207,13 +207,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="d-flex align-items-center">
-                            <div class="modal-icon bg-danger text-white rounded-circle p-3 me-3">
+                            <div class="p-3 text-white modal-icon bg-danger rounded-circle me-3">
                                 <i class="fas fa-times fa-2x"></i>
                             </div>
                             <p class="mb-0">{{ session('status') }}</p>
                         </div>
                     </div>
-                    <div class="modal-footer border-top border-white">
+                    <div class="border-white modal-footer border-top">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
                             id="errorModalButton">Aceptar</button>
                     </div>
@@ -222,7 +222,7 @@
         </div>
     @endif
 
-    <main class="flex-grow-1 overflow-auto p-4">
+    <main class="p-4 overflow-auto flex-grow-1">
         {{ $slot }}
     </main>
 
@@ -230,19 +230,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Verificar si existe el modal
+
             const successModal = document.getElementById('successModal');
             if (successModal) {
                 try {
-                    // Crear instancia del modal
+
                     const modal = new bootstrap.Modal(successModal);
 
-                    // Mostrar el modal
+
                     modal.show();
 
-                    // Evento cuando el modal se oculta
+
                     successModal.addEventListener('hidden.bs.modal', function() {
-                        modal.dispose(); // Limpiar recursos
+                        modal.dispose();
                     });
                 } catch (error) {
                     console.error('Error al inicializar el modal:', error);

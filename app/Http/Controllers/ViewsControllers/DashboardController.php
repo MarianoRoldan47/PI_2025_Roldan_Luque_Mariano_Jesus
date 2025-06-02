@@ -14,13 +14,13 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Contadores para las tarjetas
+
         $productoscount = Producto::count();
         $usuarioscount = User::count();
         $movimientoscount = Movimiento::count();
         $alertascount = AlertaStock::count();
 
-        // Datos para el gráfico de movimientos por día de la semana
+
         $lastWeekStart = now()->startOfWeek();
         $lastWeekEnd = now()->endOfWeek();
 
@@ -46,11 +46,11 @@ class DashboardController extends Controller
             $dataPorDia[5],
         ];
 
-        // Obtener usuarios con movimientos en el mes actual - CONSULTA CORREGIDA
+
         $mesInicio = Date::now()->startOfMonth();
         $mesFin = Date::now()->endOfMonth();
 
-        // Primero obtenemos todos los movimientos del mes actual con sus usuarios
+
         $movimientosUsuarios = Movimiento::join('users', 'movimientos.user_id', '=', 'users.id')
             ->select('users.id as user_id', 'users.name', DB::raw('COUNT(*) as total'))
             ->whereBetween('movimientos.fecha_movimiento', [$mesInicio, $mesFin])
@@ -60,7 +60,7 @@ class DashboardController extends Controller
             ->limit(3)
             ->get();
 
-        // Si no hay suficientes usuarios con movimientos, completamos con usuarios sin movimientos
+
         if ($movimientosUsuarios->count() < 3) {
             $usuariosConMovimientos = $movimientosUsuarios->pluck('user_id')->toArray();
 
@@ -79,7 +79,7 @@ class DashboardController extends Controller
             }
         }
 
-        // Si aún no hay 3 usuarios (en caso de que haya menos de 3 usuarios en total en la BD)
+
         while ($movimientosUsuarios->count() < 3) {
             $movimientosUsuarios->push((object)[
                 'user_id' => null,
@@ -88,7 +88,7 @@ class DashboardController extends Controller
             ]);
         }
 
-        // Convertimos a un formato compatible con el gráfico
+
         $usuarios = $movimientosUsuarios->map(function ($item) {
             return [
                 'name' => $item->name,
