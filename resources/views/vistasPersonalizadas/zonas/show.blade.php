@@ -21,13 +21,6 @@
             </div>
         </div>
 
-        @if (session('status'))
-            <div class="alert alert-{{ session('status-type', 'info') }} alert-dismissible fade show" role="alert">
-                <i class="fas fa-info-circle me-2"></i> {{ session('status') }}
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
         <div class="row g-4">
             <div class="col-lg-4">
                 <div class="shadow-sm card bg-dark h-100">
@@ -193,7 +186,7 @@
                             class="text-white">{{ $zona->nombre }}</strong>?</p>
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        <strong>Atención:</strong> Esta acción eliminará todas las estanterías asociadas a esta zona.
+                        <strong>Atención:</strong> Si hay estanterias asociadas a la zona, no se podra borrar la zona.
                     </div>
                 </div>
                 <div class="modal-footer border-danger">

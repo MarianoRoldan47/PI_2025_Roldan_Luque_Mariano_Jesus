@@ -34,7 +34,7 @@ new #[Layout('layouts.guest')] class extends Component {
     public function register(): void
     {
         $validated = $this->validate([
-            'dni' => ['required', 'string', 'size:9', 'unique:' . User::class],
+            'dni' => ['required', 'string', 'size:9', 'unique:' . User::class, 'regex:/^[0-9]{8}[A-Z]$/', 'valid_dni'],
             'name' => ['required', 'string', 'max:255'],
             'apellido1' => ['required', 'string', 'max:255'],
             'apellido2' => ['nullable', 'string', 'max:255'],
@@ -58,14 +58,12 @@ new #[Layout('layouts.guest')] class extends Component {
 
         $user = User::create($validated);
 
-
         try {
             $admins = User::where('rol', 'Administrador')->get();
             foreach ($admins as $admin) {
                 $admin->notify(new NuevaSolicitudUsuario($user));
             }
         } catch (Exception $e) {
-            
             Log::error('Error al enviar correo a administradores: ' . $e->getMessage());
         }
 
@@ -77,41 +75,39 @@ new #[Layout('layouts.guest')] class extends Component {
     }
 }; ?>
 <div>
-    <h4 class="mb-4 text-center text-white">Registro</h4>
+    <h2 class="mb-4 text-center text-white">Registro de Usuario</h2>
 
-    <form wire:submit="register" class="mt-4">
+    <form wire:submit="register" enctype="multipart/form-data">
         <div class="row g-3">
-
-            <div class="col-md-6">
+            <!-- DNI -->
+            <div class="col-12">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="dni" class="text-white form-label">DNI</label>
-                    </div>
+                    <label for="dni" class="text-white form-label">DNI <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-id-card"></i>
                         </span>
-                        <input wire:model="dni" type="text" id="dni"
+                        <input wire:model="dni" type="text" id="dni" placeholder="12345678A"
                             class="form-control bg-dark text-white border-secondary @error('dni') is-invalid @enderror"
                             required>
                     </div>
+                    <div class="form-text text-white-50 small">8 números y 1 letra mayúscula</div>
                     @error('dni')
                         <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
-
-            <div class="col-md-6">
+            <!-- Nombre -->
+            <div class="col-12">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="name" class="text-white form-label">Nombre</label>
-                    </div>
+                    <label for="name" class="text-white form-label">Nombre <span
+                            class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-user"></i>
                         </span>
-                        <input wire:model="name" type="text" id="name"
+                        <input wire:model="name" type="text" id="name" placeholder="Tu nombre"
                             class="form-control bg-dark text-white border-secondary @error('name') is-invalid @enderror"
                             required>
                     </div>
@@ -121,17 +117,16 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-
+            <!-- Apellidos -->
             <div class="col-md-6">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="apellido1" class="text-white form-label">Primer Apellido</label>
-                    </div>
+                    <label for="apellido1" class="text-white form-label">Primer Apellido <span
+                            class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-user"></i>
                         </span>
-                        <input wire:model="apellido1" type="text" id="apellido1"
+                        <input wire:model="apellido1" type="text" id="apellido1" placeholder="Primer apellido"
                             class="form-control bg-dark text-white border-secondary @error('apellido1') is-invalid @enderror"
                             required>
                     </div>
@@ -143,14 +138,12 @@ new #[Layout('layouts.guest')] class extends Component {
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="apellido2" class="text-white form-label">Segundo Apellido</label>
-                    </div>
+                    <label for="apellido2" class="text-white form-label">Segundo Apellido</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-user"></i>
                         </span>
-                        <input wire:model="apellido2" type="text" id="apellido2"
+                        <input wire:model="apellido2" type="text" id="apellido2" placeholder="Segundo apellido"
                             class="form-control bg-dark text-white border-secondary @error('apellido2') is-invalid @enderror">
                     </div>
                     @error('apellido2')
@@ -159,17 +152,16 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-
-            <div class="col-md-6">
+            <!-- Email -->
+            <div class="col-12">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="email" class="text-white form-label">Correo Electrónico</label>
-                    </div>
+                    <label for="email" class="text-white form-label">Correo Electrónico <span
+                            class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-envelope"></i>
                         </span>
-                        <input wire:model="email" type="email" id="email"
+                        <input wire:model="email" type="email" id="email" placeholder="ejemplo@correo.com"
                             class="form-control bg-dark text-white border-secondary @error('email') is-invalid @enderror"
                             required>
                     </div>
@@ -179,17 +171,16 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-
-            <div class="col-md-6">
+            <!-- Teléfono -->
+            <div class="col-12">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="telefono" class="text-white form-label">Teléfono</label>
-                    </div>
+                    <label for="telefono" class="text-white form-label">Teléfono <span
+                            class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-phone"></i>
                         </span>
-                        <input wire:model="telefono" type="tel" id="telefono"
+                        <input wire:model="telefono" type="tel" id="telefono" placeholder="612345678"
                             class="form-control bg-dark text-white border-secondary @error('telefono') is-invalid @enderror"
                             required>
                     </div>
@@ -199,17 +190,16 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-
+            <!-- Dirección -->
             <div class="col-12">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="direccion" class="text-white form-label">Dirección</label>
-                    </div>
+                    <label for="direccion" class="text-white form-label">Dirección <span
+                            class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-home"></i>
                         </span>
-                        <input wire:model="direccion" type="text" id="direccion"
+                        <input wire:model="direccion" type="text" id="direccion" placeholder="Calle, número, piso..."
                             class="form-control bg-dark text-white border-secondary @error('direccion') is-invalid @enderror"
                             required>
                     </div>
@@ -219,17 +209,16 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-
-            <div class="col-md-4">
+            <!-- Código Postal -->
+            <div class="col-12">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="codigo_postal" class="text-white form-label">Código Postal</label>
-                    </div>
+                    <label for="codigo_postal" class="text-white form-label">Código Postal <span
+                            class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-map-marker-alt"></i>
                         </span>
-                        <input wire:model="codigo_postal" type="text" id="codigo_postal"
+                        <input wire:model="codigo_postal" type="text" id="codigo_postal" placeholder="41001"
                             class="form-control bg-dark text-white border-secondary @error('codigo_postal') is-invalid @enderror"
                             required>
                     </div>
@@ -239,16 +228,16 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <!-- Localidad y Provincia -->
+            <div class="col-md-6">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="localidad" class="text-white form-label">Localidad</label>
-                    </div>
+                    <label for="localidad" class="text-white form-label">Localidad <span
+                            class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-city"></i>
                         </span>
-                        <input wire:model="localidad" type="text" id="localidad"
+                        <input wire:model="localidad" type="text" id="localidad" placeholder="Sevilla"
                             class="form-control bg-dark text-white border-secondary @error('localidad') is-invalid @enderror"
                             required>
                     </div>
@@ -258,16 +247,15 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="provincia" class="text-white form-label">Provincia</label>
-                    </div>
+                    <label for="provincia" class="text-white form-label">Provincia <span
+                            class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-map"></i>
                         </span>
-                        <input wire:model="provincia" type="text" id="provincia"
+                        <input wire:model="provincia" type="text" id="provincia" placeholder="Sevilla"
                             class="form-control bg-dark text-white border-secondary @error('provincia') is-invalid @enderror"
                             required>
                     </div>
@@ -277,12 +265,11 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-
-            <div class="col-md-6">
+            <!-- Fecha de Nacimiento -->
+            <div class="col-12">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="fecha_nacimiento" class="text-white form-label">Fecha de Nacimiento</label>
-                    </div>
+                    <label for="fecha_nacimiento" class="text-white form-label">Fecha de Nacimiento <span
+                            class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-calendar"></i>
@@ -297,78 +284,80 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <!-- Imagen -->
+            <div class="col-12">
                 <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="password" class="text-white form-label">Contraseña</label>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="text-white fas fa-lock"></i>
-                        </span>
-                        <input wire:model="password" type="password" id="password"
-                            class="form-control bg-dark text-white border-secondary @error('password') is-invalid @enderror"
-                            required>
-                    </div>
-                    @error('password')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-
-
-            <div class="col-md-6">
-                <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="password_confirmation" class="text-white form-label">Confirmar Contraseña</label>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="text-white fas fa-lock"></i>
-                        </span>
-                        <input wire:model="password_confirmation" type="password" id="password_confirmation"
-                            class="text-white form-control bg-dark border-secondary" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="form-group">
-                    <div class="label-container" style="min-height: 24px;">
-                        <label for="imagen" class="text-white form-label">Imagen de perfil</label>
-                    </div>
+                    <label for="imagen" class="text-white form-label">Imagen de perfil</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-image"></i>
                         </span>
-                        <input wire:model="imagen" type="file" id="imagen"
+                        <input wire:model.live="imagen" type="file" id="imagen"
                             class="form-control bg-dark text-white border-secondary @error('imagen') is-invalid @enderror"
                             accept="image/*">
                     </div>
                     <div class="form-text text-white-50 small">Formatos permitidos: JPG, PNG. Máximo 1MB.</div>
+                    @if ($imagen)
+                        <div class="mt-2 text-success">Imagen seleccionada correctamente</div>
+                    @endif
                     @error('imagen')
                         <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
+            <!-- Contraseña -->
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="password" class="text-white form-label">Contraseña <span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary">
+                            <i class="text-white fas fa-lock"></i>
+                        </span>
+                        <input wire:model="password" type="password" id="password" placeholder="******"
+                            class="form-control bg-dark text-white border-secondary @error('password') is-invalid @enderror"
+                            required>
+                    </div>
+                    <div class="form-text text-white-50 small">Mínimo 8 caracteres</div>
+                    @error('password')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
 
-            <div class="mt-2 col-12">
-                <button type="submit" class="py-2 btn btn-primary w-100"
+            <!-- Confirmar Contraseña -->
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="password_confirmation" class="text-white form-label">Confirmar Contraseña <span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary">
+                            <i class="text-white fas fa-lock"></i>
+                        </span>
+                        <input wire:model="password_confirmation" type="password" id="password_confirmation"
+                            placeholder="******" class="text-white form-control bg-dark border-secondary" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón de registro -->
+            <div class="mt-3 col-12">
+                <button type="submit" class="py-3 btn btn-primary w-100"
                     style="background-color: #22a7e1; border: none;">
                     <i class="fas fa-user-plus me-2"></i>
                     Registrarse
                 </button>
             </div>
-
-            <div class="mt-3 text-center col-12">
-                <p class="mb-0 text-white">
-                    ¿Ya tienes una cuenta?
-                    <a href="{{ route('login') }}" class="text-info fw-bold" wire:navigate>
-                        Iniciar sesión
-                    </a>
-                </p>
-            </div>
         </div>
     </form>
+
+    <div class="mt-4 text-center">
+        <p class="mb-0 text-white">
+            ¿Ya tienes una cuenta?
+            <a href="{{ route('login') }}" class="text-info fw-bold" wire:navigate>
+                Iniciar sesión
+            </a>
+        </p>
+    </div>
 </div>

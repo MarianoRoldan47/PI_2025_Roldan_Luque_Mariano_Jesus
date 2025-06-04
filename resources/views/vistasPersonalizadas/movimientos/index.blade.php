@@ -1,32 +1,32 @@
 <x-app-layout>
-    <div class="container-fluid px-2 px-sm-4 py-2 py-sm-4 h-100 d-flex flex-column">
-        <div class="row mb-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
+        <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">MOVIMIENTOS</h1>
                 <p>Historial de entradas y salidas de productos</p>
             </div>
-            <div class="col-12 col-md d-flex justify-content-end align-items-center">
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMovimientosBtn"
+            <div class="col-12 col-md-auto ms-md-auto">
+                <div class="dropdown w-100">
+                    <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMovimientosBtn"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-plus-circle me-2"></i>Nuevo Movimiento
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-sm"
+                    <ul class="shadow-sm dropdown-menu dropdown-menu-dark dropdown-menu-end"
                         aria-labelledby="dropdownMovimientosBtn">
                         <li>
-                            <a class="dropdown-item py-2"
+                            <a class="py-2 dropdown-item"
                                 href="{{ route('movimientos.create', ['tipo' => 'entrada']) }}">
                                 <i class="fas fa-arrow-right text-success me-2"></i> Entrada
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item py-2"
+                            <a class="py-2 dropdown-item"
                                 href="{{ route('movimientos.create', ['tipo' => 'traslado']) }}">
                                 <i class="fas fa-exchange-alt text-info me-2"></i> Traslado
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item py-2"
+                            <a class="py-2 dropdown-item"
                                 href="{{ route('movimientos.create', ['tipo' => 'salida']) }}">
                                 <i class="fas fa-arrow-left text-danger me-2"></i> Salida
                             </a>
@@ -38,7 +38,7 @@
 
         <div class="row g-4">
             <div class="col-12">
-                <div class="card bg-dark text-white shadow-sm">
+                <div class="text-white shadow-sm card bg-dark">
                     <div class="card-body">
                         <h5 class="card-title">Listado de Movimientos</h5>
                         @livewire('tabla-movimientos')
@@ -49,7 +49,7 @@
 
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-white">
+                <div class="text-white modal-content bg-dark">
                     <div class="modal-header border-bottom border-danger">
                         <h5 class="modal-title">
                             <i class="fas fa-exclamation-triangle text-danger me-2"></i>

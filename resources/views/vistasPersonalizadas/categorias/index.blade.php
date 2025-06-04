@@ -1,16 +1,18 @@
 <x-app-layout>
-    <div class="px-2 py-3 container-fluid px-sm-4 py-sm-4">
+    <div class="px-2 py-2 container-fluid px-sm-4 py-sm-4 h-100 d-flex flex-column">
 
-        <div class="flex-wrap mb-4 d-flex justify-content-between align-items-center">
-            <div>
-                <h1 class="mb-1 h3">Categorías</h1>
-                <p class="text-muted">Gestiona las categorías de productos del sistema</p>
+        <div class="mb-4 row">
+            <div class="col">
+                <h1 class="h3">Categorías</h1>
+                <p>Gestiona las categorías de productos del sistema</p>
             </div>
-
-            <div class="gap-2 mt-3 d-flex mt-md-0">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaCategoriaModal">
-                    <i class="fas fa-plus me-1"></i> Nueva categoría
-                </button>
+            <div class="col-12 col-md-auto ms-md-auto">
+                <div class="gap-2 d-flex flex-column">
+                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
+                        data-bs-target="#nuevaCategoriaModal">
+                        <i class="fas fa-plus me-1"></i> Nueva categoría
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -60,7 +62,8 @@
                                         <div class="p-2 bg-opacity-25 rounded-circle bg-primary me-3">
                                             <i class="fas fa-tag text-primary"></i>
                                         </div>
-                                        <h5 class="mb-0 text-white card-title text-truncate">{{ $categoria->nombre }}
+                                        <h5 class="mb-0 text-white card-title text-truncate">
+                                            {{ $categoria->nombre }}
                                         </h5>
                                     </div>
 
@@ -107,7 +110,8 @@
         <div class="modal-dialog">
             <div class="text-white modal-content bg-dark">
                 <div class="modal-header border-secondary">
-                    <h5 class="modal-title"><i class="fas fa-plus-circle me-2 text-primary"></i> Nueva Categoría</h5>
+                    <h5 class="modal-title"><i class="fas fa-plus-circle me-2 text-primary"></i> Nueva Categoría
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -205,7 +209,8 @@
                     <div id="con-productos-alerta" class="alert alert-danger d-none">
                         <i class="fas fa-ban me-2"></i>
                         <strong>No se puede eliminar esta categoría</strong><br>
-                        Esta categoría tiene productos asociados. Primero debes reasignar o eliminar estos productos.
+                        Esta categoría tiene productos asociados. Primero debes reasignar o eliminar estos
+                        productos.
                     </div>
                 </div>
                 <div class="modal-footer border-danger">
@@ -225,7 +230,6 @@
     </div>
     @push('styles')
         <style>
-
             .btn-outline-danger {
                 border-width: 2px;
                 font-weight: 500;
@@ -238,7 +242,7 @@
                 background-color: #ff6b6b !important;
             }
 
-            
+
             .btn-outline-warning {
                 border-width: 2px;
                 font-weight: 500;

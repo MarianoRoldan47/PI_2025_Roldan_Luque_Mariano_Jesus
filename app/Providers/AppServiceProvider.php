@@ -27,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         Producto::observe(ProductoObserver::class);
         Movimiento::observe(MovimientoObserver::class);
+
+        (new CustomValidationServiceProvider($this->app))->boot();
     }
 }

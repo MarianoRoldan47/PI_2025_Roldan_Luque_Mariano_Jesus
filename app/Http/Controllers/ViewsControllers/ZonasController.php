@@ -23,9 +23,8 @@ class ZonasController extends Controller
 
         Zona::create($request->all());
 
-        return redirect()->route('zonas.index')
-            ->with('status', 'Zona creada correctamente.')
-            ->with('status-type', 'success');
+        return redirect()->route('almacen.index')
+            ->with('success', 'Zona creada correctamente.');
     }
 
     public function show(Zona $zona)
@@ -48,21 +47,26 @@ class ZonasController extends Controller
 
         $zona->update($request->all());
 
-        return redirect()->route('zonas.index')
-            ->with('status', 'Zona actualizada correctamente.')
-            ->with('status-type', 'success');
+        return redirect()->route('zonas.show', $zona)
+            ->with('success', 'Zona actualizada correctamente.');
     }
 
     public function destroy(Zona $zona)
     {
+        // Verificar si la zona tiene estanterías asociadas
+        if ($zona->estanterias->count() > 0) {
+            return redirect()->route('zonas.show', $zona)
+                ->with('status', 'No se puede eliminar la zona porque tiene estanterías asociadas.')
+                ->with('status-type', 'danger');
+        }
+
         try {
             $zona->delete();
-            return redirect()->route('zonas.index')
-                ->with('status', 'Zona eliminada correctamente.')
-                ->with('status-type', 'success');
+            return redirect()->route('almacen.index')
+                ->with('success', 'Zona eliminada correctamente.');
         } catch (Exception $e) {
-            return redirect()->route('zonas.index')
-                ->with('status', 'No se pudo eliminar la zona porque tiene estanterías asociadas.')
+            return redirect()->route('almacen.index')
+                ->with('status', 'Ha ocurrido un error al eliminar la zona.')
                 ->with('status-type', 'danger');
         }
     }

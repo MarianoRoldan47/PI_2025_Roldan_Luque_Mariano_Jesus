@@ -3,22 +3,24 @@
         <div class="mb-4 row">
             <div class="col">
                 <h1 class="h3">USUARIOS</h1>
-                <p class="text-muted">Gestión de usuarios del sistema</p>
+                <p>Gestión de usuarios del sistema</p>
             </div>
-            <div class="gap-2 col-12 col-md-auto d-flex justify-content-end align-items-center">
-                @if (Auth::user()->rol === 'Administrador')
-                    <a href="{{ route('users.create') }}" class="btn btn-primary">
-                        <i class="fas fa-user-plus me-2"></i>Nuevo Usuario
-                    </a>
+            @if (Auth::user()->rol === 'Administrador')
+                <div class="col-12 col-md-auto ms-md-auto">
+                    <div class="gap-2 d-flex flex-column">
+                        <a href="{{ route('users.create') }}" class="btn btn-primary w-100">
+                            <i class="fas fa-user-plus me-2"></i>Nuevo Usuario
+                        </a>
 
-                    <a href="{{ route('users.solicitudes') }}" class="text-white btn btn-info">
-                        <i class="fas fa-user-check me-2"></i>Solicitudes
-                        @if ($usersPendientesAprobar > 0)
-                            <span class="badge bg-danger ms-2">{{ $usersPendientesAprobar }}</span>
-                        @endif
-                    </a>
-                @endif
-            </div>
+                        <a href="{{ route('users.solicitudes') }}" class="btn btn-info w-100">
+                            <i class="fas fa-user-check me-2"></i>Solicitudes
+                            @if ($usersPendientesAprobar > 0)
+                                <span class="badge bg-danger ms-2">{{ $usersPendientesAprobar }}</span>
+                            @endif
+                        </a>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <div class="shadow-sm card bg-dark">
@@ -58,10 +60,13 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <img src="{{ $user->imagen ? asset('storage/' . $user->imagen) : asset('img/default-profile.png') }}"
-                                                    class="rounded-circle me-2" width="40" height="40" alt="{{ $user->name }}">
+                                                    class="rounded-circle me-2" width="40" height="40"
+                                                    alt="{{ $user->name }}">
                                                 <div>
-                                                    <div class="fw-medium text-light">{{ $user->name }} {{ $user->apellido1 }} {{ $user->apellido2 }}</div>
-                                                    <div class=" small"><i class="fas fa-phone me-2"></i>{{ $user->telefono }}</div>
+                                                    <div class="fw-medium text-light">{{ $user->name }}
+                                                        {{ $user->apellido1 }} {{ $user->apellido2 }}</div>
+                                                    <div class=" small"><i
+                                                            class="fas fa-phone me-2"></i>{{ $user->telefono }}</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -102,9 +107,10 @@
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     @if (Auth::id() !== $user->id)
-                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                                data-bs-target="#deleteModal" data-id="{{ $user->id }}"
-                                                                data-name="{{ $user->name }} {{ $user->apellido1 }}">
+                                                        <button type="button" class="btn btn-danger"
+                                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                            data-id="{{ $user->id }}"
+                                                            data-name="{{ $user->name }} {{ $user->apellido1 }}">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     @endif
@@ -122,7 +128,6 @@
     </div>
 
     @if (Auth::user()->rol === 'Administrador')
-
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="text-white modal-content bg-dark">
@@ -131,7 +136,8 @@
                             <i class="fas fa-exclamation-triangle text-danger me-2"></i>
                             Confirmar eliminación
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="d-flex align-items-center">
@@ -157,39 +163,39 @@
         </div>
 
         @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
 
-                const deleteModal = document.getElementById('deleteModal');
-                if (deleteModal) {
-                    deleteModal.addEventListener('show.bs.modal', function (event) {
-                        const button = event.relatedTarget;
-                        const id = button.getAttribute('data-id');
-                        const name = button.getAttribute('data-name');
+                    const deleteModal = document.getElementById('deleteModal');
+                    if (deleteModal) {
+                        deleteModal.addEventListener('show.bs.modal', function(event) {
+                            const button = event.relatedTarget;
+                            const id = button.getAttribute('data-id');
+                            const name = button.getAttribute('data-name');
 
-                        document.getElementById('userName').textContent = name;
-                        document.getElementById('deleteForm').action = `{{ url('users') }}/${id}`;
-                    });
-                }
-
-
-                const userRows = document.querySelectorAll('.user-row');
-                userRows.forEach(row => {
-                    row.addEventListener('click', function() {
-                        window.location.href = this.getAttribute('data-href');
-                    });
+                            document.getElementById('userName').textContent = name;
+                            document.getElementById('deleteForm').action = `{{ url('users') }}/${id}`;
+                        });
+                    }
 
 
-                    row.addEventListener('mouseenter', function() {
-                        this.classList.add('table-active');
-                    });
+                    const userRows = document.querySelectorAll('.user-row');
+                    userRows.forEach(row => {
+                        row.addEventListener('click', function() {
+                            window.location.href = this.getAttribute('data-href');
+                        });
 
-                    row.addEventListener('mouseleave', function() {
-                        this.classList.remove('table-active');
+
+                        row.addEventListener('mouseenter', function() {
+                            this.classList.add('table-active');
+                        });
+
+                        row.addEventListener('mouseleave', function() {
+                            this.classList.remove('table-active');
+                        });
                     });
                 });
-            });
-        </script>
+            </script>
         @endpush
     @endif
 </x-app-layout>

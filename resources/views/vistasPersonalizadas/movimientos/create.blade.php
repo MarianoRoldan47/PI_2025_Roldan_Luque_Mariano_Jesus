@@ -403,8 +403,10 @@
 
                         Array.from(selector.options).forEach(option => {
                             if (option.value && estanteriasMap.has(option.value)) {
+                                option.disabled = true;
                                 option.style.display = 'none';
                             } else {
+                                option.disabled = false;
                                 option.style.display = '';
                             }
                         });
@@ -419,9 +421,14 @@
                             div.className =
                                 'bg-dark text-white p-2 mb-2 rounded d-flex justify-content-between align-items-center';
                             div.innerHTML =
-                                `<div class="d-flex align-items-center">
-                                    <span class="me-3">${nombreCompleto}</span>
-                                    <div class="input-group" style="width: 150px;">
+                                `<div class="position-relative estanteria-seleccionada w-100">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <h6 class="mb-2 estanteria-nombre">${nombreCompleto}</h6>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarEstanteria('${tipo}', '${estanteriaId}')">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <div class="input-group w-100">
                                         <input type="number"
                                             class="text-white form-control form-control-sm bg-dark"
                                             value="${cantidad}"
@@ -429,7 +436,6 @@
                                             max="${maxValue}"
                                             onchange="actualizarCantidad('${tipo}', '${estanteriaId}', this.value)"
                                             oninput="this.value = Math.min(this.value, ${maxValue})">
-
                                         ${tipo === 'entrada' ?
                                             `<input type="hidden" name="ubicaciones[${estanteriaId}]" value="${cantidad}">` :
                                             tipo === 'origen' ?
@@ -438,9 +444,6 @@
                                         }
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-danger btn-sm ms-2" onclick="eliminarEstanteria('${tipo}', '${estanteriaId}')">
-                                    <i class="fas fa-times"></i>
-                                </button>
                             `;
                             contenedor.appendChild(div);
                         });
@@ -520,7 +523,13 @@
 
                         const option = selector.querySelector(`option[value="${estanteriaId}"]`);
                         if (option) {
+                            option.disabled = false;
                             option.style.display = '';
+
+                            const optionsHTML = selector.innerHTML;
+                            selector.innerHTML = optionsHTML;
+
+                            selector.value = '';
                         }
 
                         actualizarVistaEstanterias(
@@ -588,23 +597,21 @@
 
 
                     document.querySelector('form').addEventListener('submit', function(e) {
+                        e.preventDefault();
+
                         if (tipo === 'entrada') {
                             const totalEntrada = Array.from(estanteriasEntradaSeleccionadas.values())
                                 .reduce((a, b) => a + parseInt(b), 0);
                             if (totalEntrada !== cantidadRequerida) {
-                                e.preventDefault();
                                 alert('La cantidad total asignada debe ser igual a la cantidad requerida');
+                                return false;
                             }
                         } else if (tipo === 'traslado') {
-                            e.preventDefault();
-
-
                             if (estanteriasOrigenSeleccionadas.size === 0 || estanteriasDestinoSeleccionadas
                                 .size === 0) {
                                 alert('Debes seleccionar al menos una ubicación de origen y una de destino');
-                                return;
+                                return false;
                             }
-
 
                             const totalOrigen = Array.from(estanteriasOrigenSeleccionadas.values())
                                 .reduce((a, b) => a + parseInt(b), 0);
@@ -615,12 +622,12 @@
                                 alert(
                                     'Las cantidades en origen y destino deben ser iguales a la cantidad total del movimiento'
                                 );
-                                return;
+                                return false;
                             }
-
-
-                            this.submit();
                         }
+
+                        this.submit();
+                        return true;
                     });
 
 

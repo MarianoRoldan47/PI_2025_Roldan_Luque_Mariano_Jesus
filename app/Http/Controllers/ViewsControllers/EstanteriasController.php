@@ -37,9 +37,8 @@ class EstanteriasController extends Controller
 
         Estanteria::create($request->all());
 
-        return redirect()->route('estanterias.index')
-            ->with('status', 'Estantería creada correctamente.')
-            ->with('status-type', 'success');
+        return redirect()->route('almacen.index')
+            ->with('success', 'Estantería creada correctamente.');
     }
 
     public function show(Estanteria $estanteria)
@@ -86,17 +85,16 @@ class EstanteriasController extends Controller
     {
         try {
             if ($estanteria->capacidad_maxima != $estanteria->capacidad_libre) {
-                return redirect()->route('estanterias.index')
+                return redirect()->route('estanterias.show', $estanteria)
                     ->with('status', 'No se puede eliminar la estantería porque contiene productos.')
                     ->with('status-type', 'danger');
             }
 
             $estanteria->delete();
-            return redirect()->route('estanterias.index')
-                ->with('status', 'Estantería eliminada correctamente.')
-                ->with('status-type', 'success');
+            return redirect()->route('almacen.index')
+                ->with('success', 'Estantería eliminada correctamente.');
         } catch (Exception $e) {
-            return redirect()->route('estanterias.index')
+            return redirect()->route('almacen.index')
                 ->with('status', 'No se pudo eliminar la estantería.')
                 ->with('status-type', 'danger');
         }

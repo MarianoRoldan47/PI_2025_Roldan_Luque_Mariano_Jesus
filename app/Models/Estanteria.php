@@ -10,7 +10,7 @@ class Estanteria extends Model
     /** @use HasFactory<\Database\Factories\EstanteriaFactory> */
     use HasFactory;
 
-    protected $fillable = ['zona_id', 'capacidad_maxima', 'capacidad_libre'];
+    protected $fillable = ['nombre', 'zona_id', 'capacidad_maxima', 'capacidad_libre'];
 
     public function zona()
     {
@@ -20,6 +20,6 @@ class Estanteria extends Model
     public function productos()
     {
         return $this->belongsToMany(Producto::class, 'producto_estanteria')
-                    ->withPivot('cantidad');
+            ->withPivot('cantidad');
     }
 }

@@ -90,6 +90,7 @@
             }
         }
     </style>
+    @livewireStyles
 </head>
 
 <body>
@@ -130,7 +131,7 @@
 
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-7">
                     <div class="p-4 shadow-lg login-container p-sm-5">
                         {{ $slot }}
                     </div>
@@ -139,6 +140,7 @@
         </div>
     </div>
 
+    @livewireScripts
     @stack('scripts')
 </body>
 

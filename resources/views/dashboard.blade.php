@@ -7,37 +7,39 @@
                 <h1 class="fs-3">PANEL DE CONTROL</h1>
                 <p class="text-muted">Resumen de actividad del almacén</p>
             </div>
-            <div class="gap-2 col text-end d-flex justify-content-end align-items-center">
-                <a href="{{ route('productos.create') }}" class="btn btn-success">
-                    <i class="fas fa-plus-circle me-2"></i>Nuevo Producto
-                </a>
+            <div class="mb-4 col-12 col-md-auto ms-md-auto">
+                <div class="gap-2 d-flex flex-column">
+                    <a href="{{ route('productos.create') }}" class="btn btn-success w-100">
+                        <i class="fas fa-plus-circle me-2"></i>Nuevo Producto
+                    </a>
 
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMovimientosBtn"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-plus-circle me-2"></i>Nuevo Movimiento
-                    </button>
-                    <ul class="shadow-sm dropdown-menu dropdown-menu-dark dropdown-menu-end"
-                        aria-labelledby="dropdownMovimientosBtn">
-                        <li>
-                            <a class="py-2 dropdown-item"
-                                href="{{ route('movimientos.create', ['tipo' => 'entrada']) }}">
-                                <i class="fas fa-arrow-right text-success me-2"></i> Entrada
-                            </a>
-                        </li>
-                        <li>
-                            <a class="py-2 dropdown-item"
-                                href="{{ route('movimientos.create', ['tipo' => 'traslado']) }}">
-                                <i class="fas fa-exchange-alt text-info me-2"></i> Traslado
-                            </a>
-                        </li>
-                        <li>
-                            <a class="py-2 dropdown-item"
-                                href="{{ route('movimientos.create', ['tipo' => 'salida']) }}">
-                                <i class="fas fa-arrow-left text-danger me-2"></i> Salida
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="dropdown w-100">
+                        <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMovimientosBtn"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-plus-circle me-2"></i>Nuevo Movimiento
+                        </button>
+                        <ul class="shadow-sm dropdown-menu dropdown-menu-dark dropdown-menu-end w-100"
+                            aria-labelledby="dropdownMovimientosBtn">
+                            <li>
+                                <a class="py-2 dropdown-item"
+                                    href="{{ route('movimientos.create', ['tipo' => 'entrada']) }}">
+                                    <i class="fas fa-arrow-right text-success me-2"></i> Entrada
+                                </a>
+                            </li>
+                            <li>
+                                <a class="py-2 dropdown-item"
+                                    href="{{ route('movimientos.create', ['tipo' => 'traslado']) }}">
+                                    <i class="fas fa-exchange-alt text-info me-2"></i> Traslado
+                                </a>
+                            </li>
+                            <li>
+                                <a class="py-2 dropdown-item"
+                                    href="{{ route('movimientos.create', ['tipo' => 'salida']) }}">
+                                    <i class="fas fa-arrow-left text-danger me-2"></i> Salida
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -100,22 +102,27 @@
             </div>
         </div>
 
-        <div class="overflow-auto row flex-grow-1 d-flex align-items-center">
-            <div class="col-12 col-lg-6">
-                <div class="mt-4 text-white card bg-dark">
+        <div class="mt-4 row">
+            <div class="mb-4 col-12 col-lg-6">
+                <div class="text-white card bg-dark h-100">
                     <div class="card-body">
                         <h5 class="card-title">Movimientos semanales</h5>
-                        <canvas id="movimientosChart"></canvas>
+                        <div class="chart-container">
+                            <canvas id="movimientosChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-lg-6">
-                <div class="mt-4 text-white card bg-dark">
+
+            <div class="mb-4 col-12 col-lg-6">
+                <div class="text-white card bg-dark h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <h5 class="card-title">Ranking de Usuarios Mensual</h5>
                         </div>
-                        <canvas id="rankingChart"></canvas>
+                        <div class="chart-container">
+                            <canvas id="rankingChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>

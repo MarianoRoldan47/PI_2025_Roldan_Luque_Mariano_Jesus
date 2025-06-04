@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+
     public function index()
     {
         $users = User::orderBy('name')->get();
@@ -32,7 +33,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'dni' => 'required|string|max:9|unique:users,dni',
+            'dni' => [
+                'required',
+                'string',
+                'max:9',
+                'unique:users,dni',
+                'regex:/^[0-9]{8}[A-Z]$/',
+                'valid_dni'
+            ],
             'name' => 'required|string|max:255',
             'apellido1' => 'required|string|max:255',
             'apellido2' => 'required|string|max:255',
@@ -47,6 +55,8 @@ class UserController extends Controller
             'fecha_nacimiento' => 'required|date',
             'imagen' => 'nullable|image|max:2048',
             'is_approved' => 'boolean',
+        ], [
+            'dni.regex' => 'El DNI debe contener 8 números seguidos de 1 letra mayúscula.',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -81,7 +91,14 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $rules = [
-            'dni' => ['required', 'string', 'max:9', Rule::unique('users')->ignore($user->id)],
+            'dni' => [
+                'required',
+                'string',
+                'max:9',
+                Rule::unique('users')->ignore($user->id),
+                'regex:/^[0-9]{8}[A-Z]$/',
+                'valid_dni'
+            ],
             'name' => 'required|string|max:255',
             'apellido1' => 'required|string|max:255',
             'apellido2' => 'required|string|max:255',
@@ -97,12 +114,16 @@ class UserController extends Controller
             'is_approved' => 'boolean',
         ];
 
+        $messages = [
+            'dni.regex' => 'El DNI debe contener 8 números seguidos de 1 letra mayúscula.',
+        ];
+
 
         if ($request->filled('password')) {
             $rules['password'] = 'required|string|min:8|confirmed';
         }
 
-        $validated = $request->validate($rules);
+        $validated = $request->validate($rules, $messages);
 
         if ($request->hasFile('imagen')) {
 
