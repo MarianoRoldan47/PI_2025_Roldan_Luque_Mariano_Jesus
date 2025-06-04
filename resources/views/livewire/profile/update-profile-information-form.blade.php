@@ -79,8 +79,9 @@ new class extends Component {
             if ($user->imagen) {
                 Storage::disk('public')->delete($user->imagen);
             }
-            $path = $this->imagen->store('imagenes/perfiles', 'public');
-            $user->imagen = $path;
+            $directory = 'imagenes/perfiles';
+            $fileName = time() . '_' . $this->dni . '_' . $this->name;
+            $path = $this->imagen->storeAs($directory, $fileName, 'public');
         }
 
         $user->save();
