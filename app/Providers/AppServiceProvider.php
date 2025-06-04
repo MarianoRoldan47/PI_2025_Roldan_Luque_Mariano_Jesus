@@ -8,6 +8,7 @@ use App\Observers\MovimientoObserver;
 use App\Observers\ProductoObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +30,9 @@ class AppServiceProvider extends ServiceProvider
         Movimiento::observe(MovimientoObserver::class);
 
         (new CustomValidationServiceProvider($this->app))->boot();
+
+        if (env('APP_ENV') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
