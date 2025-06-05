@@ -229,10 +229,21 @@ class UserController extends Controller
 
         $messages = [
             'dni.regex' => 'El DNI debe contener 8 números seguidos de 1 letra mayúscula.',
+            'dni.valid_dni' => 'El DNI proporcionado no es válido (la letra no corresponde).',
+            'dni.unique' => 'Este DNI ya está registrado en el sistema.',
+            'email.unique' => 'Este email ya está registrado en el sistema.',
         ];
 
         try {
-            $validated = $request->validate($rules, $messages);
+            $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            $validated = $validator->validated();
 
             if ($request->hasFile('imagen')) {
                 if ($user->imagen) {
