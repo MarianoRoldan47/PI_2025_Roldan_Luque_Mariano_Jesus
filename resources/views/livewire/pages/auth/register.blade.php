@@ -79,7 +79,39 @@ new #[Layout('layouts.guest')] class extends Component {
 
     <form wire:submit="register" enctype="multipart/form-data">
         <div class="row g-3">
-            <!-- DNI -->
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="imagen" class="text-white form-label">Imagen de perfil</label>
+
+                    <!-- Contenedor para la previsualización de imagen -->
+                    @if ($imagen)
+                        <div class="mb-3 text-center">
+                            <div class="mx-auto overflow-hidden border rounded-circle border-secondary"
+                                style="width: 120px; height: 120px;">
+                                <img src="{{ $imagen->temporaryUrl() }}" class="w-100 h-100 object-fit-cover"
+                                    alt="Vista previa">
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary">
+                            <i class="text-white fas fa-image"></i>
+                        </span>
+                        <input wire:model.live="imagen" type="file" id="imagen"
+                            class="form-control bg-dark text-white border-secondary @error('imagen') is-invalid @enderror"
+                            accept="image/*">
+                    </div>
+                    <div class="form-text text-white-50 small">Formatos permitidos: JPG, PNG. Máximo 1MB.</div>
+                    @if ($imagen)
+                        <div class="mt-2 text-success">Imagen seleccionada correctamente</div>
+                    @endif
+                    @error('imagen')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
             <div class="col-12">
                 <div class="form-group">
                     <label for="dni" class="text-white form-label">DNI <span class="text-danger">*</span></label>
@@ -98,7 +130,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Nombre -->
             <div class="col-12">
                 <div class="form-group">
                     <label for="name" class="text-white form-label">Nombre <span
@@ -117,7 +148,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Apellidos -->
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="apellido1" class="text-white form-label">Primer Apellido <span
@@ -152,7 +182,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Email -->
             <div class="col-12">
                 <div class="form-group">
                     <label for="email" class="text-white form-label">Correo Electrónico <span
@@ -171,7 +200,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Teléfono -->
             <div class="col-12">
                 <div class="form-group">
                     <label for="telefono" class="text-white form-label">Teléfono <span
@@ -190,7 +218,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Dirección -->
             <div class="col-12">
                 <div class="form-group">
                     <label for="direccion" class="text-white form-label">Dirección <span
@@ -199,7 +226,8 @@ new #[Layout('layouts.guest')] class extends Component {
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="text-white fas fa-home"></i>
                         </span>
-                        <input wire:model="direccion" type="text" id="direccion" placeholder="Calle, número, piso..."
+                        <input wire:model="direccion" type="text" id="direccion"
+                            placeholder="Calle, número, piso..."
                             class="form-control bg-dark text-white border-secondary @error('direccion') is-invalid @enderror"
                             required>
                     </div>
@@ -209,7 +237,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Código Postal -->
             <div class="col-12">
                 <div class="form-group">
                     <label for="codigo_postal" class="text-white form-label">Código Postal <span
@@ -228,7 +255,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Localidad y Provincia -->
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="localidad" class="text-white form-label">Localidad <span
@@ -265,7 +291,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Fecha de Nacimiento -->
             <div class="col-12">
                 <div class="form-group">
                     <label for="fecha_nacimiento" class="text-white form-label">Fecha de Nacimiento <span
@@ -284,29 +309,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Imagen -->
-            <div class="col-12">
-                <div class="form-group">
-                    <label for="imagen" class="text-white form-label">Imagen de perfil</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="text-white fas fa-image"></i>
-                        </span>
-                        <input wire:model.live="imagen" type="file" id="imagen"
-                            class="form-control bg-dark text-white border-secondary @error('imagen') is-invalid @enderror"
-                            accept="image/*">
-                    </div>
-                    <div class="form-text text-white-50 small">Formatos permitidos: JPG, PNG. Máximo 1MB.</div>
-                    @if ($imagen)
-                        <div class="mt-2 text-success">Imagen seleccionada correctamente</div>
-                    @endif
-                    @error('imagen')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-
-            <!-- Contraseña -->
             <div class="col-12">
                 <div class="form-group">
                     <label for="password" class="text-white form-label">Contraseña <span
@@ -326,7 +328,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Confirmar Contraseña -->
             <div class="col-12">
                 <div class="form-group">
                     <label for="password_confirmation" class="text-white form-label">Confirmar Contraseña <span
@@ -341,7 +342,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
             </div>
 
-            <!-- Botón de registro -->
             <div class="mt-3 col-12">
                 <button type="submit" class="py-3 btn btn-primary w-100"
                     style="background-color: #22a7e1; border: none;">

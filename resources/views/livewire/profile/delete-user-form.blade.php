@@ -2,6 +2,7 @@
 
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Volt\Component;
 
 new class extends Component {
@@ -16,17 +17,23 @@ new class extends Component {
             'password' => ['required', 'string', 'current_password'],
         ]);
 
+        $user = Auth::user();
+
+        if ($user && $user->imagen) {
+            Storage::disk('public')->delete($user->imagen);
+        }
+
         tap(Auth::user(), $logout(...))->delete();
 
         $this->redirect('/', navigate: true);
     }
 }; ?>
 
-<section class="card bg-dark shadow-lg border-0">
-    <div class="card-body p-3 p-sm-4">
+<section class="border-0 shadow-lg card bg-dark">
+    <div class="p-3 card-body p-sm-4">
 
-        <h4 class="text-white mb-2">{{ __('Eliminar Cuenta') }}</h4>
-        <p class="text-white-50 small mb-4">
+        <h4 class="mb-2 text-white">{{ __('Eliminar Cuenta') }}</h4>
+        <p class="mb-4 text-white-50 small">
             {{ __('Una vez que tu cuenta sea eliminada, todos sus recursos y datos serán eliminados permanentemente. Antes de eliminar tu cuenta, por favor descarga cualquier dato o información que desees conservar.') }}
         </p>
 
@@ -41,7 +48,7 @@ new class extends Component {
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content bg-dark border-secondary">
                     <div class="modal-header border-secondary">
-                        <h5 class="modal-title text-white" id="confirmDeleteModalLabel">
+                        <h5 class="text-white modal-title" id="confirmDeleteModalLabel">
                             {{ __('¿Estás seguro de que quieres eliminar tu cuenta?') }}
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -50,7 +57,7 @@ new class extends Component {
 
                     <form wire:submit="deleteUser">
                         <div class="modal-body">
-                            <p class="text-white small mb-4">
+                            <p class="mb-4 text-white small">
                                 {{ __('Una vez que tu cuenta sea eliminada, todos sus recursos y datos serán eliminados permanentemente. Por favor, introduce tu contraseña para confirmar que deseas eliminar permanentemente tu cuenta.') }}
                             </p>
 

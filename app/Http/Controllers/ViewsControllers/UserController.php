@@ -72,10 +72,7 @@ class UserController extends Controller
 
         User::create($validated);
 
-        Session::flash('status', 'Usuario creado correctamente.');
-        Session::flash('status-type', 'success');
-
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Usuario creado correctamente.');
     }
 
     public function show(User $user)
@@ -145,10 +142,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        Session::flash('status', 'Usuario actualizado correctamente.');
-        Session::flash('status-type', 'success');
-
-        return redirect()->route('users.show', $user);
+        return redirect()->route('users.show', $user)->with('success', 'Usuario actualizado correctamente.');
     }
 
     public function destroy(User $user)
@@ -167,10 +161,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        Session::flash('status', 'Usuario eliminado correctamente.');
-        Session::flash('status-type', 'success');
-
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente.');
     }
 
     public function solicitudes()
@@ -194,8 +185,7 @@ class UserController extends Controller
             Log::error('Error al enviar correo de aprobación: ' . $e->getMessage());
         }
 
-        Session::flash('status', 'Usuario aprobado correctamente.');
-        Session::flash('status-type', 'success');
+        Session::flash('success', 'Usuario aprobado correctamente.');
 
         return back();
     }
@@ -205,9 +195,65 @@ class UserController extends Controller
 
         $user->delete();
 
-        Session::flash('status', 'Usuario rechazado y eliminado correctamente.');
-        Session::flash('status-type', 'success');
+        Session::flash('success', 'Usuario rechazado y eliminado correctamente.');
 
         return back();
+    }
+
+
+    public function updateProfile(Request $request)
+    {
+        $user = User::find(Auth::id());
+
+        $rules = [
+            'dni' => [
+                'required',
+                'string',
+                'max:9',
+                Rule::unique('users')->ignore($user->id),
+                'regex:/^[0-9]{8}[A-Z]$/',
+                'valid_dni'
+            ],
+            'name' => 'required|string|max:255',
+            'apellido1' => 'required|string|max:255',
+            'apellido2' => 'nullable|string|max:255',
+            'telefono' => 'required|string|max:9',
+            'direccion' => 'required|string|max:255',
+            'codigo_postal' => 'required|string|max:5',
+            'localidad' => 'required|string|max:255',
+            'provincia' => 'required|string|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'fecha_nacimiento' => 'required|date',
+            'imagen' => 'nullable|image|max:2048',
+        ];
+
+        $messages = [
+            'dni.regex' => 'El DNI debe contener 8 números seguidos de 1 letra mayúscula.',
+        ];
+
+        try {
+            $validated = $request->validate($rules, $messages);
+
+            if ($request->hasFile('imagen')) {
+                if ($user->imagen) {
+                    Storage::disk('public')->delete($user->imagen);
+                }
+
+                $validated['imagen'] = $request->file('imagen')->store('imagenes/perfiles', 'public');
+            }
+
+            $user->update($validated);
+
+            Session::flash('success', 'Perfil actualizado correctamente.');
+
+            return redirect()->route('perfil');
+        } catch (Exception $e) {
+            Log::error('Error al actualizar perfil: ' . $e->getMessage());
+
+            Session::flash('status', 'No se pudo actualizar el perfil. Por favor, inténtalo de nuevo.');
+            Session::flash('status-type', 'danger');
+
+            return back()->withInput();
+        }
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use PDF;
 
+
 class ProductosController extends Controller
 {
     public function index()
@@ -141,7 +142,7 @@ class ProductosController extends Controller
             $titulo .= ' - Categoría: ' . $categoria->nombre;
         }
 
-        $pdf = PDF::loadView('vistasPersonalizadas.informes.pdf.inventario', compact(
+        $pdf = app('dompdf.wrapper')->loadView('vistasPersonalizadas.informes.pdf.inventario', compact(
             'productos',
             'fecha',
             'titulo'

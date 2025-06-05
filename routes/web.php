@@ -18,7 +18,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware([EnsureUserIsApproved::class])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/productos/pdf/inventario', [App\Http\Controllers\ViewsControllers\ProductosController::class, 'generarPdfInventario'])->name('productos.pdf.inventario');
+        Route::get('/productos/pdf/inventario', [ProductosController::class, 'generarPdfInventario'])->name('productos.pdf.inventario');
+
+
+        Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
 
         Route::middleware(EnsureUserIsAdmin::class)->group(function () {
 
@@ -44,6 +47,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::resource('users', UserController::class);
         });
+
+
 
         Route::resource('categorias', CategoriasController::class);
 
