@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'trusted_hosts' => ['cyberstock.comareslab.org', 'localhost'],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
